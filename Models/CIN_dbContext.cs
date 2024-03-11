@@ -16,8 +16,8 @@ namespace Sistema_CIN.Models
         {
         }
 
-        public virtual DbSet<Personal> Personals { get; set; } = null!;
-        public virtual DbSet<Pme> Pmes { get; set; } = null!;
+        public virtual DbSet<Encargado> Encargados { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,195 +31,70 @@ namespace Sistema_CIN.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Personal>(entity =>
+            modelBuilder.Entity<Encargado>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.cedula_e)
+                    .HasName("PK__Encargad__BBA1521016A4489F");
 
-                entity.ToTable("personal");
+                entity.Property(e => e.cedula_e)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.ApellidosPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("apellidos_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.apellidos_e)
+                    .HasMaxLength(60)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.CedulaPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("cedula_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.correo_e)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.CorreoPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("correo_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.direccion_e)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.DireccionCantonPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("direccion_canton_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.lugar_trabajo_e)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.DireccionDistritoPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("direccion_distrito_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.nombre_e)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.DireccionProvinciaPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("direccion_provincia_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.responsable_de)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.FechaNacimientoPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("fecha_nacimiento_personal")
-                    .IsFixedLength();
-
-                entity.Property(e => e.GeneroPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("genero_personal")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NombrePersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("nombre_personal")
-                    .IsFixedLength();
-
-                entity.Property(e => e.OtrasSenasPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("otras_senas_personal")
-                    .IsFixedLength();
-
-                entity.Property(e => e.PuestoPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("puesto_personal")
-                    .IsFixedLength();
-
-                entity.Property(e => e.TelefonoPersonal)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("telefono_personal")
-                    .IsFixedLength();
+                entity.Property(e => e.telefono_e)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Pme>(entity =>
+            modelBuilder.Entity<Role>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.id_rol)
+                    .HasName("PK__Roles__6ABCB5E0A977ED4D");
 
-                entity.ToTable("pme");
-
-                entity.Property(e => e.ApellidosPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("apellidos_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.CedulaPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("cedula_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.CondicionMigratoriaPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("condicion_migratoria_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.DireccionCantonPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("direccion_canton_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.DireccionDistritoPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("direccion_distrito_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.DireccionProvinciaPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("direccion_provincia_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.EdadPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("edad_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.FechaEgresoPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("fecha_egreso_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.FechaIngresoPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("fecha_ingreso_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.FechaNaciemientoPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("fecha_naciemiento_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.GeneroPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("genero_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NacionalidadPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("nacionalidad_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NivelEducativoPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("nivel_educativo_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NombrePme)
-                    .HasMaxLength(10)
-                    .HasColumnName("nombre_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.PolizaSeguroPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("poliza_seguro_pme")
-                    .IsFixedLength();
-
-                entity.Property(e => e.RecibeSubvencionPme)
-                    .HasMaxLength(10)
-                    .HasColumnName("recibe_subvencion_pme")
-                    .IsFixedLength();
+                entity.Property(e => e.nombre_Rol)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.HasKey(e => e.Correo);
+                entity.HasKey(e => e.id_usuario)
+                    .HasName("PK__Usuarios__4E3E04AD8C05001A");
 
-                entity.ToTable("usuarios");
+                entity.Property(e => e.clave)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Correo)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("correo")
-                    .IsFixedLength();
+                entity.Property(e => e.correo_u)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Clave)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("clave")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NombreUsuario)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("nombre_usuario")
-                    .IsFixedLength();
+                entity.Property(e => e.nombre_u)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
