@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Encargado>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.responsable_de)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.apellidos_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.edad_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.direccion_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefono_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.correo_e)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lugar_trabajo_e)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.responsable_de)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.apellidos_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.edad_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.direccion_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.telefono_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.correo_e)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lugar_trabajo_e)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.cedula_e">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.cedula_e">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.cedula_e">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
