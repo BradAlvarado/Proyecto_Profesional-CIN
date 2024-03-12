@@ -12,7 +12,13 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="cedula_e" />
+            <div class="form-group">
+                <label asp-for="cedula_e" class="control-label"></label>
+                <input asp-for="cedula_e" class="form-control" readonly/>
+                <span asp-validation-for="cedula_e" class="text-danger"></span>
+            </div>
+            
+
             <div class="form-group">
                 <label asp-for="responsable_de" class="control-label"></label>
                 <input asp-for="responsable_de" class="form-control" />
