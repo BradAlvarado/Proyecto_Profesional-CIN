@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_CIN.Models
 {
     public partial class Encargado
     {
+        [Key]
         public string cedula_e { get; set; } = null!;
         public string? responsable_de { get; set; }
         public string? nombre_e { get; set; }

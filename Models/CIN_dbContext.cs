@@ -17,7 +17,7 @@ namespace Sistema_CIN.Models
         }
 
         public virtual DbSet<Encargado> Encargados { get; set; } = null!;
-        public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Roles> Roles { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -69,7 +69,7 @@ namespace Sistema_CIN.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Role>(entity =>
+            modelBuilder.Entity<Roles>(entity =>
             {
                 entity.HasKey(e => e.id_rol)
                     .HasName("PK__Roles__6ABCB5E0A977ED4D");
