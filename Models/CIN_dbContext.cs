@@ -18,7 +18,7 @@ namespace Sistema_CIN.Models
 
         public virtual DbSet<Encargado> Encargados { get; set; } = null!;
         public virtual DbSet<Roles> Roles { get; set; } = null!;
-        public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
+        public virtual DbSet<Usuarios> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -79,7 +79,7 @@ namespace Sistema_CIN.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Usuario>(entity =>
+            modelBuilder.Entity<Usuarios>(entity =>
             {
                 entity.HasKey(e => e.id_usuario)
                     .HasName("PK__Usuarios__4E3E04AD8C05001A");

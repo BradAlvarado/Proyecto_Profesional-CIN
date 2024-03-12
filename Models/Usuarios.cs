@@ -16,6 +16,6 @@ namespace Sistema_CIN.Models
         [ForeignKey("Roles")]
         public int? id_rol { get; set; }
 
-        public Roles Roles { get; set; }
+        public Roles? Roles { get; set; }
     }
 }
