@@ -9,12 +9,13 @@ namespace Sistema_CIN.Models
         {
             Permisos = new HashSet<Permiso>();
         }
+        public byte[]? Imagen_U { get; set; }
 
         public int Id_Usuario { get; set; }
         public string? Nombre_U { get; set; }
         public string? Clave { get; set; }
         public string Correo_U { get; set; } = null!;
-        public byte[]? Imagen_U { get; set; }
+        
         public int? Id_Rol { get; set; }
 
         public virtual Role? IdRolNavigation { get; set; }
