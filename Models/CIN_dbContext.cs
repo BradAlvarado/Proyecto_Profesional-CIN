@@ -28,8 +28,7 @@ namespace Sistema_CIN.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=34.69.230.46; Database=CIN_db ;User Id=sqlserver;Password=admin123#!; integrated security=true; Trusted_Connection=False; TrustServerCertificate=Yes;");
+
             }
         }
 
@@ -296,33 +295,33 @@ namespace Sistema_CIN.Models
 
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.HasKey(e => e.IdUsuario)
+                entity.HasKey(e => e.Id_Usuario)
                     .HasName("PK__Usuarios__4E3E04ADE9E86304");
 
-                entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+                entity.Property(e => e.Id_Usuario).HasColumnName("id_usuario");
 
                 entity.Property(e => e.Clave)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("clave");
 
-                entity.Property(e => e.CorreoU)
+                entity.Property(e => e.Correo_U)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("correo_u");
 
-                entity.Property(e => e.IdRol).HasColumnName("id_rol");
+                entity.Property(e => e.Id_Rol).HasColumnName("id_rol");
 
-                entity.Property(e => e.ImagenU).HasColumnName("imagen_u");
+                entity.Property(e => e.Imagen_U).HasColumnName("imagen_u");
 
-                entity.Property(e => e.NombreU)
+                entity.Property(e => e.Nombre_U)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("nombre_u");
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)
-                    .HasForeignKey(d => d.IdRol)
+                    .HasForeignKey(d => d.Id_Rol)
                     .HasConstraintName("FK__Usuarios__id_rol__5441852A");
             });
 

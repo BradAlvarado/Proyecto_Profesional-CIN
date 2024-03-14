@@ -10,12 +10,12 @@ namespace Sistema_CIN.Models
             Permisos = new HashSet<Permiso>();
         }
 
-        public int IdUsuario { get; set; }
-        public string? NombreU { get; set; }
+        public int Id_Usuario { get; set; }
+        public string? Nombre_U { get; set; }
         public string? Clave { get; set; }
-        public string CorreoU { get; set; } = null!;
-        public byte[]? ImagenU { get; set; }
-        public int? IdRol { get; set; }
+        public string Correo_U { get; set; } = null!;
+        public byte[]? Imagen_U { get; set; }
+        public int? Id_Rol { get; set; }
 
         public virtual Role? IdRolNavigation { get; set; }
         public virtual ICollection<Permiso> Permisos { get; set; }
