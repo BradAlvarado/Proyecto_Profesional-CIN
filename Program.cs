@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<CIN_dbContext>(options =>
+builder.Services.AddDbContext<CINContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db"))
 );
 
