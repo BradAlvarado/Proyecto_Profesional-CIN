@@ -1,160 +1,179 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@ViewData["Title"] - Sistema_CIN</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Sistema_CIN.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/styles.scss" asp-append-version="true"/>
-    <script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" asp-append-version="true" />
 
 </head>
 
 
 
 <body>
-    <!---- HEADER ---->
-    <header class="navbar-expand-lg bg-white py-4">
-        <a asp-controller="Home" asp-action="Index" class="ps-4 mb-3 mb-md-0 me-md-auto text-decoration-none">
-            <img src="../images/Screenshot 2024-03-16 160647.png" alt="CIN logo" height="60px" />
-        </a>
+    <div class="wrapper">
 
+        <!----------SIDEBAR NAV--------->
+        <aside id="sidebar">
 
-    </header>
+            <!----------LOGO NAV--------->
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
 
-    <div class="container-fluid">
+                    <i class="lni lni-list"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">CIN</a>
+                </div>
+            </div><!----------LOGO NAV--------->
+            <!----------MODULOS NAV--------->
+            <ul class="sidebar-nav">
+                <!----------MODULO INICIO NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-home"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <!----------MODULO MANTENIMIENTO NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#mant" aria-expanded="false" aria-controls="mant">
+                        <i class="lni lni-cogs"></i>
+                        <span>Mantenimiento</span>
+                    </a>
+                    <ul id="mant" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Personal</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">PME</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Encargados</a>
+                        </li>
 
-        <div class="row">
-            <nav class="col-lg-2 col-md-1  p-3 flex-column bg-dark vh-100">
-
-                <!-----------ROL---------->
-                <a href="https://getbootstrap.com/" class="text-white d-flex align-items-center pb-3 my-3 text-decoration-none border-bottom">
-
-                    <h3>Rol</h3>
-                </a>
-                <!-----------ROL---------->
-
-                <ul class="list-unstyled text-white ps-0">
-
-                    <!-----------inicio---------->
-                    <li class="mb-3">
-                        <a class="btn d-inline-flex align-items-center rounded border-0 text-white" data-bs-toggle="collapse">
-                            <i class="fa-solid fa-house me-3"></i>Inicio
-                        </a>
-                    </li>
-                    <!-----------inicio---------->
-                    <!-----------MANTENIMIENTO---------->
-                    <li class="mb-3">
-                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#mantenimiento-collapse" aria-expanded="false">
-                            <i class="fa-solid fa-screwdriver-wrench me-3"></i>Mantenimiento<i class="fa-solid fa-chevron-down ms-2"></i>
-                        </button>
-                        <div class="collapse" id="mantenimiento-collapse">
-                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
-                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Personal</a></li>
-                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">PME</a></li>
-                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Encargados</a></li>
-                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Usuarios</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <!-----------MANTENIMIENTO---------->
-                    <!-----------ADMINSITRAR---------->
-                    <li class="mb-3">
-                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#administrar-collapse" aria-expanded="false">
-                            <i class="fa-solid fa-user-tie me-3"></i>Administrar<i class="fa-solid fa-chevron-down ms-2"></i>
-                        </button>
-
-                        <div class="collapse" id="administrar-collapse">
-                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
-                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Roles</a></li>
-                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Permisos</a></li>
-
-                            </ul>
-                        </div>
-                    </li>
-                    <!-----------ADMINSITRAR---------->
-                    <!-----------REPORTES---------->
-                    <li class="mb-3">
-                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#reportes-collapse" aria-expanded="false">
-                            <i class="fa-solid fa-file-lines me-3"></i>Reportes<i class="fa-solid fa-chevron-down ms-2"></i>
-                        </button>
-                        <div class="collapse" id="reportes-collapse">
-                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
-                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Personal</a></li>
-                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">PME</a></li>
-                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Encargados</a></li>
-
-                            </ul>
-                        </div>
-                    </li>
-                    <!-----------REPORTES---------->
-                    <!-----------OTROS---------->
-                    <li class="mb-3">
-                        <a type="button" class="btn d-inline-flex align-items-center border-0 text-white" asp-controller="Home" asp-action="Privacy">
-                            <i class="fa-solid fa-circle-info me-3"></i></>Acerca de
-                        </a>
-                    </li>
-                    
-                    <li class="mb-3">
-                        <a class="btn d-inline-flex align-items-center border-0 text-white">
-                            <i class="fa-solid fa-question me-3"></i>Ayuda
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a class="btn d-inline-flex align-items-center border-0 text-danger">
-                            <i class="fa-solid fa-arrow-right-from-bracket me-3"></i>Cerrar Sesión
-                        </a>
-                    </li>
-
-
-                    <!---SE USARÁ PARA EDITAR PERFIL--->
-                    @*<li class="mb-1">
-                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                    Account
-                    </button>
-                    <div class="collapse" id="account-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
-                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a></li>
-                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Settings</a></li>
-                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a></li>
                     </ul>
+                </li>
+
+                <!----------MODULO ADMINISTRAR NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#admin" aria-expanded="false" aria-controls="admin">
+                        <i class="lni lni-user"></i>
+                        <span>Administrar</span>
+                    </a>
+                    <ul id="admin" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Usuarios</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Roles</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Permisos</a>
+                        </li>
+                    </ul>
+                </li>
+                <!----------MODULO REPORTES NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#reportes" aria-expanded="false" aria-controls="reportes">
+                        <i class="lni lni-agenda"></i>
+                        <span>Reportes</span>
+                    </a>
+                    <ul id="reportes" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Personal</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">PME</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Encargados</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!----------MODULO AYUDA NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#help" aria-expanded="false" aria-controls="help">
+                        <i class="lni lni-question-circle"></i>
+                        <span>Ayuda</span>
+                    </a>
+                    <ul id="help" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Abrir Manual PDF</a>
+                        </li>
+                    </ul>
+                </li>
+                <!----------MODULO ACERCA DE NAV--------->
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-information"></i>
+                        <span>Acerca de</span>
+                    </a>
+                </li>
+
+
+            </ul><!----------END MODULOS NAV--------->
+            <!----------CERRAR SESION NAV--------->
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-link color-danger">
+                    <i class="lni lni-exit"></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </aside>
+        <!----------END SIDEBAR NAV--------->
+
+        <div class="main">
+
+            <!----------NAV HEADER--------->
+            <nav class="navbar navbar-expand px-4 py-3 bg-white">
+                <div class="d-flex">
+                    <div class="sidebar-logo">
+                        <a href=""><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
                     </div>
-                    </li>*@
-                </ul>
+                </div>
             </nav>
 
+            <div class="content px-3 py-4"></div>
+            <main class="container-fluid">
+                @RenderBody()
+            </main>
 
-            <div class="col-lg-10 bg-light">
+            
 
 
 
-                @*<a class="dropdown-item" asp-area="" asp-controller="Pmes" asp-action="Index">Niños</a></li> *@
 
-
-                <main class="container-fluid mt-5">
-                    <main role="main" class="pb-3 ml-sm-auto px-md-4">
-                        @RenderBody()
-                    </main>
-                </main>
-
-            </div>
-
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-secondary">
+                        <div class="col-6 text-start">
+                            <a class="text-secondary" href=" #">
+                                <strong>SISTEMA CIN</strong>
+                            </a>
+                        </div>
+                        <div class="col-6 text-end text-primary">
+                            &copy; 2024 - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
-
-
     </div>
-    <footer class=" border-top text-muted text-center py-5 bg-white ">
-        <div class="container">
-            &copy; 2024 - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
