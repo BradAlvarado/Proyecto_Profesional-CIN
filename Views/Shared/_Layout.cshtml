@@ -3,92 +3,151 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - Sistema_CIN</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Sistema_CIN.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.scss" asp-append-version="true"/>
+    <script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
+
 </head>
+
+
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema_CIN</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
+    <!---- HEADER ---->
+    <header class="navbar-expand-lg bg-white py-4">
+        <a asp-controller="Home" asp-action="Index" class="ps-4 mb-3 mb-md-0 me-md-auto text-decoration-none">
+            <img src="../images/Screenshot 2024-03-16 160647.png" alt="CIN logo" height="60px" />
+        </a>
 
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mantenimiento</a>
+    </header>
 
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <div class="container-fluid">
 
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Personal" asp-action="Index">Personal</a></li>
+        <div class="row">
+            <nav class="col-lg-2 col-md-1  p-3 flex-column bg-dark vh-100">
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                <!-----------ROL---------->
+                <a href="https://getbootstrap.com/" class="text-white d-flex align-items-center pb-3 my-3 text-decoration-none border-bottom">
 
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Pmes" asp-action="Index">Niños</a></li>
+                    <h3>Rol</h3>
+                </a>
+                <!-----------ROL---------->
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                <ul class="list-unstyled text-white ps-0">
 
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Encargadoes" asp-action="Index">Padres</a></li>
+                    <!-----------inicio---------->
+                    <li class="mb-3">
+                        <a class="btn d-inline-flex align-items-center rounded border-0 text-white" data-bs-toggle="collapse">
+                            <i class="fa-solid fa-house me-3"></i>Inicio
+                        </a>
+                    </li>
+                    <!-----------inicio---------->
+                    <!-----------MANTENIMIENTO---------->
+                    <li class="mb-3">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#mantenimiento-collapse" aria-expanded="false">
+                            <i class="fa-solid fa-screwdriver-wrench me-3"></i>Mantenimiento<i class="fa-solid fa-chevron-down ms-2"></i>
+                        </button>
+                        <div class="collapse" id="mantenimiento-collapse">
+                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
+                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Personal</a></li>
+                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">PME</a></li>
+                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Encargados</a></li>
+                                <li><a href="" class=" d-inline-flex text-decoration-none text-white mb-2">Usuarios</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-----------MANTENIMIENTO---------->
+                    <!-----------ADMINSITRAR---------->
+                    <li class="mb-3">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#administrar-collapse" aria-expanded="false">
+                            <i class="fa-solid fa-user-tie me-3"></i>Administrar<i class="fa-solid fa-chevron-down ms-2"></i>
+                        </button>
 
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Permisos" asp-action="Index">Administrar Permisos</a></li>
-
+                        <div class="collapse" id="administrar-collapse">
+                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
+                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Roles</a></li>
+                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Permisos</a></li>
 
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Acerca de</a>
-                        </li>
+                        </div>
+                    </li>
+                    <!-----------ADMINSITRAR---------->
+                    <!-----------REPORTES---------->
+                    <li class="mb-3">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 text-white collapsed" data-bs-toggle="collapse" data-bs-target="#reportes-collapse" aria-expanded="false">
+                            <i class="fa-solid fa-file-lines me-3"></i>Reportes<i class="fa-solid fa-chevron-down ms-2"></i>
+                        </button>
+                        <div class="collapse" id="reportes-collapse">
+                            <ul class="btn-toggle-nav list-unstyled py-3 ps-5 dropdown-menu-dark text-small shadow show rounded">
+                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Personal</a></li>
+                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">PME</a></li>
+                                <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none text-white rounded mb-2">Encargados</a></li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Ayuda</a>
-                        </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-----------REPORTES---------->
+                    <!-----------OTROS---------->
+                    <li class="mb-3">
+                        <a type="button" class="btn d-inline-flex align-items-center border-0 text-white" asp-controller="Home" asp-action="Privacy">
+                            <i class="fa-solid fa-circle-info me-3"></i></>Acerca de
+                        </a>
+                    </li>
+                    
+                    <li class="mb-3">
+                        <a class="btn d-inline-flex align-items-center border-0 text-white">
+                            <i class="fa-solid fa-question me-3"></i>Ayuda
+                        </a>
+                    </li>
+                    <li class="mb-3">
+                        <a class="btn d-inline-flex align-items-center border-0 text-danger">
+                            <i class="fa-solid fa-arrow-right-from-bracket me-3"></i>Cerrar Sesión
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Cerrar Sesión</a>
-                        </li>
 
+                    <!---SE USARÁ PARA EDITAR PERFIL--->
+                    @*<li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    Account
+                    </button>
+                    <div class="collapse" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
+                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a></li>
+                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Settings</a></li>
+                    <li><a href="https://getbootstrap.com/docs/5.3/examples/sidebars/#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a></li>
                     </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+                    </div>
+                    </li>*@
+                </ul>
+            </nav>
 
-    <footer class="border-top footer text-muted">
+
+            <div class="col-lg-10 bg-light">
+
+
+
+                @*<a class="dropdown-item" asp-area="" asp-controller="Pmes" asp-action="Index">Niños</a></li> *@
+
+
+                <main class="container-fluid mt-5">
+                    <main role="main" class="pb-3 ml-sm-auto px-md-4">
+                        @RenderBody()
+                    </main>
+                </main>
+
+            </div>
+
+        </div>
+
+
+    </div>
+    <footer class=" border-top text-muted text-center py-5 bg-white ">
         <div class="container">
             &copy; 2024 - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
