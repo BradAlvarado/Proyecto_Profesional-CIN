@@ -19,4 +19,8 @@
     <Folder Include="SQL\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\Screenshot 2024-03-16 160647.png" />
+  </ItemGroup>
+
 </Project>
