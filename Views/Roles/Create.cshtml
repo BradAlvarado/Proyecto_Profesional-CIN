@@ -1,0 +1,48 @@
+﻿@model Sistema_CIN.Models.Role
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3 class="fw-bold fs-4">Administrar > Registrar Rol</h3>
+
+<div class="my-3">
+    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+</div>
+
+<hr class="" />
+<div class="row">
+    <div class="col-md-4 mt">
+        <form asp-action="Create">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="row g-3 align-items-center my-3">
+                <div class="col-auto">
+                    <label asp-for="NombreRol" class="col-form-label">Nombre del Rol</label>
+                </div>
+                <div class="col-auto">
+                    <input asp-for="NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
+                </div>
+
+            </div>
+
+
+            <div class="col-auto mt-5">
+
+                <input type="submit" value="Registrar" class="btn btn-primary" />
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
