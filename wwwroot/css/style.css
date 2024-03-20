@@ -44,10 +44,10 @@ body {
     flex-direction: column;
 }
 
-    #sidebar.expand {
-        width: 260px;
-        min-width: 260px;
-    }
+#sidebar.expand {
+    width: 260px;
+    min-width: 260px;
+}
 
 .toggle-btn {
     background-color: transparent;
@@ -56,20 +56,20 @@ body {
     padding: 1rem 1.5rem;
 }
 
-    .toggle-btn i {
-        font-size: 1.5rem;
-        color: #FFF;
-    }
+.toggle-btn i {
+    font-size: 1.5rem;
+    color: #FFF;
+}
 
 .sidebar-logo {
     margin: auto 0;
 }
 
-    .sidebar-logo a {
-        color: #f68d2e;
-        font-size: 1.15rem;
-        font-weight: 600;
-    }
+.sidebar-logo a {
+    color: #f68d2e;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
 
 #sidebar:not(.expand) .sidebar-logo,
 #sidebar:not(.expand) a.sidebar-link span {
@@ -130,7 +130,7 @@ a.sidebar-link:hover {
     display: none;
 }
 
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown + .sidebar-dropdown {
+#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
     display: block;
     max-height: 15em;
     width: 100%;
@@ -173,8 +173,6 @@ a.sidebar-link:hover {
     height: 50px;
     width: 100%;
 }
-
-
 
 
 
