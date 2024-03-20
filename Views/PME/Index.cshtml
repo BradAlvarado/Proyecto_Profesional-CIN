@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Pme>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar PME</h3>
+<div>
+	<a class="btn btn-warning" asp-action="Create">Añadir</a>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Cédula
+			</th>
+			<th>
+				Nombre Completo
+			</th>
+			<th>
+				N.Póliza
+			</th>
+			<th>
+				Edad
+			</th>
+			<th>
+				Género
+			</th>
+			<th>
+				Dirección
+			</th>
+			<th>
+				Fecha Ingreso
+			</th>
+			<th>
+				Encargado
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CedulaPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NombrePme) 	@Html.DisplayFor(modelItem => item.ApellidosPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PolizaSeguro)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EdadPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.GeneroPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProvinciaPme)	@Html.DisplayFor(modelItem => item.CantonPme) @Html.DisplayFor(modelItem => item.DistritoPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FechaIngresoPme)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EncargadoPme)
+				</td>
+
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.IdPme">Editar</a> |
+					<a asp-action="Details" asp-route-id="@item.IdPme">Detalles</a> |
+					<a asp-action="Delete" asp-route-id="@item.IdPme">Eliminar</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

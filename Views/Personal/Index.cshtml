@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Personal</h3>
+<div>
+	<a class="btn btn-warning" asp-action="Create">Añadir</a>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				N.Cédula
+			</th>
+			<th>
+				Nombre Completo
+			</th>
+			<th>
+				Edad
+			</th>
+
+			<th>
+				Correo Electrónico
+			</th>
+
+			<th>
+				Dirección
+			</th>
+			<th>
+				Puesto
+			</th>
+
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CedulaP)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NombreP) @Html.DisplayFor(modelItem => item.ApellidosP)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EdadP)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CorreoP)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.ProvinciaP) @Html.DisplayFor(modelItem => item.CantonP)@Html.DisplayFor(modelItem => item.DistritoP)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PuestoP)
+				</td>
+
+
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.IdPersonal">Editar</a> |
+					<a asp-action="Details" asp-route-id="@item.IdPersonal">Detalles</a> |
+					<a asp-action="Delete" asp-route-id="@item.IdPersonal">Eliminar</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

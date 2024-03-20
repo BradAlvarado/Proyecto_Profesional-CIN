@@ -1,0 +1,128 @@
+﻿@model Sistema_CIN.Models.Pme
+
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Editar PME</h3>
+<div>
+	<a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit">
+			<br>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="CedulaPme" class="control-label">N.Cédula</label>
+						<input asp-for="CedulaPme" class="form-control" />
+						<span asp-validation-for="CedulaPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="NombrePme" class="control-label">Nombre</label>
+						<input asp-for="NombrePme" class="form-control" />
+						<span asp-validation-for="NombrePme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="ApellidosPme" class="control-label">Apellidos</label>
+						<input asp-for="ApellidosPme" class="form-control" />
+						<span asp-validation-for="ApellidosPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="PolizaSeguro" class="control-label">N.Póliza</label>
+						<input asp-for="PolizaSeguro" class="form-control" />
+						<span asp-validation-for="PolizaSeguro" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="FechaNacimientoPme" class="control-label">Fecha Nacimiento</label>
+						<input asp-for="FechaNacimientoPme" class="form-control" />
+						<span asp-validation-for="FechaNacimientoPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="EdadPme" class="control-label">Edad</label>
+						<input asp-for="EdadPme" class="form-control" />
+						<span asp-validation-for="EdadPme" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="NacionalidadPme" class="control-label">Nacionalidad</label>
+						<input asp-for="NacionalidadPme" class="form-control" />
+						<span asp-validation-for="NacionalidadPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="GeneroPme" class="control-label">Género</label>
+						<input asp-for="GeneroPme" class="form-control" />
+						<span asp-validation-for="GeneroPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="SubvencionPme" class="control-label">Recibe Subvención</label>
+						<input asp-for="SubvencionPme" class="form-control" />
+						<span asp-validation-for="SubvencionPme" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+
+					<div class="form-group">
+						<label asp-for="ProvinciaPme" class="control-label">Provincia</label>
+						<input asp-for="ProvinciaPme" class="form-control" />
+						<span asp-validation-for="ProvinciaPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="CantonPme" class="control-label">Cantón</label>
+						<input asp-for="CantonPme" class="form-control" />
+						<span asp-validation-for="CantonPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="DistritoPme" class="control-label">Distrito</label>
+						<input asp-for="DistritoPme" class="form-control" />
+						<span asp-validation-for="DistritoPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="FechaIngresoPme" class="control-label">Fecha de Ingreso</label>
+						<input asp-for="FechaIngresoPme" class="form-control" />
+						<span asp-validation-for="FechaIngresoPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="FechaEgresoPme" class="control-label">Fecha de Egreso</label>
+						<input asp-for="FechaEgresoPme" class="form-control" />
+						<span asp-validation-for="FechaEgresoPme" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="CondiciónMigratoriaPme" class="control-label">Condición Migratoria</label>
+						<input asp-for="CondiciónMigratoriaPme" class="form-control" />
+						<span asp-validation-for="CondiciónMigratoriaPme" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="NivelEducativoPme" class="control-label">Nivel Educativo</label>
+						<input asp-for="NivelEducativoPme" class="form-control" />
+						<span asp-validation-for="NivelEducativoPme" class="text-danger"></span>
+					</div>
+					<div class="form-group mb-3">
+						<label asp-for="EncargadoPme" class="control-label">Encargado</label>
+						<input asp-for="EncargadoPme" class="form-control" />
+						<span asp-validation-for="EncargadoPme" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<br>
+				<button type="submit" class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
+				<input type="reset" value="Limpiar" class="btn btn-outline-danger" />
+
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
