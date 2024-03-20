@@ -19,7 +19,7 @@ namespace Sistema_CIN.Models
         public bool? EstadoU { get; set; }
         public int? IdRol { get; set; }
 
-        public virtual Roles? IdRolNavigation { get; set; }
+        public virtual Role? IdRolNavigation { get; set; }
         public virtual ICollection<Permiso> Permisos { get; set; }
     }
 }

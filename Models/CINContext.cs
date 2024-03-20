@@ -21,7 +21,7 @@ namespace Sistema_CIN.Models
         public virtual DbSet<Permiso> Permisos { get; set; } = null!;
         public virtual DbSet<Personal> Personals { get; set; } = null!;
         public virtual DbSet<Pme> Pmes { get; set; } = null!;
-        public virtual DbSet<Roles> Roles { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -290,7 +290,7 @@ namespace Sistema_CIN.Models
                     .HasConstraintName("FK_Encargado");
             });
 
-            modelBuilder.Entity<Roles>(entity =>
+            modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
                     .HasName("PK__Roles__6ABCB5E05B6C6EEA");
