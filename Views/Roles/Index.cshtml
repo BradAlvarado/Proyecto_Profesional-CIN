@@ -1,53 +1,59 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Role>
+﻿@model IEnumerable<Sistema_CIN.Models.Roles>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="row">
-
-    <div class="col-lg-8">
 
 
-        <h3 class="fw-bold fs-4">Administrar > Roles</h3>
+<h3 class="fw-bold fs-4">Administrar > Roles</h3>
 
-        <p class="my-4">
-            <a class="btn btn-outline-success btn-sm" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
-        </p>
-        <table class="table table-striped">
-            <thead>
-                <tr class="highlight">
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre del Rol</th>
-                    <th scope="col">Editar</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdRol)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NombreRol)
-                        </td>
-                        <td>
-                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="my-3">
-            <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
-        </div>
-
+<div class="row my-4 ">
+    <div class="col">
+        <a class="btn btn-outline-success btn-sm" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
     </div>
-
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+        <form asp-controller="Roles" asp-action="Index">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="buscarRol" placeholder="Buscar aquí..." class="fluid border-0 bg-light col">
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
+        </form>
+    </div>
 </div>
+
+
+<table class="table table-striped my-4 rounded shadow-sm">
+    <thead>
+        <tr class="highlight">
+            <th scope="col">ID</th>
+            <th scope="col">Nombre del Rol</th>
+            <th scope="col">Editar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdRol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreRol)
+                </td>
+                <td>
+                    <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="my-3">
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -57,7 +63,6 @@
 
         <script>registroExito("@TempData["SuccessMessage"]");</script>
     }
-   
 
 }
 

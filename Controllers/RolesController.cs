@@ -21,12 +21,22 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Roles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string buscarRol)
         {
-            return _context.Roles != null ?
 
-                        View(await _context.Roles.ToListAsync()) :
-                        Problem("Entity set 'CINContext.Roles'  is null.");
+            var roles = from role in _context.Roles select role;
+
+            if (!String.IsNullOrEmpty(buscarRol))
+            {
+                roles = roles.Where(s => s.NombreRol!.Contains(buscarRol));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Este rol ya existe!");
+                return View(await roles.ToListAsync());
+            }
+            return View(await roles.ToListAsync());
+
 
         }
 
@@ -44,7 +54,7 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdRol,NombreRol")] Role role)
+        public async Task<IActionResult> Create([Bind("IdRol,NombreRol")] Roles role)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +105,7 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdRol,NombreRol")] Role role)
+        public async Task<IActionResult> Edit(int id, [Bind("IdRol,NombreRol")] Roles role)
         {
             if (id != role.IdRol)
             {
@@ -106,15 +116,23 @@ namespace Sistema_CIN.Controllers
             {
                 try
                 {
-                    var existingRole = await _context.Roles.FirstOrDefaultAsync(r => r.NombreRol == role.NombreRol);
+                    // Verificar si el nombre de rol ya existe en la base de datos
+                    var existingRole = await _context.Roles.AsNoTracking().FirstOrDefaultAsync(r => r.NombreRol == role.NombreRol);
+
                     if (existingRole != null)
                     {
-                        ModelState.AddModelError("", "Este rol ya existe!");
-
-                        return View(role);
+                        // Si el nombre de rol ya existe y no es el mismo que el original, mostrar un error
+                        if (existingRole.IdRol != role.IdRol)
+                        {
+                            ModelState.AddModelError("", "El nombre de rol ya está en uso.");
+                            return View(role);
+                        }
                     }
+
+                    // Actualizar el rol en la base de datos
                     _context.Update(role);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Rol modificado exitosamente!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,6 +147,8 @@ namespace Sistema_CIN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Si el modelo no es válido, vuelve a la vista de edición con los errores
             return View(role);
         }
 

@@ -1,34 +1,54 @@
-﻿@model Sistema_CIN.Models.Role
+﻿@model Sistema_CIN.Models.Roles
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h3 class="fw-bold fs-4">Administrar > Editar Rol</h3>
 
-<h4>Role</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdRol" />
-            <div class="form-group">
-                <label asp-for="NombreRol" class="control-label"></label>
-                <input asp-for="NombreRol" class="form-control" />
-                <span asp-validation-for="NombreRol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="my-3">
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
+</div>
+
+<form asp-action="Edit" class="my-4 ">
+
+
+    <div class="row g-3 align-items-center mb-3">
+        <input type="hidden" asp-for="IdRol" />
+        <div class="col-auto">
+            <label asp-for="NombreRol" class="col-form-label">Nombre del Rol</label>
+        </div>
+        <div class="col-auto">
+            <input asp-for="NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
+        </div>
+
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+
+
+    <div class="col-auto mt-5">
+
+        <button type="submit" class="btn btn-primary btn-sm">Editar  <i class="fa-solid fa-floppy-disk"></i></button>
+
+        
+
+    </div>
+</form>
+
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
+        setTimeout(function () {
+            const alertDiv = document.querySelector('.alerta');
+            if (alertDiv) {
+                alertDiv.style.display = 'none';
+            }
+        }, 2000);
+    </script>
 }
