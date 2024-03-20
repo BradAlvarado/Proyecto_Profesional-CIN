@@ -1,0 +1,84 @@
+﻿@model Sistema_CIN.Models.Encargado
+
+@{
+	ViewData["Title"] = "Create";
+}
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar Encargado</h3>
+<div>
+	<a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+
+</div>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Create">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="CedulaE" class="control-label">Cédula</label>
+				<input asp-for="CedulaE" class="form-control" required/>
+				<span asp-validation-for="CedulaE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ResponsableDe" class="control-label"></label>
+				<select asp-for="ResponsableDe" class="form-control" asp-items="ViewBag.IdPme">
+				<option> Seleccione PME  </option>
+				</select>
+				<span asp-validation-for="ResponsableDe" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="NombreE" class="control-label"></label>
+				<input asp-for="NombreE" class="form-control" />
+				<span asp-validation-for="NombreE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ApellidosE" class="control-label"></label>
+				<input asp-for="ApellidosE" class="form-control" />
+				<span asp-validation-for="ApellidosE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="FechaNaceE" class="control-label"></label>
+				<input asp-for="FechaNaceE" class="form-control" />
+				<span asp-validation-for="FechaNaceE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Edad" class="control-label"></label>
+				<input asp-for="Edad" class="form-control" />
+				<span asp-validation-for="Edad" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="CorreoE" class="control-label"></label>
+				<input asp-for="CorreoE" class="form-control" />
+				<span asp-validation-for="CorreoE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="DireccionE" class="control-label"></label>
+				<input asp-for="DireccionE" class="form-control" />
+				<span asp-validation-for="DireccionE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="TelefonoE" class="control-label"></label>
+				<input asp-for="TelefonoE" class="form-control" />
+				<span asp-validation-for="TelefonoE" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="LugarTrabajoE" class="control-label"></label>
+				<input asp-for="LugarTrabajoE" class="form-control" />
+				<span asp-validation-for="LugarTrabajoE" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<button type="submit"  class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
+				<input type="reset" value="Limpiar" class="btn btn-outline-danger" />
+
+			</div>
+		</form>
+	</div>
+</div>
+
+ 
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

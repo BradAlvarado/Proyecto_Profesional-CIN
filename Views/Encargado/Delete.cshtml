@@ -1,0 +1,75 @@
+﻿@model Sistema_CIN.Models.Encargado
+
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Eliminar Encargado</h3>
+
+<h3>¿Seguro que desea eliminar este registro?</h3>
+<div>
+	<h4>Encargado</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			N.Cédula
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.CedulaE)
+		</dd>
+		<dt class="col-sm-2">
+			Responsable De
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ResponsableDe)
+		</dd>
+		<dt class="col-sm-2">
+			Nombre Completo
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.NombreE)            @Html.DisplayFor(model => model.ApellidosE)
+
+		</dd>
+		<dt class="col-sm-2">
+			Fecha Nacimiento
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.FechaNaceE)
+		</dd>
+		<dt class="col-sm-2">
+			Edad
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Edad)
+		</dd>
+		<dt class="col-sm-2">
+			Correo Electrónico
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.CorreoE)
+		</dd>
+		<dt class="col-sm-2">
+			Dirección
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.DireccionE)
+		</dd>
+		<dt class="col-sm-2">
+			N.Teléfono
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.TelefonoE)
+		</dd>
+		<dt class="col-sm-2">
+			Lugar de Trabajo
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.LugarTrabajoE)
+		</dd>
+	</dl><form asp-action="Delete">
+		<input type="hidden" asp-for="IdEncargado" />
+		<input type="submit" value="Eliminar" class="btn btn-danger" />
+		<a class="btn btn-warning" asp-action="Index">Cancelar</a>
+
+	</form>
+</div>

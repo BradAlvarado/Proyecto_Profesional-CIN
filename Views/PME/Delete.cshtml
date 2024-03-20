@@ -1,0 +1,133 @@
+﻿@model Sistema_CIN.Models.Pme
+
+@{
+    ViewData["Title"] = "Delete";
+}
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Eliminar PME</h3>
+
+<div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+</div>
+<br>
+
+<h3>¿Seguro que desea eliminar este PME?</h3>
+<div>
+    <br>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CedulaPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CedulaPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PolizaSeguro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PolizaSeguro)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NombrePme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NombrePme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ApellidosPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ApellidosPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaNacimientoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaNacimientoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EdadPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EdadPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GeneroPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.GeneroPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProvinciaPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProvinciaPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CantonPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CantonPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DistritoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DistritoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NacionalidadPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NacionalidadPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SubvencionPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SubvencionPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaIngresoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaIngresoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaEgresoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaEgresoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CondiciónMigratoriaPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CondiciónMigratoriaPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NivelEducativoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NivelEducativoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EncargadoPme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EncargadoPme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdEncargadoNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdEncargadoNavigation.IdEncargado)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdPme" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a class="btn btn-warning" asp-action="Index">Cancelar</a>
+
+    </form>
+</div>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Encargado>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar Encargado</h3>
+<div>
+	<a class="btn btn-warning" asp-action="Create">Añadir</a>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Cédula
+			</th>
+			<th>
+				Responsable de
+			</th>
+			<th>
+				Nombre Completo
+			</th>
+			<th>
+				Fecha Nacimiento
+			</th>
+			<th>
+				Edad
+			</th>
+			<th>
+				Correo Electrónico
+			</th>
+			<th>
+				Dirección
+			</th>
+			<th>
+				N. Teléfono
+			</th>
+			<th>
+				L. Trabajo
+			</th>
+
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CedulaE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ResponsableDe)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NombreE)	@Html.DisplayFor(modelItem => item.ApellidosE)
+
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.FechaNaceE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Edad)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CorreoE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DireccionE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TelefonoE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.LugarTrabajoE)
+				</td>
+
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.IdEncargado">Editar</a> |
+					<a asp-action="Details" asp-route-id="@item.IdEncargado">Detalles</a> |
+					<a asp-action="Delete" asp-route-id="@item.IdEncargado">Eliminar</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
