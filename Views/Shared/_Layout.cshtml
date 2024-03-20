@@ -143,17 +143,26 @@
                 </div>
             </nav>
 
-            <div class="content px-3 py-4"></div>
-            <main class="container-fluid">
-                @RenderBody()
-            </main>
+            <div class="px-3 py-4 ">
 
-            
+                <main class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-10">
+                            @RenderBody()
+                        </div>
+                        <div class="col-lg-1">
+                        </div>
+                    </div>
+                </main>
+            </div>
 
 
 
 
-            <footer class="footer">
+
+            <footer class="footer py-4 border-top mt-auto">
                 <div class="container-fluid">
                     <div class="row text-secondary">
                         <div class="col-6 text-start">
@@ -161,7 +170,7 @@
                                 <strong>SISTEMA CIN</strong>
                             </a>
                         </div>
-                        <div class="col-6 text-end text-primary">
+                        <div class="col-6 text-end ">
                             &copy; 2024 - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </div>
                     </div>
