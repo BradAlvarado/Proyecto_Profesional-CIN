@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Sistema_CIN.Models
 {
-    public partial class Roles
+    public partial class Role
     {
-        public Roles()
+        public Role()
         {
             Personals = new HashSet<Personal>();
             Usuarios = new HashSet<Usuario>();
