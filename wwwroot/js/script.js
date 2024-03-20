@@ -12,13 +12,5 @@ function registroExito(message) {
         timer: 1500
     });
 }
-function registroError(message) {
-    Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: message,
-        showConfirmButton: false,
-        timer: 1500
-    });
-}
+
 
