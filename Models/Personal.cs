@@ -19,6 +19,6 @@ namespace Sistema_CIN.Models
         public string? DistritoP { get; set; }
         public int? IdRol { get; set; }
 
-        public virtual Role? IdRolNavigation { get; set; }
+        public virtual Roles? IdRolNavigation { get; set; }
     }
 }

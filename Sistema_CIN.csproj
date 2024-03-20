@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\images\Screenshot 2024-03-16 160647.png" />
+    <None Include="wwwroot\js\script.js" />
   </ItemGroup>
 
 </Project>
