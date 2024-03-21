@@ -65,11 +65,7 @@ body {
     margin: auto 0;
 }
 
-.sidebar-logo a {
-    color: #f68d2e;
-    font-size: 1.15rem;
-    font-weight: 600;
-}
+
 
 #sidebar:not(.expand) .sidebar-logo,
 #sidebar:not(.expand) a.sidebar-link span {
