@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace Sistema_CIN.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol");
+            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol");
             return View();
         }
 
@@ -60,11 +61,21 @@ namespace Sistema_CIN.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                var correoExiste = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == usuario.CorreoU);
+
+                if (correoExiste != null)
+                {
+                    ModelState.AddModelError("", "Este correo ya está en uso");
+                    return View(usuario);
+                }
+
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Usuario registrado con éxito";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol,usuario.NombreRolU);
             return View(usuario);
         }
 
