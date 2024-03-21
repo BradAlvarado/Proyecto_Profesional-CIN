@@ -4,68 +4,68 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h3 class="fw-bold fs-4">Administrar > Usuarios</h3>
+<div class="row my-4 ">
+    <div class="col">
+        <a class="btn btn-outline-success btn-sm" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
+    </div>
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+        <form asp-controller="Roles" asp-action="Index">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="buscarRol" placeholder="Buscar aquí..." class="fluid border-0 bg-light col">
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
+        </form>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+<table class="table table-striped my-4 rounded shadow-sm">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagenU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CorreoU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clave)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreRolU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstadoU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdRolNavigation)
-            </th>
-            <th></th>
+
+        <tr class="highlight">
+            <th scope="col">Foto</th>
+            <th scope="col">Nombre de Usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Acceso</th>
+            <th scope="col">Aciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagenU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CorreoU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Clave)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreRolU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstadoU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdRolNavigation.IdRol)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagenU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CorreoU)
+                </td>
+     
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreRolU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstadoU)
+                    
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts{
+    @if (TempData["SuccessMessage"] != null)
+    {
+
+        <script>registroExito("@TempData["SuccessMessage"]");</script>
+    }
+}
