@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -60,9 +61,18 @@ namespace Sistema_CIN.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(personal);
+				var existeCedula = await _context.Personals.FirstOrDefaultAsync(r => r.CedulaP == personal.CedulaP);
+
+				if (existeCedula != null)
+				{
+					ModelState.AddModelError("", "Esta cédula ya está en uso");
+
+					return View(personal);
+				}
+				_context.Add(personal);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+				TempData["SuccessMessage"] = "Personal registrado exitosamente!";
+				return RedirectToAction(nameof(Index));
             }
             ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", personal.IdRol);
             return View(personal);

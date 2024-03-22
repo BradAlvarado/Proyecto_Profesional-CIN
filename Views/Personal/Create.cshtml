@@ -14,7 +14,7 @@
     <form class="form-horizontal" asp-action="Create">
 
         <div class="row mt-5 mb-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
 
             <div class="form-group col-lg-6">
 
@@ -25,6 +25,7 @@
                     <input asp-for="CedulaP" class="form-control" />
                     <span asp-validation-for="CedulaP" class="text-danger"></span>
                 </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             </div>
 
             <div class="form-group col-lg-6">
@@ -101,13 +102,13 @@
         </div>
 
 
+        <div class="col-auto mt-5">
 
-        <div class="form-group">
-            <br>
-            <button type="submit" class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
-            <input type="reset" value="Limpiar" class="btn btn-outline-danger" />
+            <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+            <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
 
         </div>
+
     </form>
 
 </div>
@@ -119,4 +120,14 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
+        setTimeout(function () {
+            const alertaDiv = document.querySelector('.alerta');
+            if (alertaDiv) {
+                alertaDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
 }
