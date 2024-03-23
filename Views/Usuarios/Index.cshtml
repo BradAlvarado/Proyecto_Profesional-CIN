@@ -7,8 +7,9 @@
 <h3 class="fw-bold fs-4">Administrar > Usuarios</h3>
 <div class="row my-4 ">
     <div class="col">
-        <a class="btn btn-outline-success btn-sm" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
+        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
     </div>
+
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
         <form asp-controller="Roles" asp-action="Index">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -50,19 +51,22 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EstadoU)
-                    
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
+                    <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-pen-to-square"></i></a> |
+                    <a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-eye"></i></a> |
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.IdUsuario"><i class="fa-solid fa-trash-can"></i></a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
+<div class="my-3">
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+</div>
 @section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (TempData["SuccessMessage"] != null)
     {
 

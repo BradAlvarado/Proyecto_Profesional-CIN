@@ -61,21 +61,32 @@ namespace Sistema_CIN.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var correoExiste = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == usuario.CorreoU);
-
-                if (correoExiste != null)
+                try
                 {
-                    ModelState.AddModelError("", "Este correo ya está en uso");
-                    return View(usuario);
-                }
+                    var correoExiste = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == usuario.CorreoU);
+                    if (correoExiste != null)
+                    {
+                        ModelState.AddModelError("", "Este correo ya está en uso");
+                        ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
+                        return View(usuario);
+                    }
 
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Usuario registrado con éxito";
-                return RedirectToAction(nameof(Index));
+                    if(usuario.Clave != usuario.ConfirmacionClave)
+                    {
+                        return View(usuario);
+                    }
+
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Usuario registrado con éxito";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Ocurrió un error al guardar el usuario: " + ex.Message);
+                }
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol,usuario.NombreRolU);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
             return View(usuario);
         }
 
@@ -165,14 +176,14 @@ namespace Sistema_CIN.Controllers
             {
                 _context.Usuarios.Remove(usuario);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UsuarioExists(int id)
         {
-          return (_context.Usuarios?.Any(e => e.IdUsuario == id)).GetValueOrDefault();
+            return (_context.Usuarios?.Any(e => e.IdUsuario == id)).GetValueOrDefault();
         }
     }
 }
