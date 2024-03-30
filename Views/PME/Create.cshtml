@@ -1,129 +1,358 @@
-﻿@model Sistema_CIN.Models.Pme
-
+﻿@model Sistema_CIN.Models.PmeViewModel
 
 @{
-	ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Agregar PME</h3>
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar PME</h3>
 <div>
-	<a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
 
 </div>
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="Create">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label asp-for="CedulaPme" class="control-label">N.Cédula</label>
-						<input asp-for="CedulaPme" class="form-control" />
-						<span asp-validation-for="CedulaPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="NombrePme" class="control-label">Nombre</label>
-						<input asp-for="NombrePme" class="form-control" />
-						<span asp-validation-for="NombrePme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="ApellidosPme" class="control-label">Apellidos</label>
-						<input asp-for="ApellidosPme" class="form-control" />
-						<span asp-validation-for="ApellidosPme" class="text-danger"></span>
-					</div>	
-					<div class="form-group">
-						<label asp-for="PolizaSeguro" class="control-label">N.Póliza</label>
-						<input asp-for="PolizaSeguro" class="form-control" />
-						<span asp-validation-for="PolizaSeguro" class="text-danger"></span>
-					</div>
-
-					<div class="form-group">
-						<label asp-for="FechaNacimientoPme" class="control-label">Fecha Nacimiento</label>
-						<input asp-for="FechaNacimientoPme" class="form-control" />
-						<span asp-validation-for="FechaNacimientoPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="EdadPme" class="control-label">Edad</label>
-						<input asp-for="EdadPme" class="form-control" />
-						<span asp-validation-for="EdadPme" class="text-danger"></span>
-					</div>
-
-					<div class="form-group">
-						<label asp-for="NacionalidadPme" class="control-label">Nacionalidad</label>
-						<input asp-for="NacionalidadPme" class="form-control" />
-						<span asp-validation-for="NacionalidadPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="GeneroPme" class="control-label">Género</label>
-						<input asp-for="GeneroPme" class="form-control" />
-						<span asp-validation-for="GeneroPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="SubvencionPme" class="control-label">Recibe Subvención</label>
-						<input asp-for="SubvencionPme" class="form-control" />
-						<span asp-validation-for="SubvencionPme" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="col-md-6">
-
-					<div class="form-group">
-						<label asp-for="ProvinciaPme" class="control-label">Provincia</label>
-						<input asp-for="ProvinciaPme" class="form-control" />
-						<span asp-validation-for="ProvinciaPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="CantonPme" class="control-label">Cantón</label>
-						<input asp-for="CantonPme" class="form-control" />
-						<span asp-validation-for="CantonPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="DistritoPme" class="control-label">Distrito</label>
-						<input asp-for="DistritoPme" class="form-control" />
-						<span asp-validation-for="DistritoPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="FechaIngresoPme" class="control-label">Fecha de Ingreso</label>
-						<input asp-for="FechaIngresoPme" class="form-control" />
-						<span asp-validation-for="FechaIngresoPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="FechaEgresoPme" class="control-label">Fecha de Egreso</label>
-						<input asp-for="FechaEgresoPme" class="form-control" />
-						<span asp-validation-for="FechaEgresoPme" class="text-danger"></span>
-					</div>
-
-					<div class="form-group">
-						<label asp-for="CondiciónMigratoriaPme" class="control-label">Condición Migratoria</label>
-						<input asp-for="CondiciónMigratoriaPme" class="form-control" />
-						<span asp-validation-for="CondiciónMigratoriaPme" class="text-danger"></span>
-					</div>
-					<div class="form-group">
-						<label asp-for="NivelEducativoPme" class="control-label">Nivel Educativo</label>
-						<input asp-for="NivelEducativoPme" class="form-control" />
-						<span asp-validation-for="NivelEducativoPme" class="text-danger"></span>
-					</div>
-					<div class="form-group mb-3">
-						<label asp-for="EncargadoPme" class="control-label">Encargado</label>
-						<input asp-for="EncargadoPme" class="form-control" />
-						<span asp-validation-for="EncargadoPme" class="text-danger"></span>
-					</div>
-				</div>
-			</div>
 
 
-			<div class="form-group">
-				<br>
-				<button type="submit" class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
-				<input type="reset" value="Limpiar" class="btn btn-outline-danger" />
+<form class="mt-5" asp-action="Create">
 
-			</div>
-		</form>
+    <div class="row mt-4">
 
-	</div>
-</div>
+        <!--------Columna izquerda ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+
+            <!-------Cedula de PME-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.CedulaPme" class="form-control" placeholder="Número de Cédula" />
+                    <span asp-validation-for="Pme.CedulaPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Nombre de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.NombrePme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.NombrePme" class="form-control" placeholder="Nombre del Niño" />
+                    <span asp-validation-for="Pme.NombrePme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Apellidos de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.ApellidosPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.ApellidosPme" class="form-control" placeholder="Apellido1  Apellido2" />
+                    <span asp-validation-for="Pme.ApellidosPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Poliza de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.PolizaSeguro" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Póliza de Seguro</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.PolizaSeguro" class="form-control" placeholder="N Seguro" />
+                    <span asp-validation-for="Pme.PolizaSeguro" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Fecha Nace de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.FechaNacimientoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.FechaNacimientoPme" class="form-control" type="date" />
+                    <span asp-validation-for="Pme.FechaNacimientoPme" class="text-danger"></span>
+                </div>
+            </div>
+            <!-------Edad de PME-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.EdadPme" class="form-control" type="number" placeholder="0" />
+                    <span asp-validation-for="Pme.EdadPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Sexo de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.GeneroPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Género</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="Pme.GeneroPme" class="form-select" required>
+                        <option value="">-- Seleccione el Sexo</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                    <span asp-validation-for="Pme.GeneroPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Nacionalidad de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.NacionalidadPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nacionalidad</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.NacionalidadPme" class="form-control" placeholder="Nacionalidad" />
+                    <span asp-validation-for="Pme.NacionalidadPme" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!--------Columna derecha ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <!-------- Provincia PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.ProvinciaPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+
+                    <select asp-for="Pme.ProvinciaPme" class="form-select">
+                        <option>Selecciona provincia</option>
+                        <option value="San José">San José</option>
+                        <option value="Heredia">Heredia</option>
+                        <option value="Cartago">Cartago</option>
+                        <option value="Alajuela">Alajuela</option>
+                        <option value="Limón">Limón</option>
+                        <option value="Puntarenas">Puntarenas</option>
+                        <option value="Guanacaste">Guanacaste</option>
+                    </select>
+                    <span asp-validation-for="Pme.ProvinciaPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------- Canton PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.CantonPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cantón</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.CantonPme" class="form-control" placeholder="Cantón" />
+                    <span asp-validation-for="Pme.CantonPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------- Distrito PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.DistritoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Distrito</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.DistritoPme" class="form-control" placeholder="Distrito" />
+                    <span asp-validation-for="Pme.DistritoPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------- Fecha Ingreso PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.FechaIngresoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Ingreso</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.FechaIngresoPme" class="form-control" type="date" />
+                    <span asp-validation-for="Pme.FechaIngresoPme" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <!-------- Fecha Egreso PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.FechaEgresoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Egreso</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Pme.FechaEgresoPme" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="Pme.FechaEgresoPme" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <!-------- Condicion Migratoria PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.CondiciónMigratoriaPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Condición Migratoria</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="Pme.CondiciónMigratoriaPme" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Irregular">Irregular</option>
+                    </select>
+                    <span asp-validation-for="Pme.CondiciónMigratoriaPme" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <!-------- Nive educativo PME ---------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.NivelEducativoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nivel Educativo que cursa</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="Pme.NivelEducativoPme" class="form-select">
+                        <option value="Ninguno">-- Seleccione nivel educativo --</option>
+                        <option value="Ninguno">Ninguno</option>
+                        <option value="Preescolar">Educación Preescolar</option>
+                        <option value="Primaria">Educación Primaria</option>
+                        <option value="Secundaria">Educación Secundaria</option>
+                    </select>
+                    <span asp-validation-for="Pme.NivelEducativoPme" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Recibe Subvencion de PME-------->
+            <div class="mb-4 row">
+                <label asp-for="Pme.GeneroPme" class="col-lg-8 col-md-4 col-sm-12 col-form-label">Recibe subvención para cuidado y desarrollo?</label>
+
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" value=true type="radio" name="flexRadioDefault" id="flexRadioDefault1" asp-for="Pme.SubvencionPme">
+                        <label class="form-check-label" for="flexRadioDefault1" asp-for="Pme.SubvencionPme">
+                            Si
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" value=false type="radio" name="flexRadioDefault" id="flexRadioDefault2" asp-for="Pme.SubvencionPme">
+                        <label class="form-check-label" for="flexRadioDefault2" asp-for="Pme.SubvencionPme">
+                            No
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!------------------------------ Datos del Encargado ------------------------------>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Añadir datos del Encargado
+                    </div>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+
+                    <div class="row mt-4">
+                        <!--------Columna izquerda ---------->
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                            <!-------Cedula de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.CedulaE" class="form-control" placeholder="Número de Cédula" />
+                                    <span asp-validation-for="Encargado.CedulaE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Nombre de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.NombreE" class="form-control" placeholder="Nombre del Encargado" />
+                                    <span asp-validation-for="Encargado.NombreE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Apellidos de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.ApellidosE" class="form-control" placeholder="Apellido1  Apellido2" />
+                                    <span asp-validation-for="Encargado.ApellidosE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Fecha de Nacimiento de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.FechaNaceE" class="form-control" type="date" />
+                                    <span asp-validation-for="Encargado.FechaNaceE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <!-------Edad de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.Edad" class="form-control" placeholder="Edad" type="number" />
+                                    <span asp-validation-for="Encargado.Edad" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--------Columna Derecha ---------->
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                            <!-------Correo de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo Electrónico</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.CorreoE" class="form-control" placeholder="correo@ejemplo.com" type="email" />
+                                    <span asp-validation-for="Encargado.CorreoE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Direccion de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Dirección</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.DireccionE" class="form-control" placeholder="Provincia / Cantón" />
+                                    <span asp-validation-for="Encargado.DireccionE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Telefono de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">N Teléfono</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.TelefonoE" class="form-control" placeholder="87888778" type="number" />
+                                    <span asp-validation-for="Encargado.TelefonoE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-------Direccion de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Lugar donde Labora</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <input asp-for="Encargado.LugarTrabajoE" class="form-control" />
+                                    <span asp-validation-for="Encargado.LugarTrabajoE" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <br>
+        <button type="submit" class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
+        <input type="reset" value="Limpiar" class="btn btn-outline-danger" />
+
+    </div>
+</form>
+
+
+
 
 @section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 	}
