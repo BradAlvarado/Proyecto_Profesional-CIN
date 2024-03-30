@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sistema_CIN.Models;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<CINContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db"))
 );
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
