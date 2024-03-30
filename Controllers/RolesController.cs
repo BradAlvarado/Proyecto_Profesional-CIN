@@ -32,7 +32,7 @@ namespace Sistema_CIN.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "Este rol ya existe!");
+                ModelState.AddModelError("", "No existen Roles");
                 return View(await roles.ToListAsync());
             }
             return View(await roles.ToListAsync());

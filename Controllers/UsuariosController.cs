@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,7 @@ namespace Sistema_CIN.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol");
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdUsuario,ImagenU,NombreU,CorreoU,Clave,NombreRolU,EstadoU,IdRol")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("IdUsuario,FotoU,NombreU,CorreoU,Clave,EstadoU,IdRol")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -67,14 +68,25 @@ namespace Sistema_CIN.Controllers
                     if (correoExiste != null)
                     {
                         ModelState.AddModelError("", "Este correo ya está en uso");
-                        ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
                         return View(usuario);
                     }
 
-                    if(usuario.Clave != usuario.ConfirmacionClave)
+                    byte[] bytes;
+
+                    if (usuario.File != null)
                     {
-                        return View(usuario);
+                        using (Stream fs = usuario.File.OpenReadStream())
+                        {
+                            using (BinaryReader br = new(fs))
+                            {
+                                bytes = br.ReadBytes((int)fs.Length);
+                                usuario.FotoU = Convert.ToBase64String(bytes, 0, bytes.Length);
+
+
+                            }    
+                        }
                     }
+
 
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
@@ -86,7 +98,7 @@ namespace Sistema_CIN.Controllers
                     ModelState.AddModelError("", "Ocurrió un error al guardar el usuario: " + ex.Message);
                 }
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
