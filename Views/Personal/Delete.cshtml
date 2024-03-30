@@ -1,78 +1,125 @@
 ﻿@model Sistema_CIN.Models.Personal
 
 @{
-	ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete";
 }
 <h3 class="fw-bold fs-4 mb-3">Mantenimiento > Eliminar Personal</h3>
 
 <div>
-	<a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
 </div>
 <br>
 
-<h3>¿Seguro que desea eliminar este Personal?</h3>
-<div>
-	<br>
+<div class="card mb-4">
 
-	<dl class="row">
-		<dt class="col-sm-2">
-			N.Cédula
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.CedulaP)
-		</dd>
-		<dt class="col-sm-2">
-			Nombre Completo
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.NombreP)      @Html.DisplayFor(model => model.ApellidosP)
 
-		</dd>
+    <h4 class="fw-bold fs-5 card-header">¿Seguro que desea eliminar este Personal @Html.DisplayFor(model => model.NombreP) @Html.DisplayFor(model => model.CedulaP)?</h4>
 
-		<dt class="col-sm-2">
-			Correo Electrónico
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.CorreoP)
-		</dd>
-		<dt class="col-sm-2">
-			Puesto
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.PuestoP)
-		</dd>
-		<dt class="col-sm-2">
-			Fecha Naciemiento
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.FechaNaceP)
-		</dd>
-		<dt class="col-sm-2">
-			Edad
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.EdadP)
-		</dd>
-		<dt class="col-sm-2">
-			Género
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.GeneroP)
-		</dd>
-		<dt class="col-sm-2">
-			Dirección
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.ProvinciaP) 			@Html.DisplayFor(model => model.CantonP)			@Html.DisplayFor(model => model.DistritoP)
+    <div class="card-body">
 
-		</dd>
+        <div class="row">
 
-	</dl>
+            <div class="col-lg-6 col-sm-12">
 
-	<form asp-action="Delete">
-		<input type="hidden" asp-for="IdPersonal" />
-		<input type="submit" value="Eliminar" class="btn btn-danger" />
-		<a class="btn btn-warning" asp-action="Index">Cancelar</a>
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">N Cédula</div>
 
-	</form>
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CedulaP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Nombre Completo</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.NombreP)             @Html.DisplayFor(model => model.ApellidosP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Correo Electrónico</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CorreoP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Número Teléfono</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.TelefonoP)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 fw-bold">Puesto</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.IdRolNavigation.NombreRol)
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!----------------Columna Derecha----------------->
+            <div class="col-lg-6 col-sm-12">
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Fecha de Nacimiento</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.FechaNaceP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Edad</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.EdadP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Genero</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.GeneroP)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Dirección Provincia</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.ProvinciaP)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 fw-bold">Dirección Canton Distrito</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CantonP) @Html.DisplayFor(model => model.DistritoP)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
+
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="IdPersonal" />
+    <input type="submit" value="Eliminar" class="btn btn-danger" />
+    <a class="btn btn-warning" asp-action="Index">Cancelar</a>
+
+</form>
+

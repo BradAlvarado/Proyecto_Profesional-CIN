@@ -10,108 +10,160 @@
 
 </div>
 
-<div class="row">
-    <form class="form-horizontal" asp-action="Create">
+<form class="mt-5" asp-action="Create">
+    <div class="row mt-4">
 
-        <div class="row mt-5 mb-4">
-            
+        <!--------Columna izquerda ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
 
-            <div class="form-group col-lg-6">
+            <!-------Nombre de Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="NombreP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
 
-                <div class="col mb-2">
-                    <label asp-for="CedulaP" class="control-label">N.Cédula</label>
-                </div>
-                <div class="col">
-                    <input asp-for="CedulaP" class="form-control" />
-                    <span asp-validation-for="CedulaP" class="text-danger"></span>
-                </div>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            </div>
-
-            <div class="form-group col-lg-6">
-                <div class="col mb-2">
-                    <label asp-for="NombreP" class="control-label">Nombre</label>
-                </div>
-                <div class="col">
-                    <input asp-for="NombreP" class="form-control" />
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="NombreP" class="form-control" placeholder="Nombre" />
                     <span asp-validation-for="NombreP" class="text-danger"></span>
                 </div>
             </div>
 
-        </div>
+            <!-------Apellidos Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="ApellidosP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="ApellidosP" class="form-control" placeholder="Apellido1  Apellido2" />
+                    <span asp-validation-for="ApellidosP" class="text-danger"></span>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="ApellidosP" class="control-label">Apellido</label>
-            <input asp-for="ApellidosP" class="form-control" />
-            <span asp-validation-for="ApellidosP" class="text-danger"></span>
-        </div>
+            <!-------Cedula de Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="CedulaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CedulaP" class="form-control" pattern="\d-\d{8}" placeholder="Número de Cédula" />
+                    <span asp-validation-for="CedulaP" class="text-danger"></span>
+                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="CorreoP" class="control-label">Correo Electrónico</label>
-            <input asp-for="CorreoP" class="form-control" />
-            <span asp-validation-for="CorreoP" class="text-danger"></span>
-        </div>
+            <!-------Correo de Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="CorreoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo electrónico</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
+                    <span asp-validation-for="CorreoP" class="text-danger"></span>
+                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="PuestoP" class="control-label">Puesto</label>
-            <input asp-for="PuestoP" class="form-control" />
-            <span asp-validation-for="PuestoP" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="EdadP" class="control-label">Edad</label>
-            <input asp-for="EdadP" class="form-control" />
-            <span asp-validation-for="EdadP" class="text-danger"></span>
-        </div>
+            <!-------Telefono de Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="TelefonoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Teléfono</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="TelefonoP" class="form-control" placeholder="(+506)" />
+                    <span asp-validation-for="TelefonoP" class="text-danger"></span>
+                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                </div>
+            </div>
 
+            <!-------Puesto de Personal-------->
+            <div class="mb-4 row">
+                <label asp-for="IdRol" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Puesto</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol">
+                        <option>-- Seleccione el puesto --</option>
 
-
-        <div class="form-group">
-            <label asp-for="FechaNaceP" class="control-label">Fecha Nacimiento</label>
-            <input asp-for="FechaNaceP" class="form-control" />
-            <span asp-validation-for="FechaNaceP" class="text-danger"></span>
-        </div>
-
-
-
-        <div class="form-group">
-            <label asp-for="GeneroP" class="control-label">Género</label>
-            <input asp-for="GeneroP" class="form-control" />
-            <span asp-validation-for="GeneroP" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="ProvinciaP" class="control-label">Provincia</label>
-            <input asp-for="ProvinciaP" class="form-control" />
-            <span asp-validation-for="ProvinciaP" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="CantonP" class="control-label">Cantón</label>
-            <input asp-for="CantonP" class="form-control" />
-            <span asp-validation-for="CantonP" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="DistritoP" class="control-label">Distrito</label>
-            <input asp-for="DistritoP" class="form-control" />
-            <span asp-validation-for="DistritoP" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="IdRol" class="control-label">Rol</label>
-            <select asp-for="IdRol" class="form-control" asp-items="ViewBag.IdRol"></select>
-        </div>
+                    </select>
+                    <span asp-validation-for="IdRol" class="text-danger"></span>
+                </div>
+            </div>
 
 
-        <div class="col-auto mt-5">
-
-            <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
-            <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
 
         </div>
 
-    </form>
 
-</div>
+        <!--------Columna derecha ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+
+            <div class="mb-4 row">
+                <label asp-for="FechaNaceP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input type="date" asp-for="FechaNaceP" class="form-control" />
+                    <span asp-validation-for="FechaNaceP" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label asp-for="EdadP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="EdadP" class="form-control" placeholder="Edad"  />
+                    <span asp-validation-for="EdadP" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label asp-for="GeneroP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Genero</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="GeneroP" class="form-select">
+                        <option value="No encontrado">-- Seleccione el género --</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                    <span asp-validation-for="GeneroP" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="mb-4 row">
+                <label asp-for="ProvinciaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="ProvinciaP" class="form-select">
+                        <option>Selecciona provincia</option>
+                        <option value="San José">San José</option>
+                        <option value="Heredia">Heredia</option>
+                        <option value="Cartago">Cartago</option>
+                        <option value="Alajuela">Alajuela</option>
+                        <option value="Limón">Limón</option>
+                        <option value="Puntarenas">Puntarenas</option>
+                        <option value="Guanacaste">Guanacaste</option>
+                    </select>
+                    <span asp-validation-for="ProvinciaP" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="mb-4 row">
+                <label asp-for="CantonP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cantón</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CantonP" class="form-control" placeholder="Cantón" />
+                    <span asp-validation-for="CantonP" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label asp-for="DistritoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Distrito</label>
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="DistritoP" class="form-control" placeholder="Distrito"/>
+                    <span asp-validation-for="DistritoP" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="col-auto mt-4">
+
+        <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+        <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
+
+    </div>
+
+</form>
+
 
 
 
@@ -120,6 +172,8 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
@@ -130,4 +184,14 @@
             }
         }, 3000);
     </script>
+
+    <script>
+        
+    </script>
+
+
+    
+
+
+
 }
