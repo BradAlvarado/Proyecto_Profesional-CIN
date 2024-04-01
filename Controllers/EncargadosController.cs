@@ -11,9 +11,9 @@ namespace Sistema_CIN.Controllers
 {
     public class EncargadosController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
-        public EncargadosController(CINContext context)
+        public EncargadosController(CIN_pruebaContext context)
         {
             _context = context;
         }
@@ -86,8 +86,7 @@ namespace Sistema_CIN.Controllers
         }
 
         // POST: Encargados/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdEncargado,CedulaE,NombreE,ApellidosE,FechaNaceE,Edad,CorreoE,DireccionE,TelefonoE,LugarTrabajoE,IdPme")] Encargados encargados)
@@ -121,42 +120,27 @@ namespace Sistema_CIN.Controllers
             return View(encargados);
         }
 
-        // GET: Encargados/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Encargados == null)
-            {
-                return NotFound();
-            }
-
-            var encargados = await _context.Encargados
-                .Include(e => e.IdPmeNavigation)
-                .FirstOrDefaultAsync(m => m.IdEncargado == id);
-            if (encargados == null)
-            {
-                return NotFound();
-            }
-
-            return View(encargados);
-        }
 
         // POST: Encargados/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Encargados == null)
             {
                 return Problem("Entity set 'CINContext.Encargados'  is null.");
             }
-            var encargados = await _context.Encargados.FindAsync(id);
-            if (encargados != null)
+            var encargado = await _context.Encargados.FindAsync(id);
+            if (encargado == null)
             {
-                _context.Encargados.Remove(encargados);
+                return NotFound();
             }
-            
+
+            _context.Encargados.Remove(encargado);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["SuccessMessage"] = "Encargado " + encargado.NombreE + " eliminado exitosamente!";
+
+            // Json para enviar el success del Delete del registro
+            return Json(new { success = true });
         }
 
         private bool EncargadosExists(int id)

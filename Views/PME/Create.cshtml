@@ -1,26 +1,24 @@
 ﻿@model Sistema_CIN.Models.PmeViewModel
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "Edit";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar PME</h3>
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Editar PME</h3>
 <div>
-    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+	<a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
 
 </div>
-
-
 <form class="mt-5" asp-action="Create">
 
     <div class="row mt-4">
 
         <!--------Columna izquerda ---------->
         <div class="col-lg-6 col-md-12 col-sm-12">
-
+    
             <!-------Cedula de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+                <label asp-for="Pme.CedulaPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="Pme.CedulaPme" class="form-control" placeholder="Número de Cédula" />
@@ -76,7 +74,6 @@
                     <span asp-validation-for="Pme.EdadPme" class="text-danger"></span>
                 </div>
             </div>
-
             <!-------Sexo de PME-------->
             <div class="mb-4 row">
                 <label asp-for="Pme.GeneroPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Género</label>
@@ -100,6 +97,7 @@
                     <span asp-validation-for="Pme.NacionalidadPme" class="text-danger"></span>
                 </div>
             </div>
+            
 
         </div>
 
@@ -178,7 +176,7 @@
             </div>
 
 
-            <!-------- Nive educativo PME ---------->
+            <!-------- Nivel educativo PME ---------->
             <div class="mb-4 row">
                 <label asp-for="Pme.NivelEducativoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nivel Educativo que cursa</label>
 
@@ -193,7 +191,6 @@
                     <span asp-validation-for="Pme.NivelEducativoPme" class="text-danger"></span>
                 </div>
             </div>
-
             <!-------Recibe Subvencion de PME-------->
             <div class="mb-4 row">
                 <label asp-for="Pme.GeneroPme" class="col-lg-8 col-md-4 col-sm-12 col-form-label">Recibe subvención para cuidado y desarrollo?</label>
@@ -216,10 +213,24 @@
                 </div>
 
             </div>
-        </div>
 
+            <!-------Encargado del PME-------->
+           <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Encargado</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="Pme.IdEncargado" class="form-select" asp-items="ViewBag.IdEncargado">
+                        
+                    </select>
+                    <span asp-validation-for="Pme.IdEncargado" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+       
 
         <!------------------------------ Datos del Encargado ------------------------------>
+
         <div class="accordion accordion-flush" id="accordionFlushExample">
 
             <div class="accordion-item">
@@ -231,8 +242,10 @@
                     </div>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-
+                    
                     <div class="row mt-4">
+
+
                         <!--------Columna izquerda ---------->
                         <div class="col-lg-6 col-md-12 col-sm-12">
 
@@ -241,7 +254,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.CedulaE" class="form-control" placeholder="Número de Cédula" />
+                                    <input asp-for="Encargado.CedulaE" class="form-control" placeholder="Número de Cédula" required />
                                     <span asp-validation-for="Encargado.CedulaE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -251,7 +264,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.NombreE" class="form-control" placeholder="Nombre del Encargado" />
+                                    <input asp-for="Encargado.NombreE" class="form-control" placeholder="Nombre del Encargado" required />
                                     <span asp-validation-for="Encargado.NombreE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -261,7 +274,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.ApellidosE" class="form-control" placeholder="Apellido1  Apellido2" />
+                                    <input asp-for="Encargado.ApellidosE" class="form-control" placeholder="Apellido1  Apellido2" required />
                                     <span asp-validation-for="Encargado.ApellidosE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -271,7 +284,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.FechaNaceE" class="form-control" type="date" />
+                                    <input asp-for="Encargado.FechaNaceE" class="form-control" type="date" required />
                                     <span asp-validation-for="Encargado.FechaNaceE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -297,7 +310,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo Electrónico</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.CorreoE" class="form-control" placeholder="correo@ejemplo.com" type="email" />
+                                    <input asp-for="Encargado.CorreoE" class="form-control" placeholder="correo@ejemplo.com" type="email" required />
                                     <span asp-validation-for="Encargado.CorreoE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -307,7 +320,7 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Dirección</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.DireccionE" class="form-control" placeholder="Provincia / Cantón" />
+                                    <input asp-for="Encargado.DireccionE" class="form-control" placeholder="Provincia / Cantón" required />
                                     <span asp-validation-for="Encargado.DireccionE" class="text-danger"></span>
                                 </div>
                             </div>
@@ -317,12 +330,12 @@
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">N Teléfono</label>
 
                                 <div class="col-lg-8 col-md-9 col-sm-12">
-                                    <input asp-for="Encargado.TelefonoE" class="form-control" placeholder="87888778" type="number" />
+                                    <input asp-for="Encargado.TelefonoE" class="form-control" placeholder="" type="number" required />
                                     <span asp-validation-for="Encargado.TelefonoE" class="text-danger"></span>
                                 </div>
                             </div>
 
-                            <!-------Direccion de Encargado-------->
+                            <!-------Lugar trabajo de Encargado-------->
                             <div class="mb-4 row">
                                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Lugar donde Labora</label>
 
@@ -332,27 +345,36 @@
                                 </div>
                             </div>
 
-                        </div>                      
+                            <!-------Hijo de Encargado-------->
+                            <div class="mb-4 row">
+                                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Responsable de</label>
+
+                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                    <select asp-for="Encargado.IdPme" class="form-control" asp-items="ViewBag.IdPme">
+                                        <option value="">Seleccion un PME</option>
+                                    </select>
+                                    <span asp-validation-for="Encargado.IdPme" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
     <div class="form-group">
-        <br>
         <button type="submit" class="btn btn-danger">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
         <input type="reset" value="Limpiar" class="btn btn-outline-danger" />
 
     </div>
 </form>
 
-
-
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
+}

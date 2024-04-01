@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sistema_CIN.Models
 {
-    [NotMapped]
     public class PmeViewModel
     {
   

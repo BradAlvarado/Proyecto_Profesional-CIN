@@ -9,24 +9,23 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    public class PmeController : Controller
+    public class PMEController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
-        public PmeController(CINContext context)
+        public PMEController(CIN_pruebaContext context)
         {
             _context = context;
         }
 
-        // GET: Pme
-        public async Task<IActionResult> Index(string buscarPme)
+        // GET: PME
+        public async Task<IActionResult> Index()
         {
-            var cINContext = _context.Pmes.Include(u => u.IdEncargadoNavigation);
+            var cINContext = _context.Pmes.Include(p => p.IdEncargadoNavigation);
             return View(await cINContext.ToListAsync());
-
         }
 
-        // GET: Pme/Details/5
+        // GET: PME/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Pmes == null)
@@ -34,11 +33,9 @@ namespace Sistema_CIN.Controllers
                 return NotFound();
             }
 
-            
             var pme = await _context.Pmes
-                .Include(e => e.IdEncargadoNavigation)
+                .Include(p => p.IdEncargadoNavigation)
                 .FirstOrDefaultAsync(m => m.IdPme == id);
-
             if (pme == null)
             {
                 return NotFound();
@@ -47,74 +44,33 @@ namespace Sistema_CIN.Controllers
             return View(pme);
         }
 
-        // GET: Pme/Contacto Familiar/
-        public async Task<IActionResult> ContactoFamiliar(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pme = await _context.Pmes
-                .Include(p => p.Encargados)
-                .FirstOrDefaultAsync(m => m.IdPme == id);
-
-            if (pme == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new PmeViewModel
-            {
-                Pme = pme
-            };
-
-            return View(viewModel);
-        }
-
-        // GET: Pme/Create
+        // GET: PME/Create
         public IActionResult Create()
         {
-            ViewData["IdEncargado"] = new SelectList(_context.Pmes, "IdEncargado", "NombreE");
+            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE");
             return View();
         }
 
-        // POST: Pme/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: PME/Create
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Pme, Encargado")] PmeViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Encargados, Pme")] PmeViewModel viewModel)
         {
-
             if (ModelState.IsValid)
             {
-                // Verificar si se proporcionaron datos del Encargado
-                if (viewModel.Encargado != null && !string.IsNullOrEmpty(viewModel.Encargado.NombreE))
-                {
-                    // Registrar el Encargado solo si se proporcionaron los datos
-                    _context.Encargados.Add(viewModel.Encargado);
-                    await _context.SaveChangesAsync();
-
-                    // Asignar el ID del Encargado al Pme
-                    viewModel.Pme.IdEncargado = viewModel.Encargado.IdEncargado;
-                }
-
-                // Guardar el Pme
-                _context.Pmes.Add(viewModel.Pme);
+                _context.Add(viewModel);
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", viewModel.Pme.IdEncargado);
             return View(viewModel);
-
-
         }
 
-        // GET: Pme/Edit/5
+        // GET: PME/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Pmes == null)
             {
                 return NotFound();
             }
@@ -124,50 +80,47 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
-
-            var encargado = await _context.Encargados.FindAsync(pme.IdEncargado);
-            var viewModel = new PmeViewModel
-            {
-                Pme = pme,
-                Encargado = encargado
-            };
-            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE", pme.IdEncargado);
-            return View(viewModel);
+            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
+            return View(pme);
         }
 
-        // POST: Pme/Edit/5
-       
+        // POST: PME/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Pme, Encargado")] PmeViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
-            if (id != viewModel.Pme.IdPme)
+            if (id != pme.IdPme)
             {
                 return NotFound();
             }
 
-            try
+            if (ModelState.IsValid)
             {
-                _context.Update(viewModel.Pme);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PmeExists(viewModel.Pme.IdPme))
+                try
                 {
-                    return NotFound();
+                    _context.Update(pme);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!PmeExists(pme.IdPme))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
-
-
+            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
+            return View(pme);
         }
 
-        // GET: Pme/Delete/5
+        // GET: PME/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Pmes == null)
@@ -176,6 +129,7 @@ namespace Sistema_CIN.Controllers
             }
 
             var pme = await _context.Pmes
+                .Include(p => p.IdEncargadoNavigation)
                 .FirstOrDefaultAsync(m => m.IdPme == id);
             if (pme == null)
             {
@@ -185,40 +139,32 @@ namespace Sistema_CIN.Controllers
             return View(pme);
         }
 
-        // POST: Pme/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // POST: PME/Delete/5
+  
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Pmes == null)
             {
                 return Problem("Entity set 'CINContext.Pmes'  is null.");
             }
-
             var pme = await _context.Pmes.FindAsync(id);
             if (pme == null)
             {
                 return NotFound();
             }
 
-            // Desvincular al alumno de los registros relacionados en la tabla de padres
-            var padresConPme = await _context.Encargados.Where(p => p.IdPme == id).ToListAsync();
-            foreach (var padre in padresConPme)
-            {
-                padre.IdPme = null;
-            }
-            await _context.SaveChangesAsync();
-
-            // Eliminar al alumno
             _context.Pmes.Remove(pme);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " eliminado exitosamente!";
 
-            return RedirectToAction(nameof(Index));
+            // Json para enviar el success del Delete del registro
+            return Json(new { success = true });
         }
 
         private bool PmeExists(int id)
         {
-            return (_context.Pmes?.Any(e => e.IdPme == id)).GetValueOrDefault();
+          return (_context.Pmes?.Any(e => e.IdPme == id)).GetValueOrDefault();
         }
     }
 }

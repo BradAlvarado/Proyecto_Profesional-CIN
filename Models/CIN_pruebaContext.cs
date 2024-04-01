@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Models
 {
-    public partial class CINContext : DbContext
+    public partial class CIN_pruebaContext : DbContext
     {
-        public CINContext()
+        public CIN_pruebaContext()
         {
         }
 
-        public CINContext(DbContextOptions<CINContext> options)
+        public CIN_pruebaContext(DbContextOptions<CIN_pruebaContext> options)
             : base(options)
         {
         }
@@ -29,7 +28,9 @@ namespace Sistema_CIN.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,7 +38,7 @@ namespace Sistema_CIN.Models
             modelBuilder.Entity<BitacoraIngresoSalidas>(entity =>
             {
                 entity.HasKey(e => e.IdBitacora)
-                    .HasName("PK__Bitacora__7E4268B05E162D07");
+                    .HasName("PK__Bitacora__7E4268B00C364DEE");
 
                 entity.ToTable("Bitacora_ingreso_salida");
 
@@ -62,7 +63,7 @@ namespace Sistema_CIN.Models
             modelBuilder.Entity<BitacoraMovimiento>(entity =>
             {
                 entity.HasKey(e => e.IdBitacora)
-                    .HasName("PK__Bitacora__7E4268B064E4C694");
+                    .HasName("PK__Bitacora__7E4268B0EBA23FAF");
 
                 entity.ToTable("Bitacora_movimientos");
 
@@ -91,7 +92,7 @@ namespace Sistema_CIN.Models
             modelBuilder.Entity<Encargados>(entity =>
             {
                 entity.HasKey(e => e.IdEncargado)
-                    .HasName("PK__Encargad__770F28EA0184A105");
+                    .HasName("PK__Encargad__770F28EAAA3893C6");
 
                 entity.Property(e => e.IdEncargado).HasColumnName("id_encargado");
 
@@ -141,13 +142,13 @@ namespace Sistema_CIN.Models
                 entity.HasOne(d => d.IdPmeNavigation)
                     .WithMany(p => p.Encargados)
                     .HasForeignKey(d => d.IdPme)
-                    .HasConstraintName("FK_pme");
+                    .HasConstraintName("FK__Encargado__id_pm__5BE2A6F2");
             });
 
             modelBuilder.Entity<Modulos>(entity =>
             {
                 entity.HasKey(e => e.IdModulo)
-                    .HasName("PK__Modulos__B2584DFCB9A68352");
+                    .HasName("PK__Modulos__B2584DFC8FD9616F");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
@@ -170,18 +171,18 @@ namespace Sistema_CIN.Models
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.IdModulo)
-                    .HasConstraintName("FK_modulo");
+                    .HasConstraintName("FK__Permisos__id_mod__693CA210");
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK_rol");
+                    .HasConstraintName("FK__Permisos__id_rol__68487DD7");
             });
 
             modelBuilder.Entity<Personal>(entity =>
             {
                 entity.HasKey(e => e.IdPersonal)
-                    .HasName("PK__Personal__418FB808A68CC824");
+                    .HasName("PK__Personal__418FB808ACF63FB8");
 
                 entity.ToTable("Personal");
 
@@ -206,6 +207,11 @@ namespace Sistema_CIN.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("correo_p");
+
+                entity.Property(e => e.TelefonoP)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("telefono_p");
 
                 entity.Property(e => e.DistritoP)
                     .HasMaxLength(20)
@@ -235,21 +241,16 @@ namespace Sistema_CIN.Models
                     .IsUnicode(false)
                     .HasColumnName("provincia_p");
 
-                entity.Property(e => e.TelefonoP)
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("telefono_p");
-
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Personals)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK_id_rol");
+                    .HasConstraintName("FK__Personal__id_rol__5AEE82B9");
             });
 
             modelBuilder.Entity<Pme>(entity =>
             {
                 entity.HasKey(e => e.IdPme)
-                    .HasName("PK__PME__6FC802364428D54A");
+                    .HasName("PK__PME__6FC802360690C129");
 
                 entity.ToTable("PME");
 
@@ -287,7 +288,7 @@ namespace Sistema_CIN.Models
                     .HasColumnName("fecha_egreso_pme");
 
                 entity.Property(e => e.FechaIngresoPme)
-                    .HasColumnType("datetime")
+                    .HasColumnType("date")
                     .HasColumnName("fecha_ingreso_pme");
 
                 entity.Property(e => e.FechaNacimientoPme)
@@ -331,13 +332,13 @@ namespace Sistema_CIN.Models
                 entity.HasOne(d => d.IdEncargadoNavigation)
                     .WithMany(p => p.Pmes)
                     .HasForeignKey(d => d.IdEncargado)
-                    .HasConstraintName("FK_encargado");
+                    .HasConstraintName("FK__PME__id_encargad__5CD6CB2B");
             });
 
             modelBuilder.Entity<Roles>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__Roles__6ABCB5E0BAE5FF32");
+                    .HasName("PK__Roles__6ABCB5E0D21197B9");
 
                 entity.Property(e => e.IdRol).HasColumnName("id_rol");
 
@@ -350,7 +351,7 @@ namespace Sistema_CIN.Models
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__Usuarios__4E3E04ADE760EBBB");
+                    .HasName("PK__Usuarios__4E3E04ADFFBD1DE5");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
 
@@ -368,7 +369,10 @@ namespace Sistema_CIN.Models
 
                 entity.Property(e => e.EstadoU).HasColumnName("estado_u");
 
-                entity.Property(e => e.FotoU).HasColumnName("foto_u");
+                entity.Property(e => e.FotoU)
+                    .HasMaxLength(300)
+                    .IsUnicode(false)
+                    .HasColumnName("foto_u");
 
                 entity.Property(e => e.IdRol).HasColumnName("id_rol");
 
@@ -385,14 +389,12 @@ namespace Sistema_CIN.Models
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK_nombre_rol");
+                    .HasConstraintName("FK__Usuarios__id_rol__5812160E");
             });
 
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<Sistema_CIN.Models.PmeViewModel>? PmeViewModel { get; set; }
     }
 }

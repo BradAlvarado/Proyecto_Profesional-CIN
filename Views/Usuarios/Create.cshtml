@@ -11,7 +11,7 @@
     <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
 </div>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create">
     <div class="row">
         <div class="col-lg-3 col-md-12 col-sm-12">
             <!-- Profile picture card-->
@@ -24,8 +24,8 @@
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <input asp-for="FotoU" type="file" class="form-control">
-                    <span asp-validation-for="FotoU" class="text-danger"></span>
+                    @*<input asp-for="FotoU" type="file" class="form-control">*@
+                    @*<span asp-validation-for="FotoU" class="text-danger"></span>*@
                 </div>
             </div>
         </div>
@@ -35,9 +35,9 @@
             <div class="card">
 
 
-                <div class="card-header mb-3">Datos del Usuario</div>
+               <div class="card-header mb-3">Datos del Usuario</div>
                 <div class="card-body px-4">
-
+                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
                     <!-------Nombre de Usuario-------->
                     <div class="mb-4 row">
                         <label asp-for="NombreU" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre de Usuario</label>
@@ -51,7 +51,7 @@
                         <label asp-for="CorreoU" class="col-lg-4 col-form-label">Correo Electrónico</label>
                         <div class="col-lg-8">
                             <input type="email" asp-for="CorreoU" class="form-control" placeholder="correo@ejemplo.com" />
-                            <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                            
                             <span asp-validation-for="CorreoU" class="text-danger"></span>
                         </div>
                     </div>
@@ -64,14 +64,7 @@
                             <span asp-validation-for="Clave" class="text-danger"></span>
                         </div>
                     </div>
-                    <!------- confirmar Clave-------->
-                    @*<div class="mb-3 row">
-                    <label asp-for="ConfirmacionClave" class="col-lg-4 col-form-label">Confirmar contraseña</label>
-                    <div class="col-lg-8">
-                    <input type="password" asp-for="ConfirmacionClave" class="form-control" placeholder="confirmar contraseña" />
-                    <span asp-validation-for="ConfirmacionClave" class="text-danger"></span>
-                    </div>
-                    </div>*@
+                  
 
                     <!------- ROL -------->
                     <div class="mb-4 row">
@@ -92,8 +85,8 @@
                             <select asp-for="EstadoU" class="form-select">
 
                                 <option>Seleccione Acceso</option>
-                                <option value=true>Habilitado</option>
-                                <option value=false>Inhabilitado</option>
+                                <option value="true">Habilitado</option>
+                                <option value="false">Inhabilitado</option>
                             </select>
                             <span asp-validation-for="EstadoU" class="text-danger"></span>
                         </div>
@@ -113,12 +106,6 @@
         </div>
     </div>
 </form>
-
-
-
-
-
-
 
 
 @section Scripts {

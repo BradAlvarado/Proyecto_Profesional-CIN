@@ -30,7 +30,7 @@
             <div class="mb-4 row">
                 <label asp-for="ApellidosP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="ApellidosP" class="form-control" placeholder="Apellido1  Apellido2" />
+                    <input asp-for="ApellidosP" class="form-control" placeholder="Apellidos" />
                     <span asp-validation-for="ApellidosP" class="text-danger"></span>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="mb-4 row">
                 <label asp-for="CedulaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="CedulaP" class="form-control" pattern="\d-\d{8}" placeholder="Número de Cédula" />
+                    <input asp-for="CedulaP" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" />
                     <span asp-validation-for="CedulaP" class="text-danger"></span>
                     <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
                 </div>
@@ -49,7 +49,7 @@
             <div class="mb-4 row">
                 <label asp-for="CorreoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo electrónico</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
+                    <input type="email" asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
                     <span asp-validation-for="CorreoP" class="text-danger"></span>
                     <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
                 </div>
@@ -59,7 +59,7 @@
             <div class="mb-4 row">
                 <label asp-for="TelefonoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Teléfono</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="TelefonoP" class="form-control" placeholder="(+506)" />
+                    <input asp-for="TelefonoP" class="form-control" id="telefono" pattern="\+[0-9]{3} [0-9]{4}-[0-9]{4}" value="+506 " placeholder="+506 8888-8888" oninput="formatTelefono(this)"  />
                     <span asp-validation-for="TelefonoP" class="text-danger"></span>
                     <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
                 </div>
@@ -172,8 +172,6 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
@@ -187,11 +185,7 @@
 
     <script>
         
+
     </script>
-
-
-    
-
-
 
 }

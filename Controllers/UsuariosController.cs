@@ -13,9 +13,9 @@ namespace Sistema_CIN.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
-        public UsuariosController(CINContext context)
+        public UsuariosController(CIN_pruebaContext context)
         {
             _context = context;
         }
@@ -60,45 +60,13 @@ namespace Sistema_CIN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUsuario,FotoU,NombreU,CorreoU,Clave,EstadoU,IdRol")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var correoExiste = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == usuario.CorreoU);
-                    if (correoExiste != null)
-                    {
-                        ModelState.AddModelError("", "Este correo ya está en uso");
-                        return View(usuario);
-                    }
 
-                    byte[] bytes;
-
-                    if (usuario.File != null)
-                    {
-                        using (Stream fs = usuario.File.OpenReadStream())
-                        {
-                            using (BinaryReader br = new(fs))
-                            {
-                                bytes = br.ReadBytes((int)fs.Length);
-                                usuario.FotoU = Convert.ToBase64String(bytes, 0, bytes.Length);
+            _context.Add(usuario);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Usuario registrado con éxito";
 
 
-                            }    
-                        }
-                    }
-
-
-                    _context.Add(usuario);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Usuario registrado con éxito";
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Ocurrió un error al guardar el usuario: " + ex.Message);
-                }
-            }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
             return View(usuario);
         }
 
@@ -155,42 +123,25 @@ namespace Sistema_CIN.Controllers
             return View(usuario);
         }
 
-        // GET: Usuarios/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Usuarios == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuarios
-                .Include(u => u.IdRolNavigation)
-                .FirstOrDefaultAsync(m => m.IdUsuario == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
-        // POST: Usuarios/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Usuarios == null)
             {
-                return Problem("Entity set 'CINContext.Usuarios'  is null.");
+                return Problem("Entity set 'CINContext.Pme'  is null.");
             }
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var user = await _context.Usuarios.FindAsync(id);
+            if (user == null)
             {
-                _context.Usuarios.Remove(usuario);
+                return NotFound();
             }
 
+            _context.Usuarios.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["SuccessMessage"] = "Usuario " + user.NombreU + " eliminado exitosamente!";
+
+
+            return Json(new { success = true });
         }
 
         private bool UsuarioExists(int id)

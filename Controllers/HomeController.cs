@@ -7,10 +7,10 @@ namespace Sistema_CIN.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(CINContext context, ILogger<HomeController> logger)
+        public HomeController(CIN_pruebaContext context, ILogger<HomeController> logger)
         {
             _context = context;
             _logger = logger;

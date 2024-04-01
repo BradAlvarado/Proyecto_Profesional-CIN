@@ -14,9 +14,9 @@ namespace Sistema_CIN.Controllers
 {
 	public class PersonalController : Controller
 	{
-		private readonly CINContext _context;
+		private readonly CIN_pruebaContext _context;
 
-		public PersonalController(CINContext context)
+		public PersonalController(CIN_pruebaContext context)
 		{
 			_context = context;
 		}
@@ -24,9 +24,9 @@ namespace Sistema_CIN.Controllers
 		// GET: Personal
 		public async Task<IActionResult> Index(string buscarEmpleado)
 		{
-			var cINContext = _context.Personals.Include(p => p.IdRolNavigation);
-
             var empleado = from personal in _context.Personals select personal;
+			empleado = _context.Personals.Include(p => p.IdRolNavigation);
+	
 
 			if(empleado.Count() < 1)
 			{
@@ -41,6 +41,7 @@ namespace Sistema_CIN.Controllers
             {
                 return View(await empleado.ToListAsync());
             }
+
             return View(await empleado.ToListAsync());
         }
 
@@ -108,7 +109,7 @@ namespace Sistema_CIN.Controllers
 			}
 
 
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", personal.IdRol);
+			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", personal.IdRol);
 			return View(personal);
 		}
 
@@ -180,51 +181,35 @@ namespace Sistema_CIN.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", personal.IdRol);
+			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", personal.IdRol);
 			return View(personal);
 
 		}
 
-		// GET: Personal/Delete/5
-		public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null || _context.Personals == null)
-			{
-				return NotFound();
-			}
+        // POST: Personal/Delete
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (_context.Personals == null)
+            {
+                return Problem("Entity set 'CINContext.Personal'  is null.");
+            }
+            var personal = await _context.Personals.FindAsync(id);
+            if (personal == null)
+            {
+                return NotFound();
+            }
 
-			var personal = await _context.Personals
-				.Include(p => p.IdRolNavigation)
-				.FirstOrDefaultAsync(m => m.IdPersonal == id);
-			if (personal == null)
-			{
-				return NotFound();
-			}
+            _context.Personals.Remove(personal);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Personal " + personal.NombreP + " eliminado exitosamente!";
 
-			return View(personal);
-		}
 
-		// POST: Personal/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			if (_context.Personals == null)
-			{
-				return Problem("Entity set 'CINContext.Personals'  is null.");
-			}
-			var personal = await _context.Personals.FindAsync(id);
-			if (personal != null)
-			{
-				_context.Personals.Remove(personal);
-			}
+            return Json(new { success = true });
+        }
 
-			await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Personal "+ personal.NombreP +" eliminado exitosamente!";
-            return RedirectToAction(nameof(Index));
-		}
 
-		private bool PersonalExists(int id)
+        private bool PersonalExists(int id)
 		{
 			return (_context.Personals?.Any(e => e.IdPersonal == id)).GetValueOrDefault();
 		}

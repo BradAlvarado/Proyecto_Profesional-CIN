@@ -12,10 +12,10 @@ namespace Sistema_CIN.Controllers
 {
     public class RolesController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
 
-        public RolesController(CINContext context)
+        public RolesController(CIN_pruebaContext context)
         {
             _context = context;
         }
