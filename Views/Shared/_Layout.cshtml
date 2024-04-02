@@ -132,6 +132,23 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
+                       data-bs-target="#bitacoras" aria-expanded="false" aria-controls="bitacoras">
+                        <i class="lni lni-agenda"></i>
+                        <span>Bitácoras</span>
+                    </a>
+                    <ul id="bitacoras" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a asp-controller ="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">PME</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+
                 <!----------MODULO AYUDA NAV--------->
                 <li class="sidebar-item mb-2">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"

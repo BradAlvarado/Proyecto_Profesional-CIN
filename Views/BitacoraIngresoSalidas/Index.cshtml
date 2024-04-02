@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Sistema_CIN.Models.BitacoraIngresoSalidas>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdBitacora)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UsuarioB)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaIngreso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaSalida)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EstadoActual)
+                </th>
+             
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.IdBitacora)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioB)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaIngreso)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaSalida)
+                    </td>
+                    <td>
+
+                        @{
+                            if (item.EstadoActual == 1)
+                            {
+                                <text><span class="text-success">En línea</span></text>
+                            }
+                            else
+                            {
+
+                                <text><i class="fa-regular fa-circle text-danger"></i>  Desconectado</text>
+                            }
+
+
+                        }
+
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
