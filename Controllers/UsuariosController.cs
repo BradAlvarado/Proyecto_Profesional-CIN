@@ -60,14 +60,40 @@ namespace Sistema_CIN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUsuario,FotoU,NombreU,CorreoU,Clave,EstadoU,IdRol")] Usuario usuario)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
 
-            _context.Add(usuario);
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Usuario registrado con éxito";
+                    if (existeCorreo != null)
+                    {
+                        ModelState.AddModelError("", "Este correo ya está en uso");
+
+                        return View(usuario);
+
+                    }
+
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Usuario registrado con éxito";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+                return View(usuario);
+            }
+            catch (Exception)
+            {
+
+                ModelState.AddModelError("", "Error al registrar el usuario");
+
+                return View(usuario);
+            }
 
 
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
-            return View(usuario);
+
+
         }
 
         // GET: Usuarios/Edit/5
@@ -83,7 +109,7 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
