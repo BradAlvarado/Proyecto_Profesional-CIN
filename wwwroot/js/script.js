@@ -1,10 +1,11 @@
 const hamBurger = document.querySelector(".toggle-btn");
-
+// EVENTO PARA EL NAVBAR
 hamBurger.addEventListener("click", function () {
     document.querySelector("#sidebar").classList.toggle("expand");
 });
 
 
+// Alerta de Success
 function registroExito(message) {
     Swal.fire({
         icon: "success",
@@ -14,6 +15,7 @@ function registroExito(message) {
     });
 }
 
+// Funcion para dar formato a la cedula
 function formatCedula(input) {
     // Elimina todos los caracteres que no sean números
     var cedula = input.value.replace(/\D/g, '');
@@ -34,25 +36,59 @@ function formatTelefono(input) {
     var telefono = input.value.replace(/\D/g, '');
 
     // Agrega el formato deseado
-    if (telefono.length > 3) {
-        telefono = '+' + telefono.substring(0, 3) + ' ' + telefono.substring(3, 7) + '-' + telefono.substring(7, 11);
-    } else if (telefono.length > 0) {
-        telefono = '+' + telefono.substring(0, 3);
+    if (telefono.length > 4) {
+        telefono = telefono.substring(0, 4) + '-' + telefono.substring(4, 8);
     }
 
     // Actualiza el valor del input
     input.value = telefono;
 }
 
+//Calculamos la edad auto al ingresar la fecha de nacimiento
+function calcularEdad(fechaNacimientoInputId, edadInputId) {
+    var fechaNacimientoInput = document.getElementById(fechaNacimientoInputId);
+    var edadInput = document.getElementById(edadInputId);
+
+    fechaNacimientoInput.addEventListener('change', function () {
+        var fechaNacimiento = new Date(this.value);
+        var fechaActual = new Date();
+        var edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+        if (fechaNacimiento.getMonth() > fechaActual.getMonth() || (fechaNacimiento.getMonth() === fechaActual.getMonth() && fechaNacimiento.getDate() > fechaActual.getDate())) {
+            edad--;
+        }
+        edadInput.value = edad;
+    });
+}
+// Llamamos a la funcion para los diferentes formularios
+document.addEventListener('DOMContentLoaded', function () {
+
+    calcularEdad('FechaNaceP', 'EdadP');
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    calcularEdad('FechaNaceE', 'Edad');
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    calcularEdad('Pme_FechaNacimientoPme', 'Pme_EdadPme');
+
+});
+
+
+// Funcion SweetAlert para confirmar Eliminar
 function confirmDelete(id, nombre, controller) {
     Swal.fire({
-        title: `¿Deseas eliminar el registro de ${nombre}? `,
+        title: `Deseas eliminar el registro de ${nombre}? `,
         text: "¡No podrás revertir esto!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo!'
+        confirmButtonText: 'Si, eliminarlo!'
     }).then((result) => {
         if (result.isConfirmed) {
             // Si el usuario confirma, envía la solicitud de eliminación con AJAX

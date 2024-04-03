@@ -56,7 +56,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="FechaNaceE" class="form-control" type="date" required/>
+                    <input asp-for="FechaNaceE" name="FechaNaceE" class="form-control" type="date" required/>
                     <span asp-validation-for="FechaNaceE" class="text-danger"></span>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="Edad" class="form-control" placeholder="Edad" type="number" />
+                    <input asp-for="Edad" class="form-control" name="Edad" placeholder="Edad" type="number" />
                     <span asp-validation-for="Edad" class="text-danger"></span>
                 </div>
             </div>
@@ -148,4 +148,8 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        
+    </script>
 }

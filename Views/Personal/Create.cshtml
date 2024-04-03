@@ -18,7 +18,7 @@
 
             <!-------Nombre de Personal-------->
             <div class="mb-4 row">
-                <label asp-for="NombreP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="NombreP" class="form-control" placeholder="Nombre" />
@@ -28,7 +28,7 @@
 
             <!-------Apellidos Personal-------->
             <div class="mb-4 row">
-                <label asp-for="ApellidosP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+                <label asp-for="ApellidosP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="ApellidosP" class="form-control" placeholder="Apellidos" />
                     <span asp-validation-for="ApellidosP" class="text-danger"></span>
@@ -37,7 +37,7 @@
 
             <!-------Cedula de Personal-------->
             <div class="mb-4 row">
-                <label asp-for="CedulaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+                <label asp-for="CedulaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="CedulaP" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" />
                     <span asp-validation-for="CedulaP" class="text-danger"></span>
@@ -47,7 +47,7 @@
 
             <!-------Correo de Personal-------->
             <div class="mb-4 row">
-                <label asp-for="CorreoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo electrónico</label>
+                <label asp-for="CorreoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo electrónico <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input type="email" asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
                     <span asp-validation-for="CorreoP" class="text-danger"></span>
@@ -57,9 +57,9 @@
 
             <!-------Telefono de Personal-------->
             <div class="mb-4 row">
-                <label asp-for="TelefonoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Teléfono</label>
+                <label asp-for="TelefonoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Teléfono <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="TelefonoP" class="form-control" id="telefono" pattern="\+[0-9]{3} [0-9]{4}-[0-9]{4}" value="+506 " placeholder="+506 8888-8888" oninput="formatTelefono(this)"  />
+                    <input asp-for="TelefonoP" class="form-control" id="telefono" pattern="[0-9]{4}-[0-9]{4}" placeholder="N Teléfono" oninput="formatTelefono(this)" />
                     <span asp-validation-for="TelefonoP" class="text-danger"></span>
                     <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
                 </div>
@@ -67,11 +67,11 @@
 
             <!-------Puesto de Personal-------->
             <div class="mb-4 row">
-                <label asp-for="IdRol" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Puesto</label>
+                <label asp-for="IdRol" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Puesto <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol">
-                        <option>-- Seleccione el puesto --</option>
-
+                    <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol" >
+                        
+                        <option value="">Seleccione una opción</option>
                     </select>
                     <span asp-validation-for="IdRol" class="text-danger"></span>
                 </div>
@@ -85,24 +85,26 @@
         <!--------Columna derecha ---------->
         <div class="col-lg-6 col-md-12 col-sm-12">
 
+            <!-------- Fecha Nacimiento personal ---------->
             <div class="mb-4 row">
-                <label asp-for="FechaNaceP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+                <label asp-for="FechaNaceP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input type="date" asp-for="FechaNaceP" class="form-control" />
+                    <input type="date" asp-for="FechaNaceP" name="FechaNaceP" class="form-control" />
                     <span asp-validation-for="FechaNaceP" class="text-danger"></span>
                 </div>
             </div>
 
+            <!-------- Edad Personal ---------->
             <div class="mb-4 row">
                 <label asp-for="EdadP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="EdadP" class="form-control" placeholder="Edad"  />
-                    <span asp-validation-for="EdadP" class="text-danger"></span>
+                    <input asp-for="EdadP" name="EdadP" class="form-control" placeholder="Edad" />
+                    <span asp-validation-for="EdadP"class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-4 row">
-                <label asp-for="GeneroP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Genero</label>
+                <label asp-for="GeneroP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Genero <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <select asp-for="GeneroP" class="form-select">
                         <option value="No encontrado">-- Seleccione el género --</option>
@@ -115,7 +117,7 @@
 
 
             <div class="mb-4 row">
-                <label asp-for="ProvinciaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia</label>
+                <label asp-for="ProvinciaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <select asp-for="ProvinciaP" class="form-select">
                         <option>Selecciona provincia</option>
@@ -133,7 +135,7 @@
 
 
             <div class="mb-4 row">
-                <label asp-for="CantonP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cantón</label>
+                <label asp-for="CantonP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cantón <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="CantonP" class="form-control" placeholder="Cantón" />
                     <span asp-validation-for="CantonP" class="text-danger"></span>

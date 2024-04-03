@@ -61,7 +61,7 @@
                 <label asp-for="Pme.FechaNacimientoPme" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="Pme.FechaNacimientoPme" class="form-control" type="date" />
+                    <input asp-for="Pme.FechaNacimientoPme" name="FechaNacimientoPme" class="form-control" type="date" />
                     <span asp-validation-for="Pme.FechaNacimientoPme" class="text-danger"></span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="Pme.EdadPme" class="form-control" type="number" placeholder="0" />
+                    <input asp-for="Pme.EdadPme" name="EdadPme" class="form-control" type="number" placeholder="0" />
                     <span asp-validation-for="Pme.EdadPme" class="text-danger"></span>
                 </div>
             </div>
@@ -377,4 +377,14 @@
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
+
+    <script>
+        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
+        setTimeout(function () {
+            const alertaDiv = document.querySelector('.alerta');
+            if (alertaDiv) {
+                alertaDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
 }
