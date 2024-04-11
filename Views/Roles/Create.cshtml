@@ -4,10 +4,17 @@
     ViewData["Title"] = "Create";
 }
 
-<h3 class="fw-bold fs-4">Administrar > Registrar Rol</h3>
+<div class="row my-2">
 
-<div class="my-3">
-    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Administrar > Registrar Roles</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+    </div>
+
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
 </div>
 
 
@@ -27,12 +34,7 @@
             </div>
         </div>
 
-        <div class="col-lg-6 col-sm-12 mb-3">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger text-danger" role="alert">
-
-            </div>
-        </div>
-
+       
 
     </div>
 

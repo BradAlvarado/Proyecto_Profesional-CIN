@@ -18,6 +18,12 @@ namespace Sistema_CIN.Controllers
             _context = context;
         }
 
+        private void AsignarCamposVacios(Encargados encargado)
+        {
+            encargado.LugarTrabajoE ??= "No ingresado";
+           
+        }
+
         // GET: Encargados
         public async Task<IActionResult> Index()
         {
@@ -52,21 +58,41 @@ namespace Sistema_CIN.Controllers
         }
 
         // POST: Encargados/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdEncargado,CedulaE,NombreE,ApellidosE,FechaNaceE,Edad,CorreoE,DireccionE,TelefonoE,LugarTrabajoE,IdPme")] Encargados encargados)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(encargados);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Verificar si la cédula ya existe en el contexto
+                var existeCedula = await _context.Encargados.FirstOrDefaultAsync(e => e.CedulaE == encargados.CedulaE);
+                if (existeCedula != null)
+                {
+                    ModelState.AddModelError("", "Esta cédula ya está registrada.");
+                    ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme", encargados.IdPme);
+                    return View(encargados);
+                }
+
+                if (ModelState.IsValid)
+                {
+                    AsignarCamposVacios(encargados);
+                    _context.Add(encargados);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Encargado registrado exitosamente!";
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme", encargados.IdPme);
+                return View(encargados);
             }
-            ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme", encargados.IdPme);
-            return View(encargados);
+            catch (Exception)
+            {
+                // Manejo de errores aquí, como registrar el error, mostrar un mensaje al usuario, etc.
+                ModelState.AddModelError("", "Ocurrió un error al procesar la solicitud.");
+                return View(encargados);
+            }
         }
+
 
         // GET: Encargados/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -102,6 +128,7 @@ namespace Sistema_CIN.Controllers
                 {
                     _context.Update(encargados);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Encargado " + encargados.NombreE + " actualizado exitosamente!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {

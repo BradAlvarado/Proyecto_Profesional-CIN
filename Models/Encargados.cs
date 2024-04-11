@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_CIN.Models
 {
@@ -11,14 +12,23 @@ namespace Sistema_CIN.Models
         }
 
         public int IdEncargado { get; set; }
-        public string? CedulaE { get; set; }
-        public string? NombreE { get; set; }
-        public string? ApellidosE { get; set; } 
-        public DateTime? FechaNaceE { get; set; }
-        public int? Edad { get; set; }
-        public string? CorreoE { get; set; } 
-        public string? DireccionE { get; set; }
-        public string? TelefonoE { get; set; } 
+
+        [Required(ErrorMessage = "El campo Cédula es obligatorio.")]
+        public string CedulaE { get; set; } = null!;
+        [Required(ErrorMessage = "El campo Nombre es obligatorio.")]
+        public string NombreE { get; set; } = null!;
+        [Required(ErrorMessage = "El campo Apellidos es obligatorio.")]
+        public string ApellidosE { get; set; } = null!;
+        [Required(ErrorMessage = "El campo Fecha de nacimiento es obligatorio para completar la Edad.")]
+        public DateTime FechaNaceE { get; set; }
+        [Required(ErrorMessage = "El campo Edad es obligatorio.")]
+        public int Edad { get; set; }
+
+        public string? CorreoE { get; set; }
+        [Required(ErrorMessage = "El campo Dirección es obligatorio.")]
+        public string DireccionE { get; set; } = null!;
+        [Required(ErrorMessage = "El campo Teléfono es obligatorio.")]
+        public string TelefonoE { get; set; } = null!;
         public string? LugarTrabajoE { get; set; }
         public int? IdPme { get; set; }
 

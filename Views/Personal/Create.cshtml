@@ -4,9 +4,16 @@
     ViewData["Title"] = "Create";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Agregar Personal</h3>
-<div>
-    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
+<div class="row my-2">
+
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar Personal</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+    </div>
+
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 
 </div>
 
@@ -15,6 +22,7 @@
 
         <!--------Columna izquerda ---------->
         <div class="col-lg-6 col-md-12 col-sm-12">
+
 
             <!-------Nombre de Personal-------->
             <div class="mb-4 row">
@@ -41,7 +49,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="CedulaP" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" />
                     <span asp-validation-for="CedulaP" class="text-danger"></span>
-                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                    
                 </div>
             </div>
 
@@ -51,7 +59,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input type="email" asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
                     <span asp-validation-for="CorreoP" class="text-danger"></span>
-                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                    
                 </div>
             </div>
 
@@ -61,7 +69,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="TelefonoP" class="form-control" id="telefono" pattern="[0-9]{4}-[0-9]{4}" placeholder="N Teléfono" oninput="formatTelefono(this)" />
                     <span asp-validation-for="TelefonoP" class="text-danger"></span>
-                    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
+                   
                 </div>
             </div>
 
@@ -98,7 +106,7 @@
             <div class="mb-4 row">
                 <label asp-for="EdadP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="EdadP" name="EdadP" class="form-control" placeholder="Edad" />
+                    <input asp-for="EdadP" name="EdadP" class="form-control" placeholder="Edad" readonly/>
                     <span asp-validation-for="EdadP"class="text-danger"></span>
                 </div>
             </div>
@@ -186,8 +194,12 @@
     </script>
 
     <script>
-        
 
+        document.addEventListener('DOMContentLoaded', function () {
+
+            calcularEdad('FechaNaceP', 'EdadP');
+
+        });
     </script>
 
 }

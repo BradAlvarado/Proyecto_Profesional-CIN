@@ -37,11 +37,11 @@
 			<th>
 				Lugar de Trabajo
 			</th>
-			<th>
-				Hijo
-			</th>
+			
 
-			<th></th>
+			<th>Detalles</th>
+			<th>Editar</th>
+			<th>Eliminar</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -75,22 +75,15 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.LugarTrabajoE)
 				</td>
+				
 				<td>
-					@if (item.IdPme == null)
-					{
-						<text>No registrado</text>
-					}
-					else
-					{
-						<a asp-controller="PME" asp-action="Details" asp-route-id="@item.IdPme">
-							@Html.DisplayFor(modelItem => item.IdPmeNavigation.NombrePme, item.IdPmeNavigation.ApellidosPme)
-						</a>
-					}
+					<a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-eye"></i></a>
 					
 				</td>
 				<td>
-					<a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-pen-to-square"></i></a> |
-					<a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-eye"></i></a> |
+					<a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-pen-to-square"></i></a>
+				</td>
+				<td>
 					<a class="btn btn-danger btn-sm"  onclick="confirmDelete('@item.IdEncargado','@item.NombreE' ,'Encargados')" ><i class="fa-solid fa-trash-can"></i></a>
 				</td>
 			</tr>

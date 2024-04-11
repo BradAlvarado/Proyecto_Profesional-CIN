@@ -18,10 +18,12 @@ namespace Sistema_CIN.Models
         [Required(ErrorMessage = "El campo Correo es obligatorio.")]
         public string CorreoP { get; set; } = null!;
         [Required(ErrorMessage = "El campo Teléfono es obligatorio.")]
-        public string TelefonoP { get; set; }
+        public string TelefonoP { get; set; } = null!;
         public DateTime? FechaNaceP { get; set; }
         public int EdadP { get; set; }
+        [Required(ErrorMessage = "El campo Género es obligatorio.")]
         public string GeneroP { get; set; } = null!;
+        [Required(ErrorMessage = "El campo Provincia es obligatorio.")]
         public string ProvinciaP { get; set; } = null!;
         public string? CantonP { get; set; }
         public string? DistritoP { get; set; } 

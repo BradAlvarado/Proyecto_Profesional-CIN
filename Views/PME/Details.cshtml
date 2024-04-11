@@ -1,169 +1,272 @@
 ﻿@model Sistema_CIN.Models.Pme
 
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de PME";
 }
-
-<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Detalles PME</h3>
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Detalles de PMEs</h3>
 <div>
-    <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+    <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
 
 </div>
 
-<div>
-    <h4 class="my-4">Menor de Edad @Html.DisplayFor(model => model.CedulaPme) - @Html.DisplayFor(model => model.NombrePme)</h4>
-    <hr />
-    <dl class="row">
+<br>
 
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                N.Cédula
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.CedulaPme)
-            </dd>
+<div class="card mb-4">
+
+
+    <h4 class="fw-bold fs-5 card-header">Información del PME > @Html.DisplayFor(model => model.NombrePme)  @Html.DisplayFor(model => model.ApellidosPme)</h4>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-lg-6 col-sm-12">
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">N Cédula</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CedulaPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Nombre</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.NombrePme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Apellidos</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.ApellidosPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Póliza del Seguro</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.PolizaSeguro)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Fecha de Nacimiento</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.FechaNacimientoPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Edad</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.EdadPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Genero</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.GeneroPme)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 fw-bold">Nacionalidad</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.NacionalidadPme)
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!----------------Columna Derecha----------------->
+            <div class="col-lg-6 col-sm-12">
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Dirección Provincia</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.ProvinciaPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Dirección Cantón</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CantonPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Dirección Distrito</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.DistritoPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Fecha Ingreso</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.FechaIngresoPme)
+                    </div>
+                </div>
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Fecha Egreso</div>
+
+                    <div class="col-6">
+
+                        @{
+                            if (Model.FechaEgresoPme == null)
+                            {
+                                <text>No egresado</text>
+                            }
+                            @Html.DisplayFor(model => model.FechaEgresoPme)
+                        }
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Condición Migratoria</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CondiciónMigratoriaPme)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Nivel educativo</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.NivelEducativoPme)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 fw-bold">Recibe Subvención</div>
+
+                    <div class="col-6">
+
+                        @{
+                            if (Model.SubvencionPme == false)
+                            {
+                                <text>No</text>
+                            }
+                            else
+                            {
+                                <text>Si</text>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+
         </div>
+    </div>
 
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                N.Póliza
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.PolizaSeguro == null)
-                {
-                    <text>No tiene</text>
-                }
-                else
-                {
-                    @Html.DisplayFor(model => model.PolizaSeguro)
-                }
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Nombre Completo
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.NombrePme)             @Html.DisplayFor(model => model.ApellidosPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Fecha Nacimiento
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.FechaNacimientoPme)
-            </dd>
-        </div>
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Edad
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.EdadPme)
-            </dd>
-        </div>
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Género
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.GeneroPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Dirección
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ProvinciaPme)			@Html.DisplayFor(model => model.CantonPme)			@Html.DisplayFor(model => model.DistritoPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Nacionalidad
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.NacionalidadPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Recibe Subvención para desarrollo y cuido
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.SubvencionPme == true)
-                {
-                    <text>Si recibe</text>
-                }
-                else if (Model.SubvencionPme == false)
-                {
-                    <text>No recibe</text>
-                }
-                <text>No asignado</text>
-
-            </dd>
-        </div>
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Fecha de Ingreso
-            </dt>
-            <dd class="col-sm-10">
-
-                @Html.DisplayFor(model => model.FechaIngresoPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Fecha de Egreso
-            </dt>
-            <dd class="col-sm-10">
-
-                @if (Model.FechaEgresoPme == null)
-                {
-                    <text>No tiene</text>
-                }
-                else
-                {
-                    @Html.DisplayFor(model => model.FechaEgresoPme)
-                }
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Condición Migratora
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.CondiciónMigratoriaPme)
-            </dd>
-        </div>
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Nivel Educativo
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.NivelEducativoPme)
-            </dd>
-        </div>
-
-        <div class="row mb-2">
-            <dt class="col-sm-2">
-                Encargado
-            </dt>
-            <dd class="col-sm-10">
-
-                @Html.DisplayFor(model => model.IdEncargadoNavigation.NombreE)
-
-            </dd>
-        </div>
-
-    </dl>
-    
 </div>
+
+<h3 class="fw-bold fs-4 mb-3">Información Familiar</h3>
+
+
+<div class="row">
+
+
+    @if (Model.IdEncargado == null && Model.Encargados == null)
+    {
+
+        <p>No se encontraron encargados asociados.</p>
+    }
+    else
+    {
+        int encargadoIndex = 1;
+
+
+        @if (Model.IdEncargado != null)
+        {
+            <div class="col-lg-6 col-sm-12">
+                <div class="card mb-4">
+                    <h4 class="fw-bold fs-5 card-header">Encargado @encargadoIndex > @Html.DisplayFor(model => model.IdEncargadoNavigation.NombreE)</h4>
+                    <div class="card-body">
+                        <div class="mb-4 row">
+                            <div class="col-6 fw-bold">N Cédula</div>
+                            <div class="col-6">
+                                @Html.DisplayFor(model => model.IdEncargadoNavigation.CedulaE)
+                            </div>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-6 fw-bold">Nombre Completo</div>
+                            <div class="col-6">
+                                @Html.DisplayFor(model => model.IdEncargadoNavigation.NombreE) @Html.DisplayFor(model => model.IdEncargadoNavigation.ApellidosE)
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 fw-bold">Teléfono</div>
+                            <div class="col-6">
+                                @Html.DisplayFor(model => model.IdEncargadoNavigation.TelefonoE)
+                            </div>
+                        </div>
+                        <a class="btn btn-outline-success btn-sm" asp-controller="Encargados" asp-action="Details" asp-route-id="@Model.IdEncargado">Más detalles</a>
+                    </div>
+                </div>
+            </div>
+            encargadoIndex++;
+
+        }
+        @if (Model.Encargados.Any())
+        {
+            foreach (var encargado in Model.Encargados)
+            {
+                if (Model.IdEncargado != encargado.IdEncargado)
+                {
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card mb-4">
+                            <h4 class="fw-bold fs-5 card-header">Encargado @encargadoIndex  > @Html.DisplayFor(model => encargado.NombreE)</h4>
+                            <div class="card-body">
+                                <div class="mb-4 row">
+                                    <div class="col-lg-6 col-md-6 fw-bold">Cédula</div>
+                                    <div class="col-lg-6 col-md-6">
+                                        @Html.DisplayFor(model => encargado.CedulaE)
+                                    </div>
+                                </div>
+                                <div class="mb-4 row">
+                                    <div class="col-lg-6 col-md-6 fw-bold">Nombre Completo</div>
+                                    <div class="col-lg-6 col-md-6">
+                                        @Html.DisplayFor(model => encargado.NombreE) @Html.DisplayFor(model => encargado.ApellidosE)
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-lg-6 col-md-6 fw-bold">Teléfono</div>
+                                    <div class="col-lg-6 col-md-6">
+                                        @Html.DisplayFor(model => encargado.TelefonoE)
+                                    </div>
+                                </div>
+                                <a class="btn btn-outline-success btn-sm" asp-controller="Encargados" asp-action="Details" asp-route-id="@encargado.IdEncargado">Más detalles</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    encargadoIndex++;
+                }
+            }
+        }
+
+    }
+</div>
+
+
+
+

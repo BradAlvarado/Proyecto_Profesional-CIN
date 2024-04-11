@@ -11,9 +11,22 @@ function registroExito(message) {
         icon: "success",
         title: message,
         showConfirmButton: false,
-        timer: 1500
+        timer: 2000
     });
 }
+
+function alertaError(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message,
+        confirmButtonColor: '#3085d6',
+        timer: 2000,
+        timerProgressBar: true
+    });
+}
+
+
 
 // Funcion para dar formato a la cedula
 function formatCedula(input) {
@@ -50,40 +63,23 @@ function calcularEdad(fechaNacimientoInputId, edadInputId) {
     var edadInput = document.getElementById(edadInputId);
 
     fechaNacimientoInput.addEventListener('change', function () {
+        var edad = 0;
         var fechaNacimiento = new Date(this.value);
         var fechaActual = new Date();
-        var edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+        edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
         if (fechaNacimiento.getMonth() > fechaActual.getMonth() || (fechaNacimiento.getMonth() === fechaActual.getMonth() && fechaNacimiento.getDate() > fechaActual.getDate())) {
             edad--;
         }
         edadInput.value = edad;
     });
 }
-// Llamamos a la funcion para los diferentes formularios
-document.addEventListener('DOMContentLoaded', function () {
-
-    calcularEdad('FechaNaceP', 'EdadP');
-
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    calcularEdad('FechaNaceE', 'Edad');
-
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    calcularEdad('Pme_FechaNacimientoPme', 'Pme_EdadPme');
-
-});
 
 
 // Funcion SweetAlert para confirmar Eliminar
 function confirmDelete(id, nombre, controller) {
     Swal.fire({
         title: `Deseas eliminar el registro de ${nombre}? `,
-        text: "¡No podrás revertir esto!",
+        text: "No podras revertir los cambios!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -103,7 +99,7 @@ function confirmDelete(id, nombre, controller) {
                 },
                 error: function () {
                     // Errores de la solicitud AJAX 
-                    alert('Error al intentar de eliminar el registro '+ id)
+                    alertaError(`Registro ${id} no fue encontrado.`)
                     
                 }
             });
