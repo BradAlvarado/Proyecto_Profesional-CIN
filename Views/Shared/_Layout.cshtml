@@ -116,7 +116,7 @@
                 <li class="sidebar-item mb-2">
                     <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
                        data-bs-target="#reportes" aria-expanded="false" aria-controls="reportes">
-                        <i class="lni lni-agenda"></i>
+                        <i class="lni lni-remove-file"></i>
                         <span>Reportes</span>
                     </a>
                     <ul id="reportes" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
@@ -132,20 +132,21 @@
                     </ul>
                 </li>
 
+                <!----------MODULO BITACORAS NAV--------->
                 <li class="sidebar-item mb-2">
                     <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
                        data-bs-target="#bitacoras" aria-expanded="false" aria-controls="bitacoras">
-                        <i class="lni lni-agenda"></i>
+                        <i class="lni lni-graph"></i>
                         <span>Bitácoras</span>
                     </a>
                     <ul id="bitacoras" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a asp-controller ="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
+                            <a asp-controller="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="#" class="sidebar-link">PME</a>
                         </li>
-                        
+
                     </ul>
                 </li>
 
@@ -188,26 +189,15 @@
             <nav class="navbar navbar-expand px-4 py-3 bg-white">
                 <div class="d-flex">
                     <div class="sidebar-logo">
-                        <a href=""><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
+                        <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
                     </div>
                 </div>
             </nav>
 
-            <div class="row my-4 mx-2 ">
 
-                <div class="col-lg-1 col-md-1">
-                </div>
-
-
-                <main class="col-lg-10 col-md-10">
-                    @RenderBody()
-                </main>
-
-
-                <div class="col-lg-1 col-md-1">
-                </div>
-
-            </div>
+            <main class="p-4">
+                @RenderBody()
+            </main>
 
             <footer class="footer py-4 border-top mt-auto">
                 <div class="container-fluid">
@@ -233,7 +223,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    
+
     <script>
         var currentPath = window.location.pathname;
 

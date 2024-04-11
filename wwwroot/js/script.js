@@ -1,5 +1,6 @@
 const hamBurger = document.querySelector(".toggle-btn");
 // EVENTO PARA EL NAVBAR
+
 hamBurger.addEventListener("click", function () {
     document.querySelector("#sidebar").classList.toggle("expand");
 });
