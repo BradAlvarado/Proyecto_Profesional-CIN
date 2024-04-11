@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-
-
 ::after,
 ::before {
     box-sizing: border-box;
@@ -40,17 +38,18 @@ body {
     width: 80px;
     min-width: 80px;
     z-index: 1000;
-    transition: all .25s ease-in-out;
     background-color: #31313d;
     display: flex;
     flex-direction: column;
+    transition: all .25s ease-in-out;
 }
 
-#sidebar:not(.expand) {
-    width: 270px;
-    min-width: 270px;
+#sidebar.expand {
+    width: 260px;
+    min-width: 260px;
 }
 
+ 
 .toggle-btn {
     background-color: transparent;
     cursor: pointer;
@@ -67,15 +66,13 @@ body {
     margin: auto 0;
 }
 
-
-
-#sidebar.expand .sidebar-logo,
-#sidebar.expand a.sidebar-link span {
+#sidebar:not(.expand) .sidebar-logo,
+#sidebar:not(.expand) a.sidebar-link span {
     display: none;
 }
 
-#sidebar:not(.expand) .sidebar-logo,
-#sidebar:not(.expand) a.sidebar-link span {
+#sidebar.expand .sidebar-logo,
+#sidebar.expand a.sidebar-link span {
     animation: fadeIn .25s ease;
 }
 
@@ -118,24 +115,24 @@ a.sidebar-link:hover {
     position: relative;
 }
 
-#sidebar.expand .sidebar-item .sidebar-dropdown {
+#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
     position: absolute;
     top: 0;
     left: 70px;
-    background-color: #0e2238;
     padding: 0;
     min-width: 15rem;
     display: none;
 }
 
-#sidebar.expand .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+#sidebar:not(.expand) .sidebar-item:hover .has-dropdown + .sidebar-dropdown {
     display: block;
     max-height: 15em;
     width: 100%;
     opacity: 1;
+    background-color: #272732;
 }
 
-#sidebar:not(.expand) .sidebar-link[data-bs-toggle="collapse"]::after {
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
     border: solid;
     border-width: 0 .075rem .075rem 0;
     content: "";
@@ -148,7 +145,7 @@ a.sidebar-link:hover {
     transition: all .2s ease-out;
 }
 
-#sidebar:not(.expand) .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
     transition: all .2s ease-out;
 }
@@ -160,6 +157,7 @@ a.sidebar-link:hover {
 
 .navbar-expand .navbar-collapse {
     min-width: 200px;
+
 }
 
 .avatar {

@@ -1,9 +1,30 @@
+// Selecciona el botón hamBurger
 const hamBurger = document.querySelector(".toggle-btn");
-// EVENTO PARA EL NAVBAR
 
+// Selecciona el sidebar
+const sidebar = document.querySelector("#sidebar");
+
+// Función para ajustar el estado del sidebar y del botón hamBurger
+function adjustSidebar() {
+    if (window.innerWidth <= 780) {
+        sidebar.classList.remove("expand");
+        hamBurger.disabled = true;
+    } else {
+        sidebar.classList.add("expand");
+        hamBurger.disabled = false;
+    }
+}
+
+// Función para toggle el estado del sidebar cuando se hace clic en el botón hamBurger
 hamBurger.addEventListener("click", function () {
-    document.querySelector("#sidebar").classList.toggle("expand");
+    sidebar.classList.toggle("expand");
 });
+
+// Llama a la función para ajustar el estado del sidebar al cargar la página y al cambiar el tamaño de la ventana
+window.onload = adjustSidebar;
+window.onresize = adjustSidebar;
+
+
 
 
 // Alerta de Success
