@@ -1,99 +1,120 @@
 ﻿@model IEnumerable<Sistema_CIN.Models.Personal>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
 <h3 class="fw-bold fs-4">Mantenimiento > Personal</h3>
 <div class="row my-4 ">
-	<div class="col">
-		<a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
-	</div>
-	<div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
-		<form asp-controller="Roles" asp-action="Index">
-			<i class="fa-solid fa-magnifying-glass"></i>
-			<input type="text" name="buscarRol" placeholder="Buscar aquí..." class="fluid border-0 bg-light col">
-			<input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
-		</form>
-	</div>
+    <div class="col">
+        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+    </div>
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+        <form asp-controller="Personal" asp-action="Index">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text" name="buscarEmpleado" placeholder="Buscar personal aquí..." class="fluid border-0 bg-light col">
+
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
+        </form>
+    </div>
 </div>
 
 <table class="table table-striped">
-	<thead>
-		<tr>
-			<th>
-				N.Cédula
-			</th>
-			<th>
-				Nombre Completo
-			</th>
-			<th>
-				Edad
-			</th>
+    <thead>
+        <tr>
+            <th>
+                N.Cédula
+            </th>
+            <th>
+                Nombre Completo
+            </th>
+            <th>
+                Edad
+            </th>
 
-			<th>
-				Correo Electrónico
-			</th>
+            <th>
+                Correo Electrónico
+            </th>
+            <th>
+                Teléfono
+            </th>
+            <th>
+                Dirección
+            </th>
+            <th>
+                Puesto
+            </th>
 
-			<th>
-				Dirección
-			</th>
-			<th>
-				Puesto
-			</th>
+            <th>Detalles</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
 
-			<th>Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.CedulaP)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.NombreP) @Html.DisplayFor(modelItem => item.ApellidosP)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.EdadP)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CorreoP)
-				</td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CedulaP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreP) @Html.DisplayFor(modelItem => item.ApellidosP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CorreoP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TelefonoP)
+                </td>
 
-				<td>
-					@Html.DisplayFor(modelItem => item.ProvinciaP) @Html.DisplayFor(modelItem => item.CantonP)  @Html.DisplayFor(modelItem => item.DistritoP)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.PuestoP)
-				</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProvinciaP) @Html.DisplayFor(modelItem => item.CantonP)  @Html.DisplayFor(modelItem => item.DistritoP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
+                </td>
 
 
-				<td>
-					<a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-pen-to-square"></i></a> |
-					<a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-eye"></i></a> |
-					<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.IdPersonal"><i class="fa-solid fa-trash-can"></i></a>
+                <td>
+                    <a class="" asp-action="Details" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-eye"></i></a>
+                </td>
 
-					
-				</td>
-			</tr>
-		}
-	</tbody>
+                <td>
+                    <a class="text-success" asp-action="Edit" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-pen-to-square"></i></a>
+                </td>
+                <td>
+
+                    <a class="text-danger" onclick="confirmDelete('@item.IdPersonal','@item.NombreP' ,'Personal')">
+                        <i class="fa-regular fa-trash-can">
+                        </i>
+
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
 </table>
-
+<div asp-validation-summary="ModelOnly" class="" role="alert"></div>
 <div class="my-5">
-	<a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+    <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 @section Scripts{
-	@if (TempData["SuccessMessage"] != null)
-	{
 
-		<script>registroExito("@TempData["SuccessMessage"]");</script>
-	}
+    @* ALERTA DE PERSONAL REGISTRADO / EDITADO EXITOSAMENTE*@
+    @if (TempData["SuccessMessage"] != null)
+    {
+
+        <script>registroExito("@TempData["SuccessMessage"]");</script>
+
+    }
 
 }

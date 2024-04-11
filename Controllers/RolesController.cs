@@ -12,10 +12,10 @@ namespace Sistema_CIN.Controllers
 {
     public class RolesController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
 
-        public RolesController(CINContext context)
+        public RolesController(CIN_pruebaContext context)
         {
             _context = context;
         }
@@ -32,7 +32,7 @@ namespace Sistema_CIN.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "Este rol ya existe!");
+                ModelState.AddModelError("", "No existen Roles");
                 return View(await roles.ToListAsync());
             }
             return View(await roles.ToListAsync());
@@ -152,43 +152,7 @@ namespace Sistema_CIN.Controllers
             return View(role);
         }
 
-        // GET: Roles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Roles == null)
-            {
-                return NotFound();
-            }
-
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.IdRol == id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-
-            return View(role);
-        }
-
-        // POST: Roles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Roles == null)
-            {
-                return Problem("Entity set 'CINContext.Roles'  is null.");
-            }
-            var role = await _context.Roles.FindAsync(id);
-            if (role != null)
-            {
-                _context.Roles.Remove(role);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+     
         private bool RoleExists(int id)
         {
             return (_context.Roles?.Any(e => e.IdRol == id)).GetValueOrDefault();

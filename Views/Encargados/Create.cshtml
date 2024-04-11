@@ -1,0 +1,164 @@
+﻿@model Sistema_CIN.Models.Encargados
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row my-2">
+
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar Encargado</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+    </div>
+
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
+</div>
+
+<form asp-action="Create">
+
+    <div class="row mt-4">
+
+
+        <!--------Columna izquerda ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+
+            <!-------Cedula de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CedulaE" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" oninput="formatCedula(this)" placeholder="Número de Cédula" />
+                    <span asp-validation-for="CedulaE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Nombre de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="NombreE" class="form-control" placeholder="Nombre del Encargado" />
+                    <span asp-validation-for="NombreE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Apellidos de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="ApellidosE" class="form-control" placeholder="Apellido1  Apellido2" />
+                    <span asp-validation-for="ApellidosE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Fecha de Nacimiento de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="FechaNaceE" name="FechaNaceE" class="form-control" type="date" />
+                    <span asp-validation-for="FechaNaceE" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <!-------Edad de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Edad" class="form-control" name="Edad" placeholder="Edad" type="number" readonly />
+                    <span asp-validation-for="Edad" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!--------Columna Derecha ---------->
+        <div class="col-lg-6 col-md-12 col-sm-12">
+
+            <!-------Correo de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Correo Electrónico</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CorreoE" class="form-control" placeholder="correo@ejemplo.com"/>
+                    <span asp-validation-for="CorreoE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Direccion de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Dirección</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="DireccionE" class="form-control" placeholder="Provincia / Cantón" />
+                    <span asp-validation-for="DireccionE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Telefono de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">N Teléfono</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="TelefonoE" class="form-control" id="telefono" pattern="[0-9]{4}-[0-9]{4}" placeholder="N Teléfono" oninput="formatTelefono(this)" />
+                    <span asp-validation-for="TelefonoE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Lugar trabajo de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Lugar donde Labora</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="LugarTrabajoE" class="form-control" />
+                    <span asp-validation-for="LugarTrabajoE" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Hijo de Encargado-------->
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Responsable de</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <select asp-for="IdPme" class="form-control" asp-items="ViewBag.IdPme">
+                        <option value="">Seleccion un PME</option>
+                    </select>
+                    <span asp-validation-for="IdPme" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-sm text-white me-3">Guardar   <i class="fa-solid fa-floppy-disk"></i> </button>
+            <input type="reset" value="Limpiar" class="btn btn-outline-secondary btn-sm" />
+
+        </div>
+
+    </div>
+</form>
+
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            calcularEdad('FechaNaceE', 'Edad');
+
+        });
+
+    </script>
+}

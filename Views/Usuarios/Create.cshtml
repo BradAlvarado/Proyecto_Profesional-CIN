@@ -4,74 +4,106 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="row">
-    <h3 class="fw-bold fs-4">Administrar > Registrar Usuario</h3>
 
-    <div class="my-3">
-        <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
+<div class="row my-2">
+
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Administrar > Registrar Usuarios</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
     </div>
-    <form class="col-lg-6 col-md-12 col-sm-12" asp-action="Create">
 
-        <!-------Nombre de Usuario-------->
-        <div class="mb-3 row">
-            <label asp-for="NombreU" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre de Usuario</label>
-            <div class="col-lg-8 col-md-9 col-sm-12">
-                <input asp-for="NombreU" class="form-control" placeholder="nombre del usuario" />
-                <span asp-validation-for="NombreU" class="text-danger"></span>
-            </div>
-        </div>
-        <!-------Correo-------->
-        <div class="mb-3 row">
-            <label asp-for="CorreoU" class="col-lg-4 col-form-label">Correo Electrónico</label>
-            <div class="col-lg-8">
-                <input type="email" asp-for="CorreoU" class="form-control" placeholder="correo@ejemplo.com" />
-                <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
-                <span asp-validation-for="CorreoU" class="text-danger"></span>
-            </div>
-        </div>
 
-        <!-------Clave-------->
-        <div class="mb-3 row">
-            <label asp-for="Clave" class="col-lg-4 col-form-label">Contraseña</label>
-            <div class="col-lg-8">
-                <input type="password" asp-for="Clave" class="form-control" placeholder="contraseña" />
-                <span asp-validation-for="Clave" class="text-danger"></span>
-            </div>
-        </div>
-        <!------- confirmar Clave-------->
-        <div class="mb-3 row">
-            <label asp-for="ConfirmacionClave" class="col-lg-4 col-form-label">Confirmar contraseña</label>
-            <div class="col-lg-8">
-                <input type="password" asp-for="ConfirmacionClave" class="form-control" placeholder="confirmar contraseña" />
-                <span asp-validation-for="ConfirmacionClave" class="text-danger"></span>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
+</div>
+
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Foto de Perfil</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+
+                    <img class="img-fluid img-account-profile img-thumbnail rounded-circle mb-2" src="~/images/Default_Profile_photo.jpg" alt="">
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <!-- Profile picture upload button-->
+                    @*<input asp-for="FotoU" type="file" class="form-control">*@
+                    @*<span asp-validation-for="FotoU" class="text-danger"></span>*@
+                </div>
             </div>
         </div>
 
-        <!------- ROL -------->
-        <div class="mb-3 row">
-            <label asp-for="NombreRolU" class="col-lg-4 col-form-label">Rol</label>
-            <div class="col-lg-8">
-                <select asp-for="NombreRolU" class="form-select" asp-items="ViewBag.IdRol">
-                    <option>-- Seleccione un rol --</option>
-                </select>
-                <span asp-validation-for="NombreRolU" class="text-danger"></span>
+
+        <div class="col-lg-9 col-md-12 col-sm-12">
+            <div class="card">
+
+
+               <div class="card-header mb-3">Datos del Usuario</div>
+                <div class="card-body px-4">
+                    
+                    <!-------Nombre de Usuario-------->
+                    <div class="mb-4 row">
+                        <label asp-for="NombreU" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre de Usuario</label>
+                        <div class="col-lg-8 col-md-9 col-sm-12">
+                            <input asp-for="NombreU" class="form-control" placeholder="nombre del usuario" />
+                            <span asp-validation-for="NombreU" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-------Correo-------->
+                    <div class="mb-4 row">
+                        <label asp-for="CorreoU" class="col-lg-4 col-form-label">Correo Electrónico</label>
+                        <div class="col-lg-8">
+                            <input type="email" asp-for="CorreoU" class="form-control" placeholder="correo@ejemplo.com" />
+                            
+                            <span asp-validation-for="CorreoU" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-------Clave-------->
+                    <div class="mb-4 row">
+                        <label asp-for="Clave" class="col-lg-4 col-form-label">Contraseña</label>
+                        <div class="col-lg-8">
+                            <input type="password" asp-for="Clave" class="form-control" placeholder="contraseña" />
+                            <span asp-validation-for="Clave" class="text-danger"></span>
+                        </div>
+                    </div>
+                  
+
+                    <!------- ROL -------->
+                    <div class="mb-4 row">
+                        <label asp-for="IdRol" class="col-lg-4 col-form-label">Rol</label>
+                        <div class="col-lg-8">
+                            <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol">
+                                <option>Seleccione un Rol</option>
+                            </select>
+                            <span asp-validation-for="IdRol" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <!------- ESTADO -------->
+                    <div class="mb-4 row">
+                        <label asp-for="EstadoU" class="col-lg-4 col-form-label">Estado</label>
+                        <div class="col-lg-8">
+                            <select asp-for="EstadoU" class="form-select">
+
+                                <option>Seleccione Acceso</option>
+                                <option value="true">Habilitado</option>
+                                <option value="false">Inhabilitado</option>
+                            </select>
+                            <span asp-validation-for="EstadoU" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-       
 
-        <!------- ESTADO -------->
-        <div class="mb-3 row">
-            <label asp-for="EstadoU" class="col-lg-4 col-form-label">Estado</label>
-            <div class="col-lg-8">
-                <select asp-for="EstadoU" class="form-select">
-
-                    <option value=true selected>Habilitado</option>
-                    <option value=false>Inhabilitado</option>
-                </select>
-                <span asp-validation-for="EstadoU" class="text-danger"></span>
-            </div>
-        </div>
-        
 
         <div class="mt-5">
 
@@ -79,14 +111,9 @@
             <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
 
         </div>
-    </form>
+    </div>
+</form>
 
- 
-
-
-
-
-</div>
 
 @section Scripts {
     @{

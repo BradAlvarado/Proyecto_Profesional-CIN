@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ namespace Sistema_CIN.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly CINContext _context;
+        private readonly CIN_pruebaContext _context;
 
-        public UsuariosController(CINContext context)
+        public UsuariosController(CIN_pruebaContext context)
         {
             _context = context;
         }
@@ -48,7 +49,7 @@ namespace Sistema_CIN.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol");
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol");
             return View();
         }
 
@@ -57,23 +58,20 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdUsuario,ImagenU,NombreU,CorreoU,Clave,NombreRolU,EstadoU,IdRol")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("IdUsuario,FotoU,NombreU,CorreoU,Clave,EstadoU,IdRol")] Usuario usuario)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var correoExiste = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == usuario.CorreoU);
-                    if (correoExiste != null)
+                    var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
+
+                    if (existeCorreo != null)
                     {
                         ModelState.AddModelError("", "Este correo ya está en uso");
-                        ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
-                        return View(usuario);
-                    }
 
-                    if(usuario.Clave != usuario.ConfirmacionClave)
-                    {
                         return View(usuario);
+
                     }
 
                     _context.Add(usuario);
@@ -81,13 +79,21 @@ namespace Sistema_CIN.Controllers
                     TempData["SuccessMessage"] = "Usuario registrado con éxito";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Ocurrió un error al guardar el usuario: " + ex.Message);
-                }
+
+                ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+                return View(usuario);
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "NombreRol", "NombreRol", usuario.NombreRolU);
-            return View(usuario);
+            catch (Exception)
+            {
+
+                ModelState.AddModelError("", "Error al registrar el usuario");
+
+                return View(usuario);
+            }
+
+
+
+
         }
 
         // GET: Usuarios/Edit/5
@@ -103,7 +109,7 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
@@ -143,42 +149,25 @@ namespace Sistema_CIN.Controllers
             return View(usuario);
         }
 
-        // GET: Usuarios/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Usuarios == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuarios
-                .Include(u => u.IdRolNavigation)
-                .FirstOrDefaultAsync(m => m.IdUsuario == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
-        // POST: Usuarios/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Usuarios == null)
             {
-                return Problem("Entity set 'CINContext.Usuarios'  is null.");
+                return Problem("Entity set 'CINContext.Pme'  is null.");
             }
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var user = await _context.Usuarios.FindAsync(id);
+            if (user == null)
             {
-                _context.Usuarios.Remove(usuario);
+                return NotFound();
             }
 
+            _context.Usuarios.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["SuccessMessage"] = "Usuario " + user.NombreU + " eliminado exitosamente!";
+
+
+            return Json(new { success = true });
         }
 
         private bool UsuarioExists(int id)

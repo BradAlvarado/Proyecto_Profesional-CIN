@@ -1,7 +1,15 @@
-﻿@{
+﻿@model IEnumerable<Sistema_CIN.Models.CIN_pruebaContext>
+
+@{
     ViewData["Title"] = "Inicio";
 }
 
+@{
+    int personalCount = ViewData["PersonalCount"] != null ? (int)ViewData["PersonalCount"] : 0;
+    int pmeCount = ViewData["PmeCount"] != null ? (int)ViewData["PmeCount"] : 0;
+    int encargadosCount = ViewData["EncargadosCount"] != null ? (int)ViewData["EncargadosCount"] : 0;
+    int usuariosCount = ViewData["UsuariosCount"] != null ? (int)ViewData["UsuariosCount"] : 0;
+}
 
 <!----------MAIN--------->
 <h3 class="fw-bold fs-4 mb-3">Inicio > Resumen Contadores</h3>
@@ -13,7 +21,7 @@
         <!----------PERSONAL--------->
         <div class="col-lg-3 col-md-6 col-sm-12 mb-4 ">
 
-            <div class="card mb-3 shadow-sm" style="max-width: 540px;">
+            <div class="card mb-3 shadow" style="max-width: 540px;">
 
 
                 <div class="row g-0">
@@ -25,9 +33,9 @@
                     <div class="col-8">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Personal</h5>
-                            <p class="card-text">Total  <span class="text-success">1</span></p>
+                            <p class="card-text">Total  <span class="text-success">@personalCount</span></p>
                             <p class="card-text">
-                                <a href="#" class="nav-link text-secondary">
+                                <a asp-controller="Personal" asp-action="Index" class="nav-link text-secondary">
 
                                     <span>Más detalles</span>
                                 </a>
@@ -55,9 +63,9 @@
                     <div class="col-8">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">PMEs</h5>
-                            <p class="card-text">Total  <span class="text-success">1</span></p>
+                            <p class="card-text">Total  <span class="text-success">@pmeCount</span></p>
                             <p class="card-text">
-                                <a href="#" class="nav-link text-secondary">
+                                <a asp-controller="PME" asp-action="Index" class="nav-link text-secondary">
 
                                     <span>Más detalles</span>
                                 </a>
@@ -84,9 +92,9 @@
                     <div class="col-8">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Encargados</h5>
-                            <p class="card-text">Total  <span class="text-success">1</span></p>
+                            <p class="card-text">Total  <span class="text-success">@encargadosCount</span></p>
                             <p class="card-text">
-                                <a href="#" class="nav-link text-secondary">
+                                <a asp-controller ="Encargados" asp-action="Index" class="nav-link text-secondary">
 
                                     <span>Más detalles</span>
                                 </a>
@@ -114,9 +122,9 @@
                     <div class="col-8">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">Usuarios</h5>
-                            <p class="card-text">Total  <span class="text-success">1</span></p>
+                            <p class="card-text">Total  <span class="text-success">@usuariosCount</span></p>
                             <p class="card-text">
-                                <a href="#" class="nav-link text-secondary">
+                                <a asp-controller="Usuarios" asp-action="Index" class="nav-link text-secondary">
 
                                     <span>Más detalles</span>
                                 </a>

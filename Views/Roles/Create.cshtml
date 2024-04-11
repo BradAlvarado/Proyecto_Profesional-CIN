@@ -4,37 +4,50 @@
     ViewData["Title"] = "Create";
 }
 
-<h3 class="fw-bold fs-4">Administrar > Registrar Rol</h3>
+<div class="row my-2">
 
-    <div class="my-3">
-        <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Volver</a>
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Administrar > Registrar Roles</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
     </div>
+
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
+</div>
 
 
 <form asp-action="Create" class="my-4 ">
 
+    <div class="row">
+        
+        <div class="col-lg-6 col-sm-12">
+            <div class="row g-3 align-items-center mb-3">
+                <div class="col-6">
+                    <label asp-for="NombreRol" class="col-form-label">Nombre del Rol</label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
+                </div>
 
-    <div class="row g-3 align-items-center mb-3">
-        <div class="col-auto">
-            <label asp-for="NombreRol" class="col-form-label">Nombre del Rol</label>
+            </div>
         </div>
-        <div class="col-auto">
-            <input asp-for="NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
-        </div>
+
+       
 
     </div>
 
-    <div asp-validation-summary="ModelOnly" class="alerta text-danger" role="alert"></div>
 
 
-    <div class="col-auto mt-5">
+    <div class="col-auto ">
 
         <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
         <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
 
     </div>
 </form>
-    
+
 
 
 @section Scripts {
@@ -45,7 +58,7 @@
     <script>
         // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
         setTimeout(function () {
-            const alertaDiv = document.querySelector('.alerta');
+            const alertaDiv = document.querySelector('.alert');
             if (alertaDiv) {
                 alertaDiv.style.display = 'none';
             }

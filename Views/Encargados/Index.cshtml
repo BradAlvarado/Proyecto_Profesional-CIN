@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Encargados>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Encargados</h3>
+
+<div class="my-3">
+	<a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
+</div>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>
+				Cédula
+			</th>
+			<th>
+				Nombre Completo
+			</th>
+			<th>
+				Fecha Nacimiento
+			</th>
+			<th>
+				Edad
+			</th>
+			<th>
+				Correo Electrónico
+			</th>
+			<th>
+				Dirección
+			</th>
+			<th>
+				N. Teléfono
+			</th>
+			<th>
+				Lugar de Trabajo
+			</th>
+			
+
+			<th>Detalles</th>
+			<th>Editar</th>
+			<th>Eliminar</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CedulaE)
+				</td>
+			
+				<td>
+					@Html.DisplayFor(modelItem => item.NombreE)	@Html.DisplayFor(modelItem => item.ApellidosE)
+
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.FechaNaceE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Edad)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CorreoE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DireccionE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TelefonoE)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.LugarTrabajoE)
+				</td>
+				
+				<td>
+					<a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-eye"></i></a>
+					
+				</td>
+				<td>
+					<a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdEncargado"><i class="fa-regular fa-pen-to-square"></i></a>
+				</td>
+				<td>
+					<a class="btn btn-danger btn-sm"  onclick="confirmDelete('@item.IdEncargado','@item.NombreE' ,'Encargados')" ><i class="fa-solid fa-trash-can"></i></a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@section Scripts{
+
+
+	@* ALERTA DE PERSONAL REGISTRADO / EDITADO EXITOSAMENTE*@
+	@if (TempData["SuccessMessage"] != null)
+	{
+
+		<script>registroExito("@TempData["SuccessMessage"]");</script>
+
+	}
+
+}

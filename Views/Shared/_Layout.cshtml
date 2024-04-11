@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@ViewData["Title"] - Sistema_CIN</title>
@@ -63,13 +64,13 @@
             <ul class="sidebar-nav">
                 <!----------MODULO INICIO NAV--------->
                 <li class="sidebar-item mb-2">
-                    <a href="#" class="sidebar-link">
-                        <a asp-controller="Home" asp-action="Index" class="sidebar-link">
-                            <i class="lni lni-home"></i>
 
-                            <span>Inicio</span>
-                        </a>
+                    <a asp-controller="Home" asp-action="Index" class="sidebar-link" id="sb-l">
+                        <i class="lni lni-home"></i>
+
+                        <span>Inicio</span>
                     </a>
+
                 </li>
                 <!----------MODULO MANTENIMIENTO NAV--------->
                 <li class="sidebar-item mb-2">
@@ -86,10 +87,9 @@
                             <a asp-controller="PME" asp-action="Index" class="sidebar-link">PME</a>
                         </li>
                         <li class="sidebar-item">
-                            <a asp-controller="Encargado" asp-action="Index" class="sidebar-link">Encargados</a>
+                            <a asp-controller="Encargados" asp-action="Index" class="sidebar-link">Encargados</a>
 
                         </li>
-
                     </ul>
                 </li>
 
@@ -114,7 +114,7 @@
                 </li>
                 <!----------MODULO REPORTES NAV--------->
                 <li class="sidebar-item mb-2">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
                        data-bs-target="#reportes" aria-expanded="false" aria-controls="reportes">
                         <i class="lni lni-agenda"></i>
                         <span>Reportes</span>
@@ -129,6 +129,23 @@
                         <li class="sidebar-item">
                             <a href="#" class="sidebar-link">Encargados</a>
                         </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item mb-2">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
+                       data-bs-target="#bitacoras" aria-expanded="false" aria-controls="bitacoras">
+                        <i class="lni lni-agenda"></i>
+                        <span>Bitácoras</span>
+                    </a>
+                    <ul id="bitacoras" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a asp-controller ="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">PME</a>
+                        </li>
+                        
                     </ul>
                 </li>
 
@@ -147,7 +164,7 @@
                 </li>
                 <!----------MODULO ACERCA DE NAV--------->
                 <li class="sidebar-item mb-2">
-                    <a href="#" class="sidebar-link">
+                    <a asp-controller="Home" asp-action="Privacy" class="sidebar-link">
                         <i class="lni lni-information"></i>
                         <span>Acerca de</span>
                     </a>
@@ -162,7 +179,7 @@
                     <span>Cerrar Sesión</span>
                 </a>
             </div>
-        </aside> 
+        </aside>
         <!----------END SIDEBAR NAV--------->
 
         <div class="main">
@@ -210,11 +227,26 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        var currentPath = window.location.pathname;
+
+        // Busca los elementos de enlace en tu menú de navegación
+        var navLinks = document.querySelectorAll('.sidebar-link');
+
+        // Itera sobre los enlaces y verifica si la URL coincide
+        navLinks.forEach(function (link) {
+            if (link.getAttribute('href') === currentPath) {
+                link.parentElement.classList.add('bg-secondary', 'border-2', 'border-start', 'border-white'); // Agrega las clases
+            }
+        });
+    </script>
 
 </body>
 </html>

@@ -1,15 +1,24 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sistema_CIN.Models;
+using System.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Sistema_CIN.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<CINContext>(options =>
+
+builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db"))
 );
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CIN_pruebaContext>();
 
 
 var app = builder.Build();
@@ -26,11 +35,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapRazorPages();
+
 
 app.Run();

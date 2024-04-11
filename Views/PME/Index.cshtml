@@ -1,78 +1,156 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Pme>
+﻿@model Sistema_CIN.Models.PagedList<Sistema_CIN.Models.Pme>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar PME</h3>
-<div>
-	<a class="btn btn-warning" asp-action="Create">Añadir</a>
-</div>
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				Cédula
-			</th>
-			<th>
-				Nombre Completo
-			</th>
-			<th>
-				N.Póliza
-			</th>
-			<th>
-				Edad
-			</th>
-			<th>
-				Género
-			</th>
-			<th>
-				Dirección
-			</th>
-			<th>
-				Fecha Ingreso
-			</th>
-			<th>
-				Encargado
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.CedulaPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.NombrePme) 	@Html.DisplayFor(modelItem => item.ApellidosPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.PolizaSeguro)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.EdadPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.GeneroPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ProvinciaPme)	@Html.DisplayFor(modelItem => item.CantonPme) @Html.DisplayFor(modelItem => item.DistritoPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.FechaIngresoPme)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.EncargadoPme)
-				</td>
+<h3 class="fw-bold fs-4">Mantenimiento > PMEs</h3>
+<div class="row my-4 ">
 
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.IdPme">Editar</a> |
-					<a asp-action="Details" asp-route-id="@item.IdPme">Detalles</a> |
-					<a asp-action="Delete" asp-route-id="@item.IdPme">Eliminar</a>
-				</td>
-			</tr>
-		}
-	</tbody>
+    <div class="col">
+        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+        <form asp-controller="PME" asp-action="Index">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text" name="buscarPme" placeholder="Buscar por nombre..." class="fluid border-0 bg-light col">
+
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Cédula
+            </th>
+            <th>
+                Nombre Completo
+            </th>
+            <th>
+                N.Póliza
+            </th>
+            <th>
+                Edad
+            </th>
+            <th>
+                Género
+            </th>
+            <th>
+                Dirección
+            </th>
+            <th>
+                Fecha Ingreso
+            </th>
+
+
+
+            <th>Detalles</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CedulaPme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombrePme) 	@Html.DisplayFor(modelItem => item.ApellidosPme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PolizaSeguro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdadPme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeneroPme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProvinciaPme)
+
+                    @{
+                        if(item.CantonPme != "No registrado")
+                        {
+                            Html.DisplayFor(modelItem => item.CantonPme);
+                        }
+                        if (item.DistritoPme != "No registrado")
+                        {
+                            Html.DisplayFor(modelItem => item.DistritoPme);
+                        }
+                    }
+          
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaIngresoPme, "{0:d}")
+                </td>
+
+             
+                <td>
+                    <a class="btn btn-light btn-sm" asp-action="Details" asp-route-id="@item.IdPme"><i class="fa-regular fa-eye"></i></a>
+                </td>
+                <td>
+                    <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPme"><i class="fa-regular fa-pen-to-square"></i></a>
+                </td>
+                <td>
+                    <a class="btn btn-danger btn-sm" onclick="confirmDelete('@item.IdPme','@item.NombrePme','PME')"><i class="fa-solid fa-trash-can"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<nav aria-label="Page navigation" class="">
+    <ul class="pagination justify-content-center">
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?pagina=@(Model.PageIndex - 1)" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" href="?page=@i">@i</a>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?pagina=@(Model.PageIndex + 1)" aria-label="Siguiente">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Siguiente</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    @* ALERTA DE PERSONAL REGISTRADO / EDITADO EXITOSAMENTE*@
+    @if (TempData["SuccessMessage"] != null)
+    {
+
+        <script>registroExito("@TempData["SuccessMessage"]");</script>
+
+    }
+
+}
