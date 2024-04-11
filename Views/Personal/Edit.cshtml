@@ -164,4 +164,21 @@
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
+
+    <script>
+        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
+        setTimeout(function () {
+            const alertaDiv = document.querySelector('.alerta');
+            if (alertaDiv) {
+                alertaDiv.style.display = 'none';
+            }
+        }, 3000);
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            calcularEdad('FechaNaceP', 'EdadP');
+
+        });
+    </script>
+
 }

@@ -49,7 +49,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="CedulaP" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" />
                     <span asp-validation-for="CedulaP" class="text-danger"></span>
-                    
+
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input type="email" asp-for="CorreoP" class="form-control" placeholder="empleado@ejemplo.com" />
                     <span asp-validation-for="CorreoP" class="text-danger"></span>
-                    
+
                 </div>
             </div>
 
@@ -69,7 +69,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="TelefonoP" class="form-control" id="telefono" pattern="[0-9]{4}-[0-9]{4}" placeholder="N Teléfono" oninput="formatTelefono(this)" />
                     <span asp-validation-for="TelefonoP" class="text-danger"></span>
-                   
+
                 </div>
             </div>
 
@@ -77,8 +77,8 @@
             <div class="mb-4 row">
                 <label asp-for="IdRol" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Puesto <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol" >
-                        
+                    <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol">
+
                         <option value="">Seleccione una opción</option>
                     </select>
                     <span asp-validation-for="IdRol" class="text-danger"></span>
@@ -106,8 +106,8 @@
             <div class="mb-4 row">
                 <label asp-for="EdadP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Edad</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="EdadP" name="EdadP" class="form-control" placeholder="Edad" readonly/>
-                    <span asp-validation-for="EdadP"class="text-danger"></span>
+                    <input asp-for="EdadP" name="EdadP" class="form-control" placeholder="Edad" readonly />
+                    <span asp-validation-for="EdadP" class="text-danger"></span>
                 </div>
             </div>
 
@@ -153,7 +153,7 @@
             <div class="mb-4 row">
                 <label asp-for="DistritoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Distrito</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="DistritoP" class="form-control" placeholder="Distrito"/>
+                    <input asp-for="DistritoP" class="form-control" placeholder="Distrito" />
                     <span asp-validation-for="DistritoP" class="text-danger"></span>
                 </div>
             </div>
@@ -191,9 +191,6 @@
                 alertaDiv.style.display = 'none';
             }
         }, 3000);
-    </script>
-
-    <script>
 
         document.addEventListener('DOMContentLoaded', function () {
 
