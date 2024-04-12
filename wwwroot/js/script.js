@@ -1,3 +1,15 @@
+var currentPath = window.location.pathname;
+
+        //Busca los elementos de enlace en tu menú de navegación
+var navLinks = document.querySelectorAll('.sidebar-link');
+
+        //Itera sobre los enlaces y verifica si la URL coincide
+navLinks.forEach(function (link) {
+    if (link.getAttribute('href') === currentPath) {
+        link.parentElement.classList.add('bg-secondary', 'border-2', 'border-start', 'border-white'); //Agrega las clases
+    }
+});
+
 // Selecciona el botón hamBurger
 const hamBurger = document.querySelector(".toggle-btn");
 
@@ -6,11 +18,11 @@ const sidebar = document.querySelector("#sidebar");
 
 // Función para ajustar el estado del sidebar y del botón hamBurger
 function adjustSidebar() {
-    if (window.innerWidth <= 780) {
-        sidebar.classList.remove("expand");
+    if (window.innerWidth <= 800) {
+        sidebar.classList.add("expand");
         hamBurger.disabled = true;
     } else {
-        sidebar.classList.add("expand");
+        sidebar.classList.remove("expand");
         hamBurger.disabled = false;
     }
 }
@@ -23,9 +35,6 @@ hamBurger.addEventListener("click", function () {
 // Llama a la función para ajustar el estado del sidebar al cargar la página y al cambiar el tamaño de la ventana
 window.onload = adjustSidebar;
 window.onresize = adjustSidebar;
-
-
-
 
 // Alerta de Success
 function registroExito(message) {
@@ -47,7 +56,6 @@ function alertaError(message) {
         timerProgressBar: true
     });
 }
-
 
 
 // Funcion para dar formato a la cedula
