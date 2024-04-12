@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Models;
@@ -25,10 +26,35 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Encargados
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string buscarEncargado, int? page)
         {
-            var cINContext = _context.Encargados.Include(e => e.IdPmeNavigation);
-            return View(await cINContext.ToListAsync());
+            var pageNumber = page ?? 1; // Número de página actual
+            var pageSize = 10; // Número de elementos por página
+
+            var encargados = from encargado in _context.Encargados select encargado;
+            encargados = _context.Encargados.Include(p => p.IdPmeNavigation);
+
+            if (encargados.Count() < 1)
+            {
+                ModelState.AddModelError("", "No existen Encargados registrados");
+            }
+
+            if (!String.IsNullOrEmpty(buscarEncargado))
+            {
+                encargados = encargados.Where(s => s.NombreE!.Contains(buscarEncargado));
+            }
+
+            // Paginar los resultados
+            var pagedEnc = await encargados.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            // Calcular el número total de páginas
+            var totalItems = await encargados.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            // Crear un objeto de modelo para la paginación
+            var pagedModel = new PagedList<Encargados>(pagedEnc, pageNumber, pageSize, totalItems, totalPages);
+
+            return View(pagedModel);
         }
 
         // GET: Encargados/Details/5
