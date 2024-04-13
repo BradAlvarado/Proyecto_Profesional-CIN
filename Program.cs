@@ -17,11 +17,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db")));
 
-builder.Services.AddIdentity<Usuario, IdentityRole>()
-        .AddEntityFrameworkStores<CIN_pruebaContext>()
-        .AddDefaultTokenProviders();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
