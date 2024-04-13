@@ -40,7 +40,7 @@
                 </div>
 
 
-          
+
                 <div class="mb-4 row">
                     <div class="col-6 fw-bold">Fecha de Nacimiento</div>
 
@@ -92,7 +92,7 @@
                         @Html.DisplayFor(model => model.LugarTrabajoE)
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
@@ -106,18 +106,17 @@
 <div class="row">
 
 
-    @if (Model.IdPme == null && Model.Pmes == null)
+    @if (Model.IdPme == null || !Model.Pmes.Any())
     {
-
         <p>No se encontraron menores asociados.</p>
     }
     else
     {
         int pmeIndex = 1;
 
-
         @if (Model.IdPme != null)
         {
+
             <div class="col-lg-6 col-sm-12">
                 <div class="card mb-4">
                     <h4 class="fw-bold fs-5 card-header">Pme @pmeIndex > @Html.DisplayFor(model => model.IdPmeNavigation.NombrePme)</h4>
@@ -147,7 +146,8 @@
             pmeIndex++;
 
         }
-        @if (Model.Pmes.Any())
+
+        if (Model.Pmes.Any())
         {
             foreach (var pme in Model.Pmes)
             {
@@ -179,11 +179,9 @@
                             </div>
                         </div>
                     </div>
-
                     pmeIndex++;
                 }
             }
         }
-
     }
 </div>

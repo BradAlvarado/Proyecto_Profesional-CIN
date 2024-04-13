@@ -40,6 +40,7 @@
         <tbody>
             @foreach (var item in Model)
             {
+                
                 <tr>
                     <th>
                         @Html.DisplayFor(modelItem => item.IdBitacora)
@@ -70,17 +71,25 @@
                         }
 
                     </td>
-                   
+
                 </tr>
             }
         </tbody>
     </table>
+    <div asp-validation-summary="ModelOnly" class="" role="alert"></div>
 </body>
 
 @section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+        
+    }
     <script>
         function recargarPagina(){
             location.reload();
         }
     </script>
+
+    i
 }

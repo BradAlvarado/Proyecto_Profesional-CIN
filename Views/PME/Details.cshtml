@@ -185,7 +185,7 @@
 <div class="row">
 
 
-    @if (Model.IdEncargado == null && Model.Encargados == null)
+    @if (Model.IdEncargado == null && !Model.Encargados.Any())
     {
 
         <p>No se encontraron encargados asociados.</p>

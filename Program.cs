@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Sistema_CIN.Models;
 using System.Configuration;
 using Microsoft.AspNetCore.Identity;
-using Sistema_CIN.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +16,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db"))
 );
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CIN_pruebaContext>();
 
 
 var app = builder.Build();
