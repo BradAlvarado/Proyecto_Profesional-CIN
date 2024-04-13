@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Sistema_CIN.Models;
 
-namespace Sistema_CIN.Models
+namespace Sistema_CIN.Data
 {
     public partial class CIN_pruebaContext : DbContext
     {
