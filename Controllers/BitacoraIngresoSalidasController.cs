@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sistema_CIN.Models;
+using Sistema_CIN.Data;
 
 namespace Sistema_CIN.Controllers
 {

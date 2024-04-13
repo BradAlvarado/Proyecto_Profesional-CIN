@@ -1,22 +1,32 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Sistema_CIN.Models;
 using System.Configuration;
 using Microsoft.AspNetCore.Identity;
+using Sistema_CIN.Data;
+using System;
+using Sistema_CIN.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-
 
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db"))
 );
 
+
+builder.Services.AddIdentity<Usuario, IdentityRole>(
+    options =>
+    {
+        options.Password.RequiredUniqueChars = 0;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<CIN_pruebaContext>().AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -39,9 +49,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
-app.MapRazorPages();
 
 
 app.Run();

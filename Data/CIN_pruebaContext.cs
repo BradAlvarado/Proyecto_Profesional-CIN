@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Sistema_CIN.Models;
 
-namespace Sistema_CIN.Models
+namespace Sistema_CIN.Data
 {
-    public partial class CIN_pruebaContext : DbContext
+    public partial class CIN_pruebaContext : IdentityDbContext<Usuario>
     {
         public CIN_pruebaContext()
         {
