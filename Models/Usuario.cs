@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Sistema_CIN.Models
 {
-    public partial class Usuario
+    public partial class Usuario : IdentityUser
     {
         public int IdUsuario { get; set; }
         public string? FotoU { get; set; }

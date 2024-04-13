@@ -8,6 +8,8 @@ using Sistema_CIN.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Variable del String de la conexion de la BD
+var connectionString = builder.Configuration.GetConnectionString("connection_db");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -15,7 +17,12 @@ builder.Services.AddRazorPages();
 
 
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("connection_db")));
+        options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CIN_pruebaContext>();
+
+
 
 var app = builder.Build();
 
@@ -29,7 +36,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthentication();;
 

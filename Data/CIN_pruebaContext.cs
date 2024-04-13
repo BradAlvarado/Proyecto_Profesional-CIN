@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Data
 {
     public partial class CIN_pruebaContext : DbContext
     {
-        public CIN_pruebaContext()
-        {
-        }
-
+       
         public CIN_pruebaContext(DbContextOptions<CIN_pruebaContext> options)
             : base(options)
         {
