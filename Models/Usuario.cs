@@ -1,26 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Sistema_CIN.Models
 {
-    public partial class Usuario : IdentityUser
+    public partial class Usuario
     {
         public int IdUsuario { get; set; }
         public string? FotoU { get; set; }
         public string NombreU { get; set; } = null!;
-        [Required]
-        [DataType(DataType.EmailAddress)]
         public string CorreoU { get; set; } = null!;
-        [Required]
-        [DataType(DataType.Password)]
-        public string? Clave { get; set; }
-
-        [NotMapped]
-        [Compare("Clave", ErrorMessage = "Las contraseñas no coinciden")]
-        [Display(Name = "Confirmar contraseña")]
-        [DataType(DataType.Password)]
-        public string? ConfirmarClave { get; set; }
+        public string Clave { get; set; } = null!;
         public string? Token { get; set; }
         public bool? EstadoU { get; set; }
         public bool? AccesoU { get; set; }

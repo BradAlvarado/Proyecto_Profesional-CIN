@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using System.Diagnostics;
 
