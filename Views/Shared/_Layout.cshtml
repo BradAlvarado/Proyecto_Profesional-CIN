@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -33,7 +34,7 @@
 
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle hide" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
                             <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                            Administrador
+                            Nombre Rol
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small hide" aria-labelledby="dropdownUser1" data-popper-placement="top-start" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);">
                             <li><a class="dropdown-item" href="#">Perfil</a></li>
@@ -175,7 +176,7 @@
             </ul><!----------END MODULOS NAV--------->
             <!----------CERRAR SESION NAV--------->
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link text-danger">
+                <a asp-controller="Cuenta" asp-action="Logout" class="sidebar-link text-danger">
                     <i class="lni lni-exit"></i>
                     <span>Cerrar Sesión</span>
                 </a>
@@ -186,12 +187,24 @@
         <div class="main">
 
             <!----------NAV HEADER--------->
-            <nav class="navbar navbar-expand px-4 py-3 bg-white">
-                <div class="d-flex">
-                    <div class="sidebar-logo">
-                        <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
-                    </div>
+            <nav class="navbar navbar-expand px-4 py-3 bg-white row">
+
+                <div class="sidebar-logo col-auto text-start">
+                    <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
                 </div>
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    string correo = User.Identity.Name ?? "desconocido";
+                    //string idUsuario = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+                    <div class="col text-end">
+                        <span class="fw-bold">@correo  </span><img class="rounded-circle border border-1" src="~/images/Default_Profile_photo.jpg" style="height: 40px; width: 40px;" />
+                    </div>
+                }
+
+
             </nav>
 
 

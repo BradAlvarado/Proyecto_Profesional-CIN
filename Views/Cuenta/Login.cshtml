@@ -1,0 +1,69 @@
+﻿@model Usuario
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+
+
+<div class="m-5">
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-success p-auto" role="alert">
+            <p>Ya has iniciado sesión. Serás redirigido al Inicio en <span class="fw-bold" id="contador">3</span> segundos...</p>
+
+            <script>
+                // Inicializar el contador en 3
+                var contador = 3;
+
+                // Función para actualizar y mostrar el contador cada segundo
+                var intervalo = setInterval(function () {
+                    contador--; // Decrementar el contador
+                    document.getElementById('contador').innerText = contador; // Mostrar el contador en el span
+
+                    // Si el contador llega a 0, detener el intervalo y redirigir a la página de inicio
+                    if (contador === 0) {
+                        clearInterval(intervalo); // Detener el intervalo
+                        window.location.href = '@Url.Action("Index", "Home")'; // Redirigir a la página de inicio
+                    }
+                }, 1000); // 1000 milisegundos = 1 segundo
+            </script>
+        </div>
+    }
+    else
+    {
+        <h1>Iniciar Sesión</h1>
+        <form method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label">Correo</label>
+                <input id="correo" name="correo" class="form-control" type="email" />
+                <span asp-validation-for="CorreoU" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Contraseña</label>
+                <input id="clave" name="clave" class="form-control" type="password" />
+                <span asp-validation-for="Clave" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Ingresar" class="btn btn-primary text-white" />
+            </div>
+        </form>
+
+        <p>
+            <a class="btn btn-link" asp-action="Register">No tienes una cuenta? Regístrate</a>
+        </p>
+    }
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

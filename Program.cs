@@ -4,6 +4,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,14 +14,30 @@ var connectionString = builder.Configuration.GetConnectionString("connection_db"
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 
+builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CIN_pruebaContext>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(
+        "RquiredAdmin",
+        policy => policy.RequireRole("Administrador")
+    );
+});
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+        options.LoginPath = "/Cuenta/Login";
+        options.AccessDeniedPath = "/Cuenta/AccessDenied";
+    });
 
 
 
@@ -36,14 +53,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthentication();;
 
+app.UseRouting();
+
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Cuenta}/{action=Login}/{id?}");
 
 
 app.MapRazorPages();
