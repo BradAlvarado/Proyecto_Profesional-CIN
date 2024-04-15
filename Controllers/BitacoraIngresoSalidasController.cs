@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize]
     public class BitacoraIngresoSalidasController : Controller
     {
         private readonly CIN_pruebaContext _context;

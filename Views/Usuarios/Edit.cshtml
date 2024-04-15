@@ -9,46 +9,61 @@
 <h4>Usuario</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <div class="form-group">
-                <label asp-for="FotoU" class="control-label"></label>
-                <input asp-for="FotoU" class="form-control" />
-                <span asp-validation-for="FotoU" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombreU" class="control-label"></label>
+
+    <!--------Columna izquerda ---------->
+    <div class="col-lg-6 col-md-12 col-sm-12">
+        <input type="hidden" asp-for="IdUsuario" />
+
+        <div class="mb-4 row">
+            <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre de Usuario</label>
+          
+
+            <div class="col-lg-8 col-md-9 col-sm-12">
                 <input asp-for="NombreU" class="form-control" />
                 <span asp-validation-for="NombreU" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CorreoU" class="control-label"></label>
-                <input asp-for="CorreoU" class="form-control" />
-                <span asp-validation-for="CorreoU" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Clave" class="control-label"></label>
-                <input asp-for="Clave" class="form-control" />
-                <span asp-validation-for="Clave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdRol" class="control-label"></label>
-                <select asp-for="IdRol" class="form-control" asp-items="ViewBag.IdRol"></select>
-                <span asp-validation-for="IdRol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EstadoU" class="control-label"></label>
-                <input asp-for="EstadoU" class="form-control" />
-                <span asp-validation-for="EstadoU" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary text-white" />
-            </div>
-        </form>
+        </div>
+
     </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdUsuario" />
+        <div class="form-group">
+            <label asp-for="FotoU" class="control-label"></label>
+            <input asp-for="FotoU" class="form-control" />
+            <span asp-validation-for="FotoU" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NombreU" class="control-label"></label>
+            <input asp-for="NombreU" class="form-control" />
+            <span asp-validation-for="NombreU" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CorreoU" class="control-label"></label>
+            <input asp-for="CorreoU" class="form-control" />
+            <span asp-validation-for="CorreoU" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Clave" class="control-label"></label>
+            <input asp-for="Clave" class="form-control" />
+            <span asp-validation-for="Clave" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IdRol" class="control-label"></label>
+            <select asp-for="IdRol" class="form-control" asp-items="ViewBag.IdRol"></select>
+            <span asp-validation-for="IdRol" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EstadoU" class="control-label"></label>
+            <input asp-for="EstadoU" class="form-control" />
+            <span asp-validation-for="EstadoU" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary text-white" />
+        </div>
+    </form>
+
 </div>
 
 <div>
@@ -56,5 +71,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -37,6 +37,7 @@ builder.Services
         options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
         options.LoginPath = "/Cuenta/Login";
         options.AccessDeniedPath = "/Cuenta/AccessDenied";
+        options.LogoutPath = "/Home/Logout";
     });
 
 
@@ -47,6 +48,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

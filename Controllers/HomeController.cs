@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
@@ -6,17 +7,20 @@ using System.Diagnostics;
 
 namespace Sistema_CIN.Controllers
 {
+
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly CIN_pruebaContext _context;
-        private readonly ILogger<HomeController> _logger;
+
 
         public HomeController(CIN_pruebaContext context, ILogger<HomeController> logger)
         {
             _context = context;
-            _logger = logger;
+
         }
 
+       
         public IActionResult Index()
         {
             int personalCount = _context.Personals.Count();
@@ -31,7 +35,7 @@ namespace Sistema_CIN.Controllers
 
             return View();
         }
-
+       
         public IActionResult Privacy()
         {
             return View();

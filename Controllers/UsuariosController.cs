@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly CIN_pruebaContext _context;

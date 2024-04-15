@@ -47,10 +47,16 @@
                 </td>
      
                 <td>
-                    @*@Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)*@
+                    @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EstadoU)
+                    @if(item.AccesoU == true){
+                        <span class="text-success">Permitido</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Denegado</span>
+                    }               
                 </td>
                 <td>
                     <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-pen-to-square"></i></a> |

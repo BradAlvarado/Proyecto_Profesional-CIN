@@ -10,28 +10,50 @@
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 </head>
 <body>
-    <nav class="navbar navbar-expand px-4 py-3 bg-white">
-        <div class="d-flex">
-            <div class="sidebar-logo">
-                <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand px-4 py-3 bg-white">
+            <div class="d-flex">
+                <div class="sidebar-logo">
+                    <a><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
+                </div>
             </div>
-        </div>
-    </nav>
-    <main class="row">
-        <div class="col-4">
+        </nav>
+
+        <br />
+        <br />
+
+        <!-------------------->
+
+        <div class="row mt-5">
+
+            <div class="col-lg-4 col-md-2 col-sm-0">
+            </div>
+            <div class="col-lg-4 col-md-8 col-sm-12">
+                <div class="shadow row m-1">
+                    <div class="col-lg-9 col-md-7 col-sm-12 mt-4 p-4">
+
+                        @RenderBody()
+                    </div>
+
+                    <div class="col-lg-3 col-md-5 col-sm-12 text-center">
+
+                        <img src="~/images/Screenshot 2024-03-16 161316.png" class="img-fluid rounded-4 " style="max-width: 300px;"/>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-2 col-sm-0">
+            </div>
+
 
         </div>
 
-        <div class="col-lg-4 col-md-8 col-sm-12">
-            @RenderBody()
-        </div>
-        <div class="col-4">
 
-        </div>
-        
-    </main>
+    </div>
 </body>
 </html>
-
-
+<script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
+<script src="~/js/script.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
