@@ -121,36 +121,34 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,ImagenU,NombreU,CorreoU,Clave,NombreRolU,EstadoU,IdRol")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,NombreU,CorreoU,Clave,AccesoU,IdRol")] Usuario usuario)
         {
             if (id != usuario.IdUsuario)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.IdUsuario))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
-            return View(usuario);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(usuario.IdUsuario))
+                {
+                    ModelState.AddModelError("", "Error al obtener el Usuario");
+                    return View(usuario);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

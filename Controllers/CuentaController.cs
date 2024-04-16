@@ -67,13 +67,12 @@ namespace Sistema_CIN.Controllers
                         usuario.AccesoU = true;
                     }
 
-
-
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
 
                     var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                     identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
                     identity.AddClaim(new Claim(ClaimTypes.Role, "Invitado"));
 
                     await HttpContext.SignInAsync(
@@ -85,7 +84,7 @@ namespace Sistema_CIN.Controllers
                 return View(usuario);
 
             }
-            catch (DbException dbEx)
+            catch (DbException)
             {
 
                 return View(usuario);
@@ -109,7 +108,7 @@ namespace Sistema_CIN.Controllers
                 var usuarioRegistrado = await _context.Usuarios
                     .FirstOrDefaultAsync(u => u.CorreoU == correo && u.Clave == clave);
 
-                if (usuarioRegistrado != null)
+                if (usuarioRegistrado != null && usuarioRegistrado.AccesoU == true)
                 {
                     // Actualiza el campo EstadoU a true para el usuario que ha iniciado sesión
                     usuarioRegistrado.EstadoU = true;
@@ -166,7 +165,56 @@ namespace Sistema_CIN.Controllers
 
         }
 
+        // GET: Usuarios/Edit/5
+        public async Task<IActionResult> EditProfile(int? id)
+        {
+            if (id == null || _context.Usuarios == null)
+            {
+                return NotFound();
+            }
 
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+           
+            return View(usuario);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(int id, Usuario usuario)
+        { 
+            if (id != usuario.IdUsuario)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Tu perfil fue actualizado exitosamente!";
+                return View();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(usuario.IdUsuario))
+                {
+                    ModelState.AddModelError("", "Error al obtener el Usuario");
+                    return View();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private bool UsuarioExists(int id)
+        {
+            return (_context.Usuarios?.Any(e => e.IdUsuario == id)).GetValueOrDefault();
+        }
 
 
         [AllowAnonymous]

@@ -15,7 +15,7 @@ namespace Sistema_CIN.Models
 
         [Required(ErrorMessage = "El campo Correo es obligatorio.")]
         [DataType(DataType.EmailAddress)]
-        public string CorreoU { get; set; } = null!;
+        public string? CorreoU { get; set; }
 
         [Required(ErrorMessage = "El campo Contraseña es obligatorio.")]
         [DataType(DataType.Password)]

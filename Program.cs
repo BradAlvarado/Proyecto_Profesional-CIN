@@ -34,7 +34,7 @@ builder.Services
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.LoginPath = "/Cuenta/Login";
         options.AccessDeniedPath = "/Cuenta/AccessDenied";
         options.LogoutPath = "/Home/Logout";

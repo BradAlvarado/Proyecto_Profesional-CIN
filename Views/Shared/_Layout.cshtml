@@ -1,4 +1,5 @@
-﻿
+﻿@using System.Security.Claims
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,6 +29,12 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="sidebar-logo">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        string userRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "desconocido";
+
+                        <h1 class="text-white fs-6">Rol <span class="text-primary">@userRole</span></h1>
+                    }
                 </div>
             </div><!----------LOGO NAV--------->
             <!----------MODULOS NAV--------->
@@ -145,7 +152,7 @@
             </ul><!----------END MODULOS NAV--------->
             <!----------CERRAR SESION NAV--------->
             <div class="sidebar-footer">
- 
+
                 <a asp-controller="Cuenta" asp-action="Logout" class="sidebar-link text-danger">
                     <i class="lni lni-exit"></i>
                     <span>Cerrar Sesión</span>
@@ -165,15 +172,16 @@
                 <div class="col text-end">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        string correo = User.Identity.Name ?? "desconocido";
+                        string email = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+                        string idUser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0";
 
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="~/images/Default_Profile_photo.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
-                                <span>@correo</span>
+                                <span>@email </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-                                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                <li><a class="dropdown-item" asp-route-id="@idUser" asp-controller="Cuenta" asp-action="EditProfile">Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a href="#" class="dropdown-item text-danger">Salir</a>
