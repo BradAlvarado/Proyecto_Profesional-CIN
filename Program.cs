@@ -20,6 +20,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<CIN_pruebaContext>(options =>
         options.UseSqlServer(connectionString));
 
+    //builder.Services.AddDefaultIdentity
 
 builder.Services.AddAuthorization(options =>
 {

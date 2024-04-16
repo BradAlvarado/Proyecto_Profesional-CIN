@@ -24,7 +24,7 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() //no tiene Search User
         {
             var cINContext = _context.Usuarios.Include(u => u.IdRolNavigation);
             return View(await cINContext.ToListAsync());
