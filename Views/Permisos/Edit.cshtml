@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Permisos>
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Permisos de ROl: </h4>
+<hr />
+
+<table class="table table-striped my-4 rounded shadow-sm">
+    <thead>
+        <tr class="highlight">
+            <th scope="col">ID</th>
+            <th scope="col">Nombre Modulo</th>
+            <th scope="col">Permitir</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <form>
+
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.IdModulo)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.IdModuloNavigation.NombreModulo)
+                </td>
+                <td>
+                </td>
+            </tr>
+            }
+
+        </form>
+    </tbody>
+</table>
+
+<button type="submit" class="btn btn-primary btn-sm">Aplicar</button>
+<div class="my-3">
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Permisos" asp-action="Index">Volver</a>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

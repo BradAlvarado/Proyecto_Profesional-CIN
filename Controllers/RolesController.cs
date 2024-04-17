@@ -12,7 +12,7 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "RequireAdmin")]
     public class RolesController : Controller
     {
         private readonly CIN_pruebaContext _context;
@@ -22,6 +22,29 @@ namespace Sistema_CIN.Controllers
         {
             _context = context;
         }
+        //private void rolesDefault(int idRol)
+        //{
+        //    // Obtener todos los módulos disponibles en la base de datos
+        //    var modulos = _context.Modulos.ToList(); // Reemplaza db.Modulos con el DbSet correspondiente en tu contexto de base de datos
+
+        //    // Iterar sobre cada módulo y establecer los permisos predeterminados para el rol
+        //    foreach (var modulo in modulos)
+        //    {
+        //        // Crear un nuevo objeto Permisos para asignar permisos predeterminados
+        //        var permiso = new Permisos
+        //        {
+        //            IdRol = idRol,
+        //            IdModulo = modulo.IdModulo, // Asignar el Id del módulo actual
+        //            Permitido = false // Establecer el permiso predeterminado, por ejemplo, false
+        //        };
+
+        //        // Agregar el nuevo permiso a la base de datos
+        //        _context.Permisos.Add(permiso); // Asegúrate de que Permisos sea el DbSet adecuado en tu contexto de base de datos
+        //    }
+
+        //    // Guardar los cambios en la base de datos
+        //    _context.SaveChanges();
+        //}
 
         // GET: Roles
         public async Task<IActionResult> Index(string buscarRol)
@@ -71,7 +94,7 @@ namespace Sistema_CIN.Controllers
 
                         return View(role);
                     }
-
+                   
                     _context.Add(role);
                     await _context.SaveChangesAsync();
 

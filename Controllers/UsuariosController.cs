@@ -13,7 +13,7 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "RequireAdmin")]
     public class UsuariosController : Controller
     {
         private readonly CIN_pruebaContext _context;

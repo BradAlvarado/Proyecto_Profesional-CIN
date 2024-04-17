@@ -38,7 +38,6 @@ namespace Sistema_CIN.Controllers
         {
             try
             {
-
                 if (usuario != null)
                 {
                     var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);

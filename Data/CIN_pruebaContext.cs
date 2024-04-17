@@ -158,7 +158,10 @@ namespace Sistema_CIN.Data
 
             modelBuilder.Entity<Permisos>(entity =>
             {
-                entity.HasNoKey();
+
+                entity.HasKey(e => e.IdPermiso)
+                    .HasName("PK__Permisos__228F224F79C55118");
+                entity.Property(e => e.IdPermiso).HasColumnName("id_permiso");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 

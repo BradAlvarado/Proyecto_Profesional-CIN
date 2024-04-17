@@ -20,7 +20,7 @@ namespace Sistema_CIN.Controllers
 
         }
 
-       
+      
         public IActionResult Index()
         {
             int personalCount = _context.Personals.Count();

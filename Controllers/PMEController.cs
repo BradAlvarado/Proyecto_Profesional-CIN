@@ -8,14 +8,26 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize]
+
     public class PMEController : Controller
     {
+
+
+
         private readonly CIN_pruebaContext _context;
 
         public PMEController(CIN_pruebaContext context)
         {
             _context = context;
+        }
+
+        public IActionResult MiAccion()
+        {
+            // Realizar la consulta a la base de datos para obtener los nombres de los productos
+            var rolesPermitidos = _context.Permisos.Where(p => p.IdModulo == 2 && p.Permitido == true).Select(p => p.IdRol).ToArray();
+
+            // nombresProductos ahora es un array que contiene los nombres de los productos
+            return View(rolesPermitidos);
         }
         private void AsignarCamposVacios(Pme pme)
         {
@@ -30,6 +42,8 @@ namespace Sistema_CIN.Controllers
 
 
         // GET: PME
+
+        [Authorize(Policy = "PermitidosPorRoles")]
         public async Task<IActionResult> Index(string buscarPME, int? page)
         {
             var pageNumber = page ?? 1; // Número de página actual
@@ -188,7 +202,7 @@ namespace Sistema_CIN.Controllers
                     _context.Update(pme);
                     await _context.SaveChangesAsync();
 
-                    TempData["SuccessMessage"] = "Menos " + pme.NombrePme + " actualizado exitosamente!";
+                    TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " actualizado exitosamente!";
 
                 }
                 catch (DbUpdateConcurrencyException)

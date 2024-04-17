@@ -11,3 +11,5 @@ INSERT INTO Modulos(nombre_modulo) values('Bitacoras Ingresos Salidas');
 INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');
 INSERT INTO Modulos(nombre_modulo) values('Ayuda');
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');
+
+Select * from Permisos;
