@@ -41,9 +41,6 @@ namespace Sistema_CIN.Controllers
         }
 
 
-        // GET: PME
-
-        [Authorize(Policy = "PermitidosPorRoles")]
         public async Task<IActionResult> Index(string buscarPME, int? page)
         {
             var pageNumber = page ?? 1; // Número de página actual
