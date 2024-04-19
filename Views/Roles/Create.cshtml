@@ -1,4 +1,4 @@
-﻿@model Sistema_CIN.Models.Roles
+﻿@model Sistema_CIN.Models.Rol
 
 @{
     ViewData["Title"] = "Create";
@@ -18,23 +18,22 @@
 </div>
 
 
-<form asp-action="Create" class="my-4 ">
+<form asp-action="Create" class="my-4">
 
     <div class="row">
-        
+
         <div class="col-lg-6 col-sm-12">
             <div class="row g-3 align-items-center mb-3">
                 <div class="col-6">
-                    <label asp-for="NombreRol" class="col-form-label">Nombre del Rol</label>
+                    <label  class="col-form-label">Nombre del Rol</label>
                 </div>
                 <div class="col-6">
                     <input asp-for="NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
                 </div>
 
             </div>
-        </div>
 
-       
+        </div>
 
     </div>
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,45 +13,22 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize(Policy = "RequireAdmin")]
+    
     public class RolesController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
 
-        public RolesController(CIN_pruebaContext context)
+        public RolesController(SistemaCIN_dbContext context)
         {
             _context = context;
         }
-        //private void rolesDefault(int idRol)
-        //{
-        //    // Obtener todos los módulos disponibles en la base de datos
-        //    var modulos = _context.Modulos.ToList(); // Reemplaza db.Modulos con el DbSet correspondiente en tu contexto de base de datos
-
-        //    // Iterar sobre cada módulo y establecer los permisos predeterminados para el rol
-        //    foreach (var modulo in modulos)
-        //    {
-        //        // Crear un nuevo objeto Permisos para asignar permisos predeterminados
-        //        var permiso = new Permisos
-        //        {
-        //            IdRol = idRol,
-        //            IdModulo = modulo.IdModulo, // Asignar el Id del módulo actual
-        //            Permitido = false // Establecer el permiso predeterminado, por ejemplo, false
-        //        };
-
-        //        // Agregar el nuevo permiso a la base de datos
-        //        _context.Permisos.Add(permiso); // Asegúrate de que Permisos sea el DbSet adecuado en tu contexto de base de datos
-        //    }
-
-        //    // Guardar los cambios en la base de datos
-        //    _context.SaveChanges();
-        //}
 
         // GET: Roles
         public async Task<IActionResult> Index(string buscarRol)
         {
 
-            var roles = from role in _context.Roles select role;
+            var roles = from role in _context.Rols select role;
 
             if (!String.IsNullOrEmpty(buscarRol))
             {
@@ -72,53 +50,54 @@ namespace Sistema_CIN.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
+
+
             return View();
         }
 
-        // POST: Roles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdRol,NombreRol")] Roles role)
+		//POST: Roles/Create
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create([Bind("IdRol,NombreRol")] Rol roles)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					var existingRole = await _context.Rols.FirstOrDefaultAsync(r => r.NombreRol == roles.NombreRol);
+
+					if (existingRole != null)
+					{
+						ModelState.AddModelError("", "Este rol ya existe!");
+
+						return View(roles);
+					}
+
+					_context.Add(roles);
+					await _context.SaveChangesAsync();
+
+					TempData["SuccessMessage"] = "El rol se agregó con éxito.";
+					return RedirectToAction(nameof(Index));
+				}
+				catch
+				(Exception ex)
+				{
+					ModelState.AddModelError("", "Ocurrió un error al guardar el rol: " + ex.Message);
+				}
+			}
+			return View(roles);
+		}
+
+		
+		// GET: Roles/Edit/5
+		public async Task<IActionResult> Edit(int? id)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var existingRole = await _context.Roles.FirstOrDefaultAsync(r => r.NombreRol == role.NombreRol);
-
-                    if (existingRole != null)
-                    {
-                        ModelState.AddModelError("", "Este rol ya existe!");
-
-                        return View(role);
-                    }
-                   
-                    _context.Add(role);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "El rol se agregó con éxito.";
-                    return RedirectToAction(nameof(Index));
-                }
-                catch
-                (Exception ex)
-                {
-                    ModelState.AddModelError("", "Ocurrió un error al guardar el rol: " + ex.Message);
-                }
-            }
-            return View(role);
-        }
-
-        // GET: Roles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Roles == null)
+            if (id == null || _context.Rols == null)
             {
                 return NotFound();
             }
 
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Rols.FindAsync(id);
             if (role == null)
             {
                 return NotFound();
@@ -131,7 +110,7 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdRol,NombreRol")] Roles role)
+        public async Task<IActionResult> Edit(int id, [Bind("IdRol,NombreRol")] Rol role)
         {
             if (id != role.IdRol)
             {
@@ -143,7 +122,7 @@ namespace Sistema_CIN.Controllers
                 try
                 {
                     // Verificar si el nombre de rol ya existe en la base de datos
-                    var existingRole = await _context.Roles.AsNoTracking().FirstOrDefaultAsync(r => r.NombreRol == role.NombreRol);
+                    var existingRole = await _context.Rols.AsNoTracking().FirstOrDefaultAsync(r => r.NombreRol == role.NombreRol);
 
                     if (existingRole != null)
                     {
@@ -178,10 +157,10 @@ namespace Sistema_CIN.Controllers
             return View(role);
         }
 
-     
+
         private bool RoleExists(int id)
         {
-            return (_context.Roles?.Any(e => e.IdRol == id)).GetValueOrDefault();
+            return (_context.Rols?.Any(e => e.IdRol == id)).GetValueOrDefault();
         }
     }
 }

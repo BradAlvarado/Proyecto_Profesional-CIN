@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Metadata;
 using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Data
 {
-    public partial class CIN_pruebaContext : DbContext
+    public partial class SistemaCIN_dbContext : DbContext
     {
-       
-        public CIN_pruebaContext(DbContextOptions<CIN_pruebaContext> options)
+        public SistemaCIN_dbContext()
+        {
+        }
+
+        public SistemaCIN_dbContext(DbContextOptions<SistemaCIN_dbContext> options)
             : base(options)
         {
         }
@@ -17,17 +20,19 @@ namespace Sistema_CIN.Data
         public virtual DbSet<BitacoraIngresoSalidas> BitacoraIngresoSalida { get; set; } = null!;
         public virtual DbSet<BitacoraMovimiento> BitacoraMovimientos { get; set; } = null!;
         public virtual DbSet<Encargados> Encargados { get; set; } = null!;
-        public virtual DbSet<Modulos> Modulos { get; set; } = null!;
-        public virtual DbSet<Permisos> Permisos { get; set; } = null!;
+        public virtual DbSet<Modulo> Modulos { get; set; } = null!;
+        public virtual DbSet<Operaciones> Operaciones { get; set; } = null!;
         public virtual DbSet<Personal> Personals { get; set; } = null!;
         public virtual DbSet<Pme> Pmes { get; set; } = null!;
-        public virtual DbSet<Roles> Roles { get; set; } = null!;
+        public virtual DbSet<Rol> Rols { get; set; } = null!;
+        public virtual DbSet<RolOperacion> RolOperacions { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+
             }
         }
 
@@ -36,7 +41,7 @@ namespace Sistema_CIN.Data
             modelBuilder.Entity<BitacoraIngresoSalidas>(entity =>
             {
                 entity.HasKey(e => e.IdBitacora)
-                    .HasName("PK__Bitacora__7E4268B00C364DEE");
+                    .HasName("PK__Bitacora__7E4268B027D1242F");
 
                 entity.ToTable("Bitacora_ingreso_salida");
 
@@ -61,7 +66,7 @@ namespace Sistema_CIN.Data
             modelBuilder.Entity<BitacoraMovimiento>(entity =>
             {
                 entity.HasKey(e => e.IdBitacora)
-                    .HasName("PK__Bitacora__7E4268B0EBA23FAF");
+                    .HasName("PK__Bitacora__7E4268B0A9DE718E");
 
                 entity.ToTable("Bitacora_movimientos");
 
@@ -90,7 +95,7 @@ namespace Sistema_CIN.Data
             modelBuilder.Entity<Encargados>(entity =>
             {
                 entity.HasKey(e => e.IdEncargado)
-                    .HasName("PK__Encargad__770F28EAAA3893C6");
+                    .HasName("PK__Encargad__770F28EA5E419044");
 
                 entity.Property(e => e.IdEncargado).HasColumnName("id_encargado");
 
@@ -140,13 +145,13 @@ namespace Sistema_CIN.Data
                 entity.HasOne(d => d.IdPmeNavigation)
                     .WithMany(p => p.Encargados)
                     .HasForeignKey(d => d.IdPme)
-                    .HasConstraintName("FK__Encargado__id_pm__5BE2A6F2");
+                    .HasConstraintName("FK__Encargado__id_pm__6383C8BA");
             });
 
-            modelBuilder.Entity<Modulos>(entity =>
+            modelBuilder.Entity<Modulo>(entity =>
             {
                 entity.HasKey(e => e.IdModulo)
-                    .HasName("PK__Modulos__B2584DFC8FD9616F");
+                    .HasName("PK__Modulos__B2584DFC5C3EA48E");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
@@ -156,34 +161,30 @@ namespace Sistema_CIN.Data
                     .HasColumnName("nombre_modulo");
             });
 
-            modelBuilder.Entity<Permisos>(entity =>
+            modelBuilder.Entity<Operaciones>(entity =>
             {
+                entity.HasKey(e => e.IdOp)
+                    .HasName("PK__Operacio__0148BB6A1578D6D8");
 
-                entity.HasKey(e => e.IdPermiso)
-                    .HasName("PK__Permisos__228F224F79C55118");
-                entity.Property(e => e.IdPermiso).HasColumnName("id_permiso");
+                entity.Property(e => e.IdOp).HasColumnName("id_op");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
-                entity.Property(e => e.IdRol).HasColumnName("id_rol");
-
-                entity.Property(e => e.Permitido).HasColumnName("permitido");
+                entity.Property(e => e.NombreOp)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("nombre_op");
 
                 entity.HasOne(d => d.IdModuloNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Operaciones)
                     .HasForeignKey(d => d.IdModulo)
-                    .HasConstraintName("FK__Permisos__id_mod__693CA210");
-
-                entity.HasOne(d => d.IdRolNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK__Permisos__id_rol__68487DD7");
+                    .HasConstraintName("FK__Operacion__id_mo__5FB337D6");
             });
 
             modelBuilder.Entity<Personal>(entity =>
             {
                 entity.HasKey(e => e.IdPersonal)
-                    .HasName("PK__Personal__418FB808ACF63FB8");
+                    .HasName("PK__Personal__418FB8087A4B3E5E");
 
                 entity.ToTable("Personal");
 
@@ -208,11 +209,6 @@ namespace Sistema_CIN.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("correo_p");
-
-                entity.Property(e => e.TelefonoP)
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("telefono_p");
 
                 entity.Property(e => e.DistritoP)
                     .HasMaxLength(20)
@@ -242,16 +238,21 @@ namespace Sistema_CIN.Data
                     .IsUnicode(false)
                     .HasColumnName("provincia_p");
 
+                entity.Property(e => e.TelefonoP)
+                    .HasMaxLength(12)
+                    .IsUnicode(false)
+                    .HasColumnName("telefono_p");
+
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Personals)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK__Personal__id_rol__5AEE82B9");
+                    .HasConstraintName("FK__Personal__id_rol__619B8048");
             });
 
             modelBuilder.Entity<Pme>(entity =>
             {
                 entity.HasKey(e => e.IdPme)
-                    .HasName("PK__PME__6FC802360690C129");
+                    .HasName("PK__PME__6FC802361894BBFA");
 
                 entity.ToTable("PME");
 
@@ -333,13 +334,15 @@ namespace Sistema_CIN.Data
                 entity.HasOne(d => d.IdEncargadoNavigation)
                     .WithMany(p => p.Pmes)
                     .HasForeignKey(d => d.IdEncargado)
-                    .HasConstraintName("FK__PME__id_encargad__5CD6CB2B");
+                    .HasConstraintName("FK__PME__id_encargad__628FA481");
             });
 
-            modelBuilder.Entity<Roles>(entity =>
+            modelBuilder.Entity<Rol>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__Roles__6ABCB5E0D21197B9");
+                    .HasName("PK__Rol__6ABCB5E0EB387742");
+
+                entity.ToTable("Rol");
 
                 entity.Property(e => e.IdRol).HasColumnName("id_rol");
 
@@ -349,17 +352,41 @@ namespace Sistema_CIN.Data
                     .HasColumnName("nombre_rol");
             });
 
+            modelBuilder.Entity<RolOperacion>(entity =>
+            {
+                entity.HasKey(e => e.IdRolOp)
+                    .HasName("PK__Rol_oper__771ED49BBD3CB9C4");
+
+                entity.ToTable("Rol_operacion");
+
+                entity.Property(e => e.IdRolOp).HasColumnName("id_rol_op");
+
+                entity.Property(e => e.IdOp).HasColumnName("id_op");
+
+                entity.Property(e => e.IdRol).HasColumnName("id_rol");
+
+                entity.HasOne(d => d.IdOpNavigation)
+                    .WithMany(p => p.RolOperacions)
+                    .HasForeignKey(d => d.IdOp)
+                    .HasConstraintName("FK__Rol_opera__id_op__5EBF139D");
+
+                entity.HasOne(d => d.IdRolNavigation)
+                    .WithMany(p => p.RolOperacions)
+                    .HasForeignKey(d => d.IdRol)
+                    .HasConstraintName("FK__Rol_opera__id_ro__5DCAEF64");
+            });
+
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__Usuarios__4E3E04ADFFBD1DE5");
+                    .HasName("PK__Usuarios__4E3E04AD3A152FF1");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
 
                 entity.Property(e => e.AccesoU).HasColumnName("acceso_u");
 
                 entity.Property(e => e.Clave)
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("clave");
 
@@ -371,7 +398,6 @@ namespace Sistema_CIN.Data
                 entity.Property(e => e.EstadoU).HasColumnName("estado_u");
 
                 entity.Property(e => e.FotoU)
-                    .HasMaxLength(300)
                     .IsUnicode(false)
                     .HasColumnName("foto_u");
 
@@ -382,15 +408,10 @@ namespace Sistema_CIN.Data
                     .IsUnicode(false)
                     .HasColumnName("nombre_u");
 
-                entity.Property(e => e.Token)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("token");
-
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.IdRol)
-                    .HasConstraintName("FK__Usuarios__id_rol__5812160E");
+                    .HasConstraintName("FK__Usuarios__id_rol__5CD6CB2B");
             });
 
             OnModelCreatingPartial(modelBuilder);

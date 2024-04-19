@@ -13,12 +13,11 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize(Policy = "RequireAdmin")]
     public class UsuariosController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
-        public UsuariosController(CIN_pruebaContext context)
+        public UsuariosController(SistemaCIN_dbContext context)
         {
             _context = context;
         }
@@ -52,7 +51,7 @@ namespace Sistema_CIN.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol");
+            ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol");
             return View();
         }
 
@@ -83,7 +82,7 @@ namespace Sistema_CIN.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+                ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", usuario.IdRol);
                 return View(usuario);
             }
             catch (Exception)
@@ -112,7 +111,7 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 

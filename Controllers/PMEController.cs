@@ -4,31 +4,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
+using Sistema_CIN.Filters;
 using Sistema_CIN.Models;
+using Sistema_CIN.Services;
+using System.Security.Claims;
 
 namespace Sistema_CIN.Controllers
 {
 
-    public class PMEController : Controller
+	public class PMEController : Controller
     {
+        private readonly SistemaCIN_dbContext _context;
+        private readonly FiltrosPermisos _filters;
 
-
-
-        private readonly CIN_pruebaContext _context;
-
-        public PMEController(CIN_pruebaContext context)
+        public PMEController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
         {
             _context = context;
+            _filters = filtro;
         }
 
-        public IActionResult MiAccion()
+        public string obtenerUsuario()
         {
-            // Realizar la consulta a la base de datos para obtener los nombres de los productos
-            var rolesPermitidos = _context.Permisos.Where(p => p.IdModulo == 2 && p.Permitido == true).Select(p => p.IdRol).ToArray();
-
-            // nombresProductos ahora es un array que contiene los nombres de los productos
-            return View(rolesPermitidos);
+            string emailUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+            return emailUser;
         }
+
         private void AsignarCamposVacios(Pme pme)
         {
             pme.PolizaSeguro ??= "Póliza no registrada";
@@ -40,11 +40,17 @@ namespace Sistema_CIN.Controllers
             pme.NivelEducativoPme ??= "No registrado";
         }
 
-
-        public async Task<IActionResult> Index(string buscarPME, int? page)
+		public async Task<IActionResult> Index(string buscarPME, int? page)
         {
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
+            string user = obtenerUsuario();
+            int cantidadOperaciones = await _filters.VerificarPermiso(user, 1);
+
+            if(cantidadOperaciones == 0)
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
 
             var pmes = from pme in _context.Pmes select pme;
             pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
@@ -72,8 +78,8 @@ namespace Sistema_CIN.Controllers
             return View(pagedModel);
         }
 
-        // GET: PME/Details/5
-        public async Task<IActionResult> Details(int? id)
+		// GET: PME/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -99,8 +105,9 @@ namespace Sistema_CIN.Controllers
             return View(pme);
         }
 
-        // GET: PME/Create
-        public IActionResult Create()
+		// GET: PME/Create
+	
+		public IActionResult Create()
         {
             ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE");
             return View();
@@ -109,7 +116,8 @@ namespace Sistema_CIN.Controllers
         // POST: PME/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
+		[AuthorizeUser(idOperacion: 6)]
+		public async Task<IActionResult> Create([Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
             try
             {
@@ -154,8 +162,10 @@ namespace Sistema_CIN.Controllers
         }
 
 
-        // GET: PME/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: PME/Edit/5
+
+		[AuthorizeUser(idOperacion: 7)]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Pmes == null)
             {
@@ -174,6 +184,7 @@ namespace Sistema_CIN.Controllers
         // POST: PME/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeUser(idOperacion: 7)]
         public async Task<IActionResult> Edit(int id, [Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
             if (id != pme.IdPme)
@@ -215,14 +226,15 @@ namespace Sistema_CIN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdEncargado"] = new SelectList(_context.Roles, "IdEncargado", "IdEncargado", pme.IdEncargado);
+            ViewData["IdEncargado"] = new SelectList(_context.Rols, "IdEncargado", "IdEncargado", pme.IdEncargado);
             return View(pme);
         }
 
 
         // POST: PME/Delete/5
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+		[AuthorizeUser(idOperacion: 8)]
+		public async Task<IActionResult> Delete(int id)
         {
             if (_context.Pmes == null)
             {

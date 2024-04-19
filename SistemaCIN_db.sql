@@ -1,3 +1,143 @@
+ï»¿Create DataBase SistemaCIN_db
+
+USE SistemaCIN_db;
+
+GO
+
+CREATE TABLE Usuarios (
+    id_usuario INT IDENTITY(1,1) PRIMARY KEY,
+	foto_u VARCHAR(max),
+    nombre_u VARCHAR(50) not null,
+	correo_u VARCHAR(50) not null,
+    clave VARCHAR(100) not null,
+	estado_u BIT, -- ACTIVO - INACTIVO 
+	acceso_u BIT,
+	id_rol INT -- FK 1 -- FK 2
+);
+
+
+------ LO QUE NOS AYUDA CON ROLES Y PERMISOS 
+CREATE TABLE Rol (
+    id_rol INT IDENTITY(1,1) PRIMARY KEY, -- FK 1
+    nombre_rol VARCHAR(50) not null
+);
+CREATE TABLE Rol_operacion (
+    id_rol_op INT IDENTITY(1,1) PRIMARY KEY,
+    id_rol INT, -- FK 2
+    id_op INT -- FK 3
+);
+
+CREATE TABLE Operaciones(
+    id_op INT IDENTITY(1,1) PRIMARY KEY, -- FK 3
+    nombre_op VARCHAR(20) not null,
+    id_modulo INT -- FK 4
+);
+
+
+CREATE TABLE Modulos (
+    id_modulo INT IDENTITY (1,1) PRIMARY KEY, -- FK 4
+    nombre_modulo VARCHAR(50)
+);
+------ LO QUE NOS AYUDA CON ROLES Y PERMISOS 
+
+CREATE TABLE Bitacora_ingreso_salida(
+	id_bitacora INT IDENTITY(1,1) PRIMARY KEY,
+	usuario_b VARCHAR(50),
+	fecha_ingreso DATETIME,
+	fecha_salida DATETIME,
+	estado_actual int
+);
+
+
+CREATE TABLE Bitacora_movimientos(
+	id_bitacora INT IDENTITY(1,1) PRIMARY KEY,
+	usuario_b VARCHAR(50),
+	fecha_movimiento DATETIME,
+	tipo_movimiento VARCHAR(20),
+	detalle VARCHAR (50)
+);
+
+
+CREATE TABLE PME (
+	id_pme INT IDENTITY(1,1) PRIMARY KEY,
+    id_encargado INT,
+    cedula_pme VARCHAR(25) not null,
+    poliza_seguro VARCHAR(50),
+    nombre_pme VARCHAR(50) not null,
+    apellidos_pme VARCHAR(60) not null,
+	fecha_nacimiento_pme DATE not null,
+    edad_pme INT not null,
+	genero_pme VARCHAR(20) not null,
+    provincia_pme VARCHAR(20) not null,
+    canton_pme VARCHAR(20),
+    distrito_pme VARCHAR(20),
+    nacionalidad_pme VARCHAR(20) not null,
+    subvencion_pme BIT,
+    fecha_ingreso_pme DATE not null,
+    fecha_egreso_pme DATETIME,
+    condiciÃ³n_migratoria_pme VARCHAR(50),
+    nivel_educativo_pme VARCHAR(50)
+);
+
+
+CREATE TABLE Encargados (
+	id_encargado INT IDENTITY(1,1) PRIMARY KEY,
+    id_pme INT,
+    cedula_e VARCHAR(25) not null,
+    nombre_e VARCHAR(50) not null,
+    apellidos_e VARCHAR(60) not null,
+    fecha_nace_e DATE,
+	edad int not null,
+	correo_e VARCHAR(50)not null,
+    direccion_e VARCHAR(60) not null,
+    telefono_e VARCHAR(10) not null,
+    lugar_trabajo_e VARCHAR(25)
+);
+
+
+CREATE TABLE Personal (
+	id_personal INT IDENTITY(1,1) PRIMARY KEY,
+	cedula_p VARCHAR(25) not null,
+    nombre_p VARCHAR(50) not null,
+    apellidos_p VARCHAR(60) not null,
+	correo_p VARCHAR(50) not null, 
+    telefono_p VARCHAR(12),
+	fecha_nace_p DATE,
+    edad_p INT not null,
+	genero_p VARCHAR(20) not null,
+    provincia_p VARCHAR(20) not null,
+    canton_p VARCHAR(20),
+    distrito_p VARCHAR(20), 
+	id_rol INT  
+);
+
+
+-----------------------------------------
+--- ALTERS LLAVES FORANEAS --------------
+
+ALTER TABLE Usuarios
+	ADD FOREIGN KEY (id_rol) REFERENCES Rol(id_rol)
+-----------------------------------------
+ALTER TABLE Rol_operacion
+	ADD FOREIGN KEY (id_rol) REFERENCES Rol(id_rol),
+    FOREIGN KEY (id_op) REFERENCES Operaciones(id_op)
+
+ALTER TABLE Operaciones
+	ADD FOREIGN KEY (id_modulo) REFERENCES Modulos(id_modulo)
+
+-----------------------------------------
+
+ALTER TABLE Personal
+	ADD FOREIGN KEY (id_rol) REFERENCES Rol(id_rol);
+-----------------------------------------
+
+ALTER TABLE PME
+	ADD FOREIGN KEY (id_encargado) REFERENCES Encargados(id_encargado);
+-----------------------------------------
+ALTER TABLE Encargados
+	ADD FOREIGN KEY (id_pme) REFERENCES PME(id_pme);
+
+
 
 ----------------------bitacoras------------------------------
 
@@ -19,18 +159,18 @@ BEGIN
     BEGIN
         IF EXISTS (SELECT * FROM deleted)
 		BEGIN
-            SET @Movimiento = 'UPDATE'; -- Actualización
+            SET @Movimiento = 'UPDATE'; -- ActualizaciÃ³n
 			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
 		END
         ELSE
 		BEGIN
-            SET @Movimiento = 'INSERT'; -- Inserción
+            SET @Movimiento = 'INSERT'; -- InserciÃ³n
 			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
 		END
 	END
     ELSE IF EXISTS(SELECT * FROM deleted)
 		BEGIN
-        SET @Movimiento = 'DELETE'; -- Eliminación
+        SET @Movimiento = 'DELETE'; -- EliminaciÃ³n
 		SET @PMEAfectado = (SELECT nombre_pme FROM deleted)
 	END
 	
@@ -76,7 +216,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Variables para almacenar información relevante
+    -- Variables para almacenar informaciÃ³n relevante
     DECLARE @Usuario VARCHAR(50);
     DECLARE @FechaActual DATETIME;
 
@@ -113,7 +253,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Variables para almacenar información relevante
+    -- Variables para almacenar informaciÃ³n relevante
     DECLARE @Usuario VARCHAR(50);
     DECLARE @FechaActual DATETIME;
     DECLARE @NuevoEstado BIT;
@@ -125,7 +265,7 @@ BEGIN
     -- Convertir a la hora local de Costa Rica (UTC-6)
     SET @FechaActual = DATEADD(HOUR, -6, @FechaActual);
 
-    -- Obtener información de las filas afectadas por la actualización
+    -- Obtener informaciÃ³n de las filas afectadas por la actualizaciÃ³n
     SELECT @Usuario = i.correo_u,
            @NuevoEstado = i.estado_u
     FROM inserted i
@@ -136,7 +276,7 @@ BEGIN
     FROM Bitacora_ingreso_salida
     WHERE usuario_b = @Usuario;
 
-    -- Verificar si el estado cambió de 1 a 0 (de activo a inactivo)
+    -- Verificar si el estado cambiÃ³ de 1 a 0 (de activo a inactivo)
     IF @NuevoEstado = 0
     BEGIN
         -- Actualizar la fecha de salida en la tabla Bitacora_ingreso_salida
@@ -218,3 +358,41 @@ values('Isaac','isaac@gmail.com', 'i1234', 1,1,1);
 
 
 DELETE Usuarios where id_usuario = 15
+
+
+
+
+Select * from Modulos;
+INSERT INTO Modulos(nombre_modulo) values('Mantenimiento Personal');
+INSERT INTO Modulos(nombre_modulo) values('Mantenimiento PME');
+INSERT INTO Modulos(nombre_modulo) values('Mantenimiento Encargados');
+INSERT INTO Modulos(nombre_modulo) values('Administrar Usuarios');
+INSERT INTO Modulos(nombre_modulo) values('Administrar Roles');
+INSERT INTO Modulos(nombre_modulo) values('Administrar Permisos');
+INSERT INTO Modulos(nombre_modulo) values('Bitacoras Ingresos Salidas');
+INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');
+INSERT INTO Modulos(nombre_modulo) values('Ayuda');
+INSERT INTO Modulos(nombre_modulo) values('Acerca de');
+
+Select * from Modulos;
+Select * from Usuarios;
+Select * from Rol;
+Select * from Rol_operacion;
+Select * from Operaciones;
+
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Ver',3);
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Crear',3);
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Editar',3);
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Eliminar',3);
+
+Select * from Rol_operacion;
+Select * from Operaciones;
+
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,5)
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,6);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,7);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,8);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,9);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,10);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,11);
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,12);

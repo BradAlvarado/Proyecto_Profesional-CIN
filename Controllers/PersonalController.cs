@@ -9,22 +9,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
+using Sistema_CIN.Filters;
 using Sistema_CIN.Models;
 
 
 namespace Sistema_CIN.Controllers
 {
-    [Authorize]
-    public class PersonalController : Controller
-	{
-		private readonly CIN_pruebaContext _context;
 
-		public PersonalController(CIN_pruebaContext context)
+	public class PersonalController : Controller
+	{
+		private readonly SistemaCIN_dbContext _context;
+
+		public PersonalController(SistemaCIN_dbContext context)
 		{
 			_context = context;
 		}
 
-		// GET: Personal
+        // GET: Personal
+
+
 		public async Task<IActionResult> Index(string buscarEmpleado)
 		{
             var empleado = from personal in _context.Personals select personal;
@@ -48,7 +51,9 @@ namespace Sistema_CIN.Controllers
             return View(await empleado.ToListAsync());
         }
 
+
 		// GET: Personal/Details/5
+	
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null || _context.Personals == null)
@@ -68,10 +73,11 @@ namespace Sistema_CIN.Controllers
 		}
 
 		// GET: Personal/Create
+
 		public IActionResult Create()
 		{
 
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol");
+			ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol");
 			return View();
 
 
@@ -81,6 +87,8 @@ namespace Sistema_CIN.Controllers
 		// POST: Personal/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdPersonal,CedulaP,NombreP,ApellidosP,CorreoP,PuestoP,FechaNaceP,EdadP,GeneroP,ProvinciaP,CantonP,DistritoP,TelefonoP,IdRol")] Personal personal)
@@ -112,13 +120,14 @@ namespace Sistema_CIN.Controllers
 			}
 
 
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", personal.IdRol);
+			ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", personal.IdRol);
 			return View(personal);
 		}
 
 
 
 		// GET: Personal/Edit/5
+
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null)
@@ -135,7 +144,7 @@ namespace Sistema_CIN.Controllers
 				return NotFound();
 			}
 
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", personal.IdRol);
+			ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol", personal.IdRol);
 			return View(personal);
 		}
 
@@ -184,14 +193,15 @@ namespace Sistema_CIN.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", personal.IdRol);
+			ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", personal.IdRol);
 			return View(personal);
 
 		}
 
         // POST: Personal/Delete
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+
+		public async Task<IActionResult> Delete(int id)
         {
             if (_context.Personals == null)
             {

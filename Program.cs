@@ -1,52 +1,42 @@
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Sistema_CIN.Controllers;
-using Microsoft.AspNetCore.Authorization;
+using Sistema_CIN.Filters;
+using System.Configuration;
+using Sistema_CIN.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Variable del String de la conexion de la BD
 var connectionString = builder.Configuration.GetConnectionString("connection_db");
+builder.Services.AddDbContext<SistemaCIN_dbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+    options.EnableSensitiveDataLogging(); // Habilitar el registro de datos sensibles
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSession();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddDbContext<CIN_pruebaContext>(options =>
+
+builder.Services.AddDbContext<SistemaCIN_dbContext>(options =>
         options.UseSqlServer(connectionString));
 
-CIN_pruebaContext _context;
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdmin",
          policy => policy.RequireRole("Administrador"));
 });
 
-// Inicializamos _context en el scope
-using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-{
-    _context = scope.ServiceProvider.GetRequiredService<CIN_pruebaContext>();
-}
+builder.Services.AddScoped<FiltrosPermisos>();
 
-//builder.Services.AddAuthorization(options =>
-//{
-
-//    options.AddPolicy("PermitidosPorRoles", policy =>
-//    {
-//        policy.RequireAssertion(context =>
-//        {
-//            // Obtener los roles permitidos de tu método MiAccion()
-//            var rolesPermitidos = ObtenerRolesPermitidos(context, _context);
-
-//            // Verificar si el usuario actual tiene al menos uno de los roles permitidos
-//            return rolesPermitidos.Any(role => context.User.IsInRole(role));
-//        });
-//    });
-
-//});
 
 builder.Services
+   
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -71,9 +61,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

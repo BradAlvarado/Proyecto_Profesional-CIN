@@ -10,7 +10,7 @@
     <div class="col">
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
     </div>
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+    
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
         <form asp-controller="PME" asp-action="Index">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -107,6 +107,7 @@
         }
     </tbody>
 </table>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 </div>
 <!------Paginacion------>
 <div class="row my-4">

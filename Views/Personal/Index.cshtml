@@ -12,8 +12,6 @@
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
     </div>
 
-    <div asp-validation-summary="ModelOnly" class="alert" role="alert"></div>
-
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
 
         <form asp-controller="Personal" asp-action="Index">
@@ -111,6 +109,8 @@
 
     </table>
 
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
 </div>
 
 <div class="my-5">
@@ -127,15 +127,5 @@
         <script>registroExito("@TempData["SuccessMessage"]");</script>
 
     }
-    <script>
-
-
-        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
-        setTimeout(function () {
-            const alertaDiv = document.querySelector('.alert');
-            if (alertaDiv) {
-                alertaDiv.style.display = 'none';
-            }
-        }, 3000);
-    </script>
+    
 }

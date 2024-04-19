@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace Sistema_CIN.Models
 {
-    public partial class Roles
+    public partial class Rol
     {
-        public Roles()
+        public Rol()
         {
             Personals = new HashSet<Personal>();
+            RolOperacions = new HashSet<RolOperacion>();
             Usuarios = new HashSet<Usuario>();
         }
 
@@ -15,6 +16,7 @@ namespace Sistema_CIN.Models
         public string NombreRol { get; set; } = null!;
 
         public virtual ICollection<Personal> Personals { get; set; }
+        public virtual ICollection<RolOperacion> RolOperacions { get; set; }
         public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Sistema_CIN.Models
         }
 
         public int IdPme { get; set; }
+        public int? IdEncargado { get; set; }
         public string CedulaPme { get; set; } = null!;
         public string? PolizaSeguro { get; set; }
         public string NombrePme { get; set; } = null!;
@@ -27,7 +28,6 @@ namespace Sistema_CIN.Models
         public DateTime? FechaEgresoPme { get; set; }
         public string? CondiciónMigratoriaPme { get; set; }
         public string? NivelEducativoPme { get; set; }
-        public int? IdEncargado { get; set; }
 
         public virtual Encargados? IdEncargadoNavigation { get; set; }
         public virtual ICollection<Encargados> Encargados { get; set; }

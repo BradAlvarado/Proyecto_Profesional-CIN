@@ -14,9 +14,9 @@ namespace Sistema_CIN.Controllers
     [Authorize, ]
     public class BitacoraIngresoSalidasController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
-        public BitacoraIngresoSalidasController(CIN_pruebaContext context)
+        public BitacoraIngresoSalidasController(SistemaCIN_dbContext context)
         {
             _context = context;
         }

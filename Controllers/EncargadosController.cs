@@ -15,9 +15,9 @@ namespace Sistema_CIN.Controllers
     [Authorize]
     public class EncargadosController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
-        public EncargadosController(CIN_pruebaContext context)
+        public EncargadosController(SistemaCIN_dbContext context)
         {
             _context = context;
         }

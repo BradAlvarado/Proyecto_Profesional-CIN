@@ -11,10 +11,10 @@ namespace Sistema_CIN.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
 
-        public HomeController(CIN_pruebaContext context, ILogger<HomeController> logger)
+        public HomeController(SistemaCIN_dbContext context, ILogger<HomeController> logger)
         {
             _context = context;
 
@@ -41,7 +41,12 @@ namespace Sistema_CIN.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult NotFound()
+		{
+			return View();
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
