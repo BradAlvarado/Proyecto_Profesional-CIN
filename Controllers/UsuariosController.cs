@@ -13,6 +13,7 @@ using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize(Policy = "RequireAdmin")]
     public class UsuariosController : Controller
     {
         private readonly SistemaCIN_dbContext _context;

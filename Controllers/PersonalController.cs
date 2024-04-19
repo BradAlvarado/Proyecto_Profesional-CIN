@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Filters;
 using Sistema_CIN.Models;
+using Sistema_CIN.Services;
 
 
 namespace Sistema_CIN.Controllers
@@ -19,17 +21,29 @@ namespace Sistema_CIN.Controllers
 	public class PersonalController : Controller
 	{
 		private readonly SistemaCIN_dbContext _context;
+        private readonly FiltrosPermisos _filters;
 
-		public PersonalController(SistemaCIN_dbContext context)
+        public PersonalController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
 		{
 			_context = context;
-		}
+            _filters = filtro;
+        }
+
+		// Funcion para verificar si el usuario en sesion tiene permiso para acceder a los modulos
+        private async Task<bool> VerificarPermiso(int idOp)
+        {
+            string emailUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+            int cantidadOperaciones = await _filters.VerificarPermiso(emailUser, idOp);
+            return cantidadOperaciones > 0;
+        }
 
         // GET: Personal
-
-
-		public async Task<IActionResult> Index(string buscarEmpleado)
+        public async Task<IActionResult> Index(string buscarEmpleado)
 		{
+            if (!await VerificarPermiso(1))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             var empleado = from personal in _context.Personals select personal;
 			empleado = _context.Personals.Include(p => p.IdRolNavigation);
 	
@@ -56,7 +70,11 @@ namespace Sistema_CIN.Controllers
 	
 		public async Task<IActionResult> Details(int? id)
 		{
-			if (id == null || _context.Personals == null)
+            if (!await VerificarPermiso(1))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            if (id == null || _context.Personals == null)
 			{
 				return NotFound();
 			}
@@ -93,7 +111,11 @@ namespace Sistema_CIN.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdPersonal,CedulaP,NombreP,ApellidosP,CorreoP,PuestoP,FechaNaceP,EdadP,GeneroP,ProvinciaP,CantonP,DistritoP,TelefonoP,IdRol")] Personal personal)
 		{
-			if (ModelState.IsValid)
+            if (!await VerificarPermiso(2))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            if (ModelState.IsValid)
 			{
 
 				var existeCedula = await _context.Personals.FirstOrDefaultAsync(r => r.CedulaP == personal.CedulaP);
@@ -130,7 +152,11 @@ namespace Sistema_CIN.Controllers
 
 		public async Task<IActionResult> Edit(int? id)
 		{
-			if (id == null)
+            if (!await VerificarPermiso(3))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            if (id == null)
 			{
 				return NotFound();
 			}
@@ -154,7 +180,12 @@ namespace Sistema_CIN.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("IdPersonal,CedulaP,NombreP,ApellidosP,CorreoP,FechaNaceP,EdadP,GeneroP,ProvinciaP,CantonP,DistritoP,TelefonoP,IdRol")] Personal personal)
 		{
-			if (id != personal.IdPersonal)
+            if (!await VerificarPermiso(3))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
+            if (id != personal.IdPersonal)
 			{
 				return NotFound();
 			}
@@ -203,6 +234,11 @@ namespace Sistema_CIN.Controllers
 
 		public async Task<IActionResult> Delete(int id)
         {
+            if (!await VerificarPermiso(5))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (_context.Personals == null)
             {
                 return Problem("Entity set 'CINContext.Personal'  is null.");

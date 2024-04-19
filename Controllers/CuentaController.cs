@@ -63,20 +63,25 @@ namespace Sistema_CIN.Controllers
 						usuario.EstadoU = true;
 						usuario.AccesoU = true;
 					}
-
-					_context.Add(usuario);
-					await _context.SaveChangesAsync();
-
 					var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-					identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
-					identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
-					identity.AddClaim(new Claim(ClaimTypes.Role, "Invitado"));
+                    identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
+                    identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
 
-					await HttpContext.SignInAsync(
+                    // Obtener el rol del usuario y agregarlo como reclamación
+                    var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuario.IdRol);
+                    if (rolUser != null)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
+                    }
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    // Inicia Sesión
+                    await HttpContext.SignInAsync(
 						CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
 
-					return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
 				}
 				return View(usuario);
 

@@ -23,10 +23,11 @@ namespace Sistema_CIN.Controllers
             _filters = filtro;
         }
 
-        public string obtenerUsuario()
+        private async Task<bool> VerificarPermiso(int idOp)
         {
             string emailUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
-            return emailUser;
+            int cantidadOperaciones = await _filters.VerificarPermiso(emailUser, idOp);
+            return cantidadOperaciones > 0;
         }
 
         private void AsignarCamposVacios(Pme pme)
@@ -42,15 +43,13 @@ namespace Sistema_CIN.Controllers
 
 		public async Task<IActionResult> Index(string buscarPME, int? page)
         {
-            var pageNumber = page ?? 1; // Número de página actual
-            var pageSize = 10; // Número de elementos por página
-            string user = obtenerUsuario();
-            int cantidadOperaciones = await _filters.VerificarPermiso(user, 1);
-
-            if(cantidadOperaciones == 0)
+            if (!await VerificarPermiso(6))
             {
                 return RedirectToAction("AccessDenied", "Cuenta");
             }
+
+            var pageNumber = page ?? 1; // Número de página actual
+            var pageSize = 10; // Número de elementos por página
 
             var pmes = from pme in _context.Pmes select pme;
             pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
@@ -81,6 +80,11 @@ namespace Sistema_CIN.Controllers
 		// GET: PME/Details/5
 		public async Task<IActionResult> Details(int? id)
         {
+            if (!await VerificarPermiso(6))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -116,11 +120,15 @@ namespace Sistema_CIN.Controllers
         // POST: PME/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-		[AuthorizeUser(idOperacion: 6)]
+
 		public async Task<IActionResult> Create([Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
             try
             {
+                if (!await VerificarPermiso(7))
+                {
+                    return RedirectToAction("AccessDenied", "Cuenta");
+                }
                 // Verificar si la cédula existe
                 var existeCedula = await _context.Pmes.FirstOrDefaultAsync(r => r.CedulaPme == pme.CedulaPme);
 
@@ -164,9 +172,13 @@ namespace Sistema_CIN.Controllers
 
 		// GET: PME/Edit/5
 
-		[AuthorizeUser(idOperacion: 7)]
 		public async Task<IActionResult> Edit(int? id)
         {
+            if (!await VerificarPermiso(8))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (id == null || _context.Pmes == null)
             {
                 return NotFound();
@@ -184,9 +196,13 @@ namespace Sistema_CIN.Controllers
         // POST: PME/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AuthorizeUser(idOperacion: 7)]
         public async Task<IActionResult> Edit(int id, [Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
+            if (!await VerificarPermiso(8))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (id != pme.IdPme)
             {
                 return NotFound();
@@ -233,9 +249,13 @@ namespace Sistema_CIN.Controllers
 
         // POST: PME/Delete/5
         [HttpPost]
-		[AuthorizeUser(idOperacion: 8)]
+
 		public async Task<IActionResult> Delete(int id)
         {
+            if (!await VerificarPermiso(10))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (_context.Pmes == null)
             {
                 return Problem("Entity set 'CINContext.Pmes'  is null.");

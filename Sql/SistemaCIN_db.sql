@@ -353,12 +353,7 @@ delete from Bitacora_ingreso_salida;
 
 
 INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
-values('Isaac','isaac@gmail.com', 'i1234', 1,1,1);
-
-
-
-DELETE Usuarios where id_usuario = 15
-
+values('Vilma Badilla','admin@sistema.cin', 'Admin123#!', 0,1,1);
 
 
 
@@ -366,33 +361,55 @@ Select * from Modulos;
 INSERT INTO Modulos(nombre_modulo) values('Mantenimiento Personal');
 INSERT INTO Modulos(nombre_modulo) values('Mantenimiento PME');
 INSERT INTO Modulos(nombre_modulo) values('Mantenimiento Encargados');
-INSERT INTO Modulos(nombre_modulo) values('Administrar Usuarios');
-INSERT INTO Modulos(nombre_modulo) values('Administrar Roles');
-INSERT INTO Modulos(nombre_modulo) values('Administrar Permisos');
 INSERT INTO Modulos(nombre_modulo) values('Bitacoras Ingresos Salidas');
 INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');
 INSERT INTO Modulos(nombre_modulo) values('Ayuda');
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');
 
-Select * from Modulos;
-Select * from Usuarios;
-Select * from Rol;
+Select * from Modulos; 
+Select * from Usuarios; 
+Select * from Rol; 
 Select * from Rol_operacion;
-Select * from Operaciones;
+Select * from Operaciones; 
 
-INSERT INTO Operaciones(nombre_op, id_modulo) values('Ver',3);
+DBCC CHECKIDENT (Rol, RESEED, 0);
+DBCC CHECKIDENT (Operaciones, RESEED, 0);
+DBCC CHECKIDENT (Rol_operacion, RESEED, 0);
+DBCC CHECKIDENT (Modulos, RESEED, 0);
+DBCC CHECKIDENT (Usuarios, RESEED, 0);
+
+--Delete from Modulos;
+--Delete from Usuarios;
+--Delete from Rol;
+--Delete from Rol_operacion;
+--Delete from Operaciones;
+
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Ver',7);
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Crear',3);
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Editar',3);
+INSERT INTO Operaciones(nombre_op, id_modulo) values('Reportar',3);
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Eliminar',3);
 
+Select * from Modulos;
 Select * from Rol_operacion;
 Select * from Operaciones;
-
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,5)
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,6);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,7);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,8);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,9);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,10);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,11);
-INSERT INTO Rol_operacion(id_rol, id_op) values(2,12);
+                                         -- Rol 2- Docente 
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,1)  -- Ver Personal
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,2); -- Crear Personal
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,3); -- Editar Personal
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,4); -- Reportar Personal
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,5); -- Eliminar Personal
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,6); -- Ver Pme
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,7); -- Crear Pme
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,8); -- Editar Pme
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,9); -- Reportar Pme
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,10); -- Eliminar Pme
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,11); -- Ver Encargados
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,12); -- Crear Encargados
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,13); -- Editar Encargados
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,14); -- Reportar Encargados
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,15); -- Eliminar Encargados
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,16); -- Ver Bitacoras Ingreso Salidas
+INSERT INTO Rol_operacion(id_rol, id_op) values(1,17); -- Ver Bitacoras PME
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,18); -- Ver Ayuda
+INSERT INTO Rol_operacion(id_rol, id_op) values(2,19); -- Ver Acerca de

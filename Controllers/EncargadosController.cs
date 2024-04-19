@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using Sistema_CIN.Services;
 
 namespace Sistema_CIN.Controllers
 {
@@ -16,10 +18,19 @@ namespace Sistema_CIN.Controllers
     public class EncargadosController : Controller
     {
         private readonly SistemaCIN_dbContext _context;
+        private readonly FiltrosPermisos _filters;
 
-        public EncargadosController(SistemaCIN_dbContext context)
+        public EncargadosController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
         {
             _context = context;
+            _filters = filtro;
+        }
+        // Funcion para verificar si el usuario en sesion tiene permiso para acceder a los modulos
+        private async Task<bool> VerificarPermiso(int idOp)
+        {
+            string emailUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+            int cantidadOperaciones = await _filters.VerificarPermiso(emailUser, idOp);
+            return cantidadOperaciones > 0;
         }
 
         private void AsignarCamposVacios(Encargados encargado)
@@ -31,6 +42,10 @@ namespace Sistema_CIN.Controllers
         // GET: Encargados
         public async Task<IActionResult> Index(string buscarEncargado, int? page)
         {
+            if (!await VerificarPermiso(11))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
@@ -63,6 +78,10 @@ namespace Sistema_CIN.Controllers
         // GET: Encargados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!await VerificarPermiso(11))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (id == null || _context.Encargados == null)
             {
                 return NotFound();
@@ -82,6 +101,7 @@ namespace Sistema_CIN.Controllers
         // GET: Encargados/Create
         public IActionResult Create()
         {
+            
             ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme");
             return View();
         }
@@ -94,6 +114,10 @@ namespace Sistema_CIN.Controllers
         {
             try
             {
+                if (!await VerificarPermiso(12))
+                {
+                    return RedirectToAction("AccessDenied", "Cuenta");
+                }
                 // Verificar si la cédula ya existe en el contexto
                 var existeCedula = await _context.Encargados.FirstOrDefaultAsync(e => e.CedulaE == encargados.CedulaE);
                 if (existeCedula != null)
@@ -126,6 +150,10 @@ namespace Sistema_CIN.Controllers
         // GET: Encargados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!await VerificarPermiso(13))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (id == null || _context.Encargados == null)
             {
                 return NotFound();
@@ -146,6 +174,10 @@ namespace Sistema_CIN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdEncargado,CedulaE,NombreE,ApellidosE,FechaNaceE,Edad,CorreoE,DireccionE,TelefonoE,LugarTrabajoE,IdPme")] Encargados encargados)
         {
+            if (!await VerificarPermiso(13))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (id != encargados.IdEncargado)
             {
                 return NotFound();
@@ -181,6 +213,10 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!await VerificarPermiso(15))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (_context.Encargados == null)
             {
                 return Problem("Entity set 'CINContext.Encargados'  is null.");
