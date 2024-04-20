@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int idPme = 1;
+    int idPersonal = 2;
 }
 
 <div class="row my-2">
@@ -18,38 +21,75 @@
 
 </div>
 
-
 <form method="post" asp-action="Create">
-    <div class="col-6">
-        <label class="col-form-label">Nombre del Rol</label>
-        <input name="rol.NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
+    <!-- Contenido del formulario -->
+    <div class="col-auto">
+        <input asp-for="Rol.NombreRol" type="text" class="form-control" placeholder="Nombre del Rol" required>
     </div>
+
     <div class="form-group">
-        <h4 class="fw-bold fs-4">Accesos</h4>
-        <h4 class="fw-bold fs-5">Modulo CRUD Estudiantes</h4>
+        <!-- Módulo 1: Mantenimiento Personal -->
+        <h4 class="fw-bold fs-5">Mantenimiento Personal</h4>
         <div class="form-check">
-            <input name="verChecked"  class="form-check-input" type="checkbox" value="true" id="verCheckbox">
+            <input name="operacionesPorModulo[1][Ver]" data-idModulo="1" class="form-check-input" type="checkbox" value="true" id="verCheckbox">
             <label class="form-check-label" for="verCheckbox">Ver</label>
         </div>
+
         <div class="form-check">
-            <input name="crearChecked" class="form-check-input" type="checkbox" value="true" id="crearCheckbox">
+            <input name="operacionesPorModulo[1][Crear]" data-idModulo="1" class="form-check-input" type="checkbox" value="true" id="crearCheckbox">
             <label class="form-check-label" for="crearCheckbox">Crear</label>
         </div>
+
         <div class="form-check">
-            <input name="editarChecked" class="form-check-input" type="checkbox" value="true" id="editarCheckbox">
-            <label class="form-check-label" for="editarCheckbox">Editar</label>
+            <input name="operacionesPorModulo[1][Editar]" data-idModulo="1" class="form-check-input" type="checkbox" value="true" id="crearCheckbox">
+            <label class="form-check-label" for="crearCheckbox">Editar</label>
+        </div>
+        <!-- Otros checkboxes para Mantenimiento Personal -->
+        <!-- Módulo 2: Mantenimiento Pme -->
+        <h4 class="fw-bold fs-5">Mantenimiento Pme</h4>
+        <div class="form-check">
+            <input name="operacionesPorModulo[2][Ver]" data-idModulo="2" class="form-check-input" type="checkbox" value="true" id="verCheckbox2">
+            <label class="form-check-label" for="verCheckbox2">Ver</label>
+        </div>
+
+        <div class="form-check">
+            <input name="operacionesPorModulo[2][Crear]" data-idModulo="2" class="form-check-input" type="checkbox" value="true" id="editarCheckbox2">
+            <label class="form-check-label" for="editarCheckbox2">Crear</label>
+        </div>
+
+
+        <!-- Módulo 3: Mantenimiento Encargados -->
+        <h4 class="fw-bold fs-5">Mantenimiento Encargados</h4>
+        <div class="form-check">
+            <input name="operacionesPorModulo[3][Ver]" data-idModulo="3" class="form-check-input" type="checkbox" value="true" id="verCheckbox3">
+            <label class="form-check-label" for="verCheckbox3">Ver</label>
+        </div>
+
+        <div class="form-check">
+            <input name="operacionesPorModulo[3][Crear]" data-idModulo="3" class="form-check-input" type="checkbox" value="true" id="crearCheckbox3">
+            <label class="form-check-label" for="crearCheckbox3">Crear</label>
         </div>
         <div class="form-check">
-            <input name="reportarChecked" class="form-check-input" type="checkbox" value="true" id="reportarCheckbox">
-            <label class="form-check-label" for="reportarCheckbox">Reportar</label>
+            <input name="operacionesPorModulo[3][Editar]" data-idModulo="3" class="form-check-input" type="checkbox" value="true" id="editarCheckbox3">
+            <label class="form-check-label" for="editarCheckbox3">Editar</label>
         </div>
+
         <div class="form-check">
-            <input name="eliminarChecked" class="form-check-input" type="checkbox" value="true" id="eliminarCheckbox">
-            <label class="form-check-label" for="eliminarCheckbox">Eliminar</label>
+            <input name="operacionesPorModulo[3][Eliminar]" data-idModulo="3" class="form-check-input" type="checkbox" value="true" id="eliminarCheckbox3">
+            <label class="form-check-label" for="eliminarCheckbox3">Eliminar</label>
+        </div>
+
+        <!-- Módulo 4: Bitacoras ingresos y salidas -->
+        <h4 class="fw-bold fs-5">Bitacoras ingresos y salidas</h4>
+        <div class="form-check">
+            <input name="operacionesPorModulo[4][Ver]" data-idModulo="4" class="form-check-input" type="checkbox" value="true" id="verCheckbox4">
+            <label class="form-check-label" for="verCheckbox4">Ver</label>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
 </form>
+
+
 
 
 

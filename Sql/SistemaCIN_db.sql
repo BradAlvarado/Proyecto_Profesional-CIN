@@ -366,8 +366,8 @@ INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');
 INSERT INTO Modulos(nombre_modulo) values('Ayuda');
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');
 
-Select * from Modulos; 
 Select * from Usuarios; 
+Select * from Modulos; 
 Select * from Rol; 
 Select * from Rol_operacion;
 Select * from Operaciones; 
