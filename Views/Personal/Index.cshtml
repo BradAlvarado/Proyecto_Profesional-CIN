@@ -4,9 +4,8 @@
     ViewData["Title"] = "Mantenimiento de Personal";
 }
 
+
 <h3 class="fw-bold fs-4">Mantenimiento > Personal</h3>
-
-
 <div class="row my-4 align-items-center">
     <div class="col">
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
@@ -17,9 +16,11 @@
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
 
         <form asp-controller="Personal" asp-action="Index">
-            <i class="fa-solid fa-magnifying-glass"></i>
+           <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Restablecer Filtros" />
 
-            <input type="text" name="buscarEmpleado" placeholder="Buscar personal aquí..." class="fluid border-0 bg-light col">
+
+
+            <i class="fa-solid fa-magnifying-glass"></i>
 
             <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
         </form>
