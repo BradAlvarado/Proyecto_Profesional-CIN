@@ -21,9 +21,9 @@ namespace Sistema_CIN.Models
         public string ApellidosE { get; set; } = null!;
         [Required(ErrorMessage = "El campo Fecha de nacimiento es obligatorio para completar la Edad.")]
         public DateTime FechaNaceE { get; set; }
-        [Required(ErrorMessage = "El campo Edad es obligatorio.")]
+        
         public int Edad { get; set; }
-
+        [Required(ErrorMessage = "El campo Correo es obligatorio.")]
         public string? CorreoE { get; set; }
         [Required(ErrorMessage = "El campo Dirección es obligatorio.")]
         public string DireccionE { get; set; } = null!;

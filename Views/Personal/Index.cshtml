@@ -10,10 +10,22 @@
 
 <div class="row my-4 align-items-center">
     <div class="col">
-        
 
-      
-        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+        <a class="btn btn-primary btn-sm text-white me-1" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+        <a class="btn btn-success btn-sm text-white" asp-action="Export">Exportar <i class="fa-solid fa-file-pdf"></i></a>
+    </div>
+
+    <div class="col-auto">
+
+        <form asp-controller="Personal" asp-action="Index">
+
+            <input type="submit" class="btn btn-outline-danger btn-sm col-xs-1" value="Restablecer" />
+
+            <a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
+            <a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
+            <a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
+            <a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+        </form>
     </div>
 
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
@@ -164,5 +176,5 @@
         <script>registroExito("@TempData["SuccessMessage"]");</script>
 
     }
-    
+
 }

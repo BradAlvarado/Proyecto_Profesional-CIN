@@ -1,14 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Configuration;
 using Sistema_CIN.Services;
-
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using Sistema_CIN.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var context = new CustomAssemblyLoadContext();
+context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "PDF Framework/libwkhtmltox.dll"));
 // Variable del String de la conexion de la BD
 var connectionString = builder.Configuration.GetConnectionString("connection_db");
+
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 builder.Services.AddDbContext<SistemaCIN_dbContext>(options =>
 {
     options.UseSqlServer(connectionString);

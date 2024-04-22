@@ -39,18 +39,15 @@ namespace Sistema_CIN.Controllers
             pme.NivelEducativoPme ??= "No registrado";
         }
 
-        public async Task<IActionResult> Index(string buscarPME, int? page)
+        public async Task<IActionResult> Index(string buscarPME, int? page, string sortOrder)
         {
-            if (!await VerificarPermiso(6))
-            {
-                return RedirectToAction("AccessDenied", "Cuenta");
-            }
-
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
+
             var pmes = from pme in _context.Pmes select pme;
             pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
+
 
             if (pmes.Count() < 1)
             {
@@ -61,10 +58,35 @@ namespace Sistema_CIN.Controllers
             {
                 pmes = pmes.Where(s => s.NombrePme!.Contains(buscarPME));
             }
-            else
+
+
+            //Filtro A-Z
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
+
+            if (sortOrder == "name_asc")
             {
-                return View(await pmes.ToListAsync());
+                pmes = pmes.OrderBy(p => p.NombrePme);
             }
+            if (sortOrder == "name_des")
+            {
+                pmes = pmes.OrderByDescending(p => p.NombrePme);
+            }
+
+            //Filtro EDAD
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
+
+            if (sortOrder == "edad_asc")
+            {
+                pmes = pmes.OrderBy(p => p.EdadPme);
+            }
+            if (sortOrder == "edad_des")
+            {
+                pmes = pmes.OrderByDescending(p => p.EdadPme);
+            }
+
+
 
             // Paginar los resultados
             var pagedPmes = await pmes.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -77,7 +99,10 @@ namespace Sistema_CIN.Controllers
             var pagedModel = new PagedList<Pme>(pagedPmes, pageNumber, pageSize, totalItems, totalPages);
 
             return View(pagedModel);
+
+
         }
+
 
         // GET: PME/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -250,49 +275,22 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            try
+            if (_context.Pmes == null)
             {
-                // Verificar si el conjunto de entidades Rols es null
-                if (_context.Rols == null)
-                {
-                    return Problem("Entity set 'CINContext.Rols' is null.");
-                }
-
-                // Buscar el rol por su ID
-                var rol = await _context.Rols.FindAsync(id);
-
-                // Si el rol no se encuentra, devolver un JSON indicando que no se encontró el rol
-                if (rol == null)
-                {
-                    return Json(new { success = false, message = "No se encontró el rol." });
-                }
-
-                //// Buscar el RolOperacion correspondiente al ID del rol
-                //var rolOperacion = await _context.RolOperacions.FirstOrDefaultAsync(r => r.IdRol == id);
-
-                //// Si se encuentra el RolOperacion, eliminarlo
-                //if (rolOperacion != null)
-                //{
-                //    _context.RolOperacions.Remove(rolOperacion);
-                //}
-
-                // Eliminar el rol
-                _context.Rols.Remove(rol);
-
-                // Guardar los cambios en la base de datos
-                await _context.SaveChangesAsync();
-
-                // Establecer un mensaje de éxito en TempData
-                TempData["SuccessMessage"] = "Rol " + rol.NombreRol + " eliminado exitosamente!";
-
-                // Devolver un JSON indicando el éxito de la operación de eliminación
-                return Json(new { success = true });
+                return Problem("Entity set 'CINContext.Pmes'  is null.");
             }
-            catch (Exception ex)
+            var pme = await _context.Pmes.FindAsync(id);
+            if (pme == null)
             {
-                // Manejar cualquier excepción que pueda ocurrir durante el proceso de eliminación
-                return Json(new { success = false, message = "Ocurrió un error al eliminar el rol: " + ex.Message });
+                return NotFound();
             }
+
+            _context.Pmes.Remove(pme);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " eliminado exitosamente!";
+
+            // Json para enviar el success del Delete del registro
+            return Json(new { success = true });
         }
 
 

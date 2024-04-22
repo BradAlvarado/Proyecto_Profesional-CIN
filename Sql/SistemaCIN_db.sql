@@ -386,6 +386,10 @@ Delete from Rol_operacion;
 Delete from Rol_operacion where id_rol =9;
 Delete from Rol where id_rol = 9;
 
+UPDATE Usuarios 
+SET id_rol = 1
+WHERE correo_u = 'brad@sistema.cin';
+
 -- AQUI SE GENERAN TODAS LAS OPERACIONES POSIBLES EN CADA MODULO
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Ver', 7);
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Crear',3);

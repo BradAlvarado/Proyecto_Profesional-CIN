@@ -41,43 +41,67 @@ namespace Sistema_CIN.Controllers
 
         // GET: Personal
 
-        public async Task<IActionResult> Index(string buscarEmpleado, int? page)
+        public async Task<IActionResult> Index(string buscarEmpleado, int? page, string sortOrder)
         {
-            if (!await VerificarPermiso(1))
-            {
-                return RedirectToAction("AccessDenied", "Cuenta");
-            }
-
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
-            var personals = from personal in _context.Personals select personal;
-            personals = _context.Personals.Include(p => p.IdRolNavigation);
 
-            if (personals.Count() < 1)
+            var empleado = from personal in _context.Personals select personal;
+            empleado = _context.Personals.Include(p => p.IdRolNavigation);
+
+
+            if (empleado.Count() < 1)
             {
-                ModelState.AddModelError("", "No existe Personal registrado");
+                ModelState.AddModelError("", "No existen PME registrados");
             }
 
             if (!String.IsNullOrEmpty(buscarEmpleado))
             {
-                personals = personals.Where(s => s.NombreP!.Contains(buscarEmpleado));
+                empleado = empleado.Where(s => s.NombreP!.Contains(buscarEmpleado));
             }
 
-            // Calcular el número total de elementos
-            var totalItems = await personals.CountAsync();
+
+            //Filtro A-Z
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
+
+            if (sortOrder == "name_asc")
+            {
+                empleado = empleado.OrderBy(p => p.NombreP);
+            }
+            if (sortOrder == "name_des")
+            {
+                empleado = empleado.OrderByDescending(p => p.NombreP);
+            }
+
+            //Filtro EDAD
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
+
+            if (sortOrder == "edad_asc")
+            {
+                empleado = empleado.OrderBy(p => p.EdadP);
+            }
+            if (sortOrder == "edad_des")
+            {
+                empleado = empleado.OrderByDescending(p => p.EdadP);
+            }
+
+
 
             // Paginar los resultados
-            var pagedEmp = await personals.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var pagedempleado = await empleado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             // Calcular el número total de páginas
+            var totalItems = await empleado.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
             // Crear un objeto de modelo para la paginación
-            var pagedModel = new PagedList<Personal>(pagedEmp, pageNumber, pageSize, totalItems, totalPages);
+            var pagedModel = new PagedList<Personal>(pagedempleado, pageNumber, pageSize, totalItems, totalPages);
 
             return View(pagedModel);
         }
+
 
 
         // GET: Personal/Details/5
@@ -142,7 +166,7 @@ namespace Sistema_CIN.Controllers
                 _context.Add(personal);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Personal registrado exitosamente!";
-                return RedirectToAction(nameof(Index));
+                
             }
             catch (Exception ex)
             {
@@ -152,6 +176,7 @@ namespace Sistema_CIN.Controllers
                 ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", personal.IdRol);
                 return View(personal); // Redirige a una vista de error o a donde sea apropiado en tu aplicación.
             }
+            return RedirectToAction(nameof(Index));
         }
 
 
