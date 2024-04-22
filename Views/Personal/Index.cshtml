@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+﻿@model Sistema_CIN.Models.PagedList<Sistema_CIN.Models.Personal>
+
 
 @{
     ViewData["Title"] = "Mantenimiento de Personal";
@@ -7,25 +8,52 @@
 
 <h3 class="fw-bold fs-4">Mantenimiento > Personal</h3>
 <div class="row my-4 align-items-center">
+
     <div class="col">
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+        <a class="btn btn-success btn-sm text-white" asp-action="Export">Exportar <i class="fa-solid fa-download "></i></a>
+
     </div>
 
-    <div asp-validation-summary="ModelOnly" class="alert" role="alert"></div>
-
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
 
         <form asp-controller="Personal" asp-action="Index">
-           <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Restablecer Filtros" />
+
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Restablecer" />
+
+            <button type="button" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+            </button>
+
+        </form>
+    </div>
 
 
-
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+        <form asp-controller="Personal" asp-action="Index">
             <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text" name="buscarEmpleado" placeholder="Buscar por nombre..." class="fluid border-0 bg-light col">
 
             <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
         </form>
     </div>
+
 </div>
+
 
 <div class="table-responsive">
 
@@ -114,8 +142,41 @@
 
 </div>
 
-<div class="my-5">
-    <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+<!------Paginacion------>
+<div class="row my-4">
+    <div class="col">
+        <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+    </div>
+    <nav aria-label="Page navigation" class="col justify-content-center">
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=@(Model.PageIndex - 1)" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=@(Model.PageIndex + 1)" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>
 
 

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 
 namespace Sistema_CIN.Controllers
 {
@@ -29,36 +31,73 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Encargados
-        public async Task<IActionResult> Index(string buscarEncargado, int? page)
+        public async Task<IActionResult> Index(string buscarEncargado, int? page, string sortOrder)
         {
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
-            var encargados = from encargado in _context.Encargados select encargado;
-            encargados = _context.Encargados.Include(p => p.IdPmeNavigation);
 
-            if (encargados.Count() < 1)
+            var encargado = from Encargados in _context.Encargados select Encargados;
+            encargado = _context.Encargados.Include(p => p.IdPmeNavigation);
+
+
+            if (encargado.Count() < 1)
             {
                 ModelState.AddModelError("", "No existen Encargados registrados");
             }
 
             if (!String.IsNullOrEmpty(buscarEncargado))
             {
-                encargados = encargados.Where(s => s.NombreE!.Contains(buscarEncargado));
+                encargado = encargado.Where(s => s.NombreE!.Contains(buscarEncargado));
             }
 
+
+            //Filtro A-Z
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
+
+            if (sortOrder == "name_asc")
+            {
+                encargado = encargado.OrderBy(p => p.NombreE);
+            }
+            if (sortOrder == "name_des")
+            {
+                encargado = encargado.OrderByDescending(p => p.NombreE);
+            }
+
+            //Filtro EDAD
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
+
+            if (sortOrder == "edad_asc")
+            {
+                encargado = encargado.OrderBy(p => p.Edad);
+            }
+            if (sortOrder == "edad_des")
+            {
+                encargado = encargado.OrderByDescending(p => p.Edad);
+            }
+
+
+
             // Paginar los resultados
-            var pagedEnc = await encargados.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var pagedEncargado = await encargado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             // Calcular el número total de páginas
-            var totalItems = await encargados.CountAsync();
+            var totalItems = await encargado.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
             // Crear un objeto de modelo para la paginación
-            var pagedModel = new PagedList<Encargados>(pagedEnc, pageNumber, pageSize, totalItems, totalPages);
+            var pagedModel = new PagedList<Encargados>(pagedEncargado, pageNumber, pageSize, totalItems, totalPages);
+
+
+
 
             return View(pagedModel);
+
+
         }
+
 
         // GET: Encargados/Details/5
         public async Task<IActionResult> Details(int? id)

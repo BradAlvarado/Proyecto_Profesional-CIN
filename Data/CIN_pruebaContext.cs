@@ -379,10 +379,7 @@ namespace Sistema_CIN.Data
                     .IsUnicode(false)
                     .HasColumnName("nombre_u");
 
-                entity.Property(e => e.Token)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("token");
+               
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)

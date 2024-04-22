@@ -30,13 +30,15 @@ namespace Sistema_CIN.Controllers
 
 
         // GET: PME
-        public async Task<IActionResult> Index(string buscarPME, int? page)
+        public async Task<IActionResult> Index(string buscarPME, int? page, string sortOrder)
         {
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
+
             var pmes = from pme in _context.Pmes select pme;
-            pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
+                 pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
+
 
             if (pmes.Count() < 1)
             {
@@ -48,6 +50,35 @@ namespace Sistema_CIN.Controllers
                 pmes = pmes.Where(s => s.NombrePme!.Contains(buscarPME));
             }
 
+
+            //Filtro A-Z
+            // Establece el valor predeterminado para AgeSortParm
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
+
+            if (sortOrder == "name_asc")
+            {
+                pmes = pmes.OrderBy(p => p.NombrePme);
+            }
+            if (sortOrder == "name_des")
+            {
+                pmes = pmes.OrderByDescending(p => p.NombrePme);
+            }
+
+                //Filtro EDAD
+                // Establece el valor predeterminado para AgeSortParm
+                ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
+
+            if (sortOrder == "edad_asc")
+            {
+                pmes = pmes.OrderBy(p => p.EdadPme);
+            }
+            if (sortOrder == "edad_des")
+            {
+                pmes = pmes.OrderByDescending(p => p.EdadPme);
+            }
+
+
+
             // Paginar los resultados
             var pagedPmes = await pmes.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -57,8 +88,10 @@ namespace Sistema_CIN.Controllers
 
             // Crear un objeto de modelo para la paginación
             var pagedModel = new PagedList<Pme>(pagedPmes, pageNumber, pageSize, totalItems, totalPages);
-
+            
             return View(pagedModel);
+        
+
         }
 
         // GET: PME/Details/5
@@ -231,6 +264,7 @@ namespace Sistema_CIN.Controllers
             return Json(new { success = true });
         }
 
+       
         private bool PmeExists(int id)
         {
             return (_context.Pmes?.Any(e => e.IdPme == id)).GetValueOrDefault();

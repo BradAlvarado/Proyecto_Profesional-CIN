@@ -13,6 +13,32 @@
 
 	<div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 	<div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+
+		<form asp-controller="Encargados" asp-action="Index">
+
+			<input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Restablecer" />
+
+			<button type="button" class="btn btn-secondary btn-sm col-xs-1">
+				<a href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
+			</button>
+
+			<button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+				<a href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
+			</button>
+
+			<button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+				<a href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
+			</button>
+
+			<button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+				<a href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+			</button>
+
+		</form>
+	</div>
+
+
+	<div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
 		<form asp-controller="Encargados" asp-action="Index">
 			<i class="fa-solid fa-magnifying-glass"></i>
 

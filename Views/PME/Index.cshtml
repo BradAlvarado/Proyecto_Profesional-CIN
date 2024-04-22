@@ -4,22 +4,53 @@
     ViewData["Title"] = "Mantenimientos PMEs";
 }
 
+
+
 <h3 class="fw-bold fs-4">Mantenimiento > PMEs</h3>
 <div class="row my-4 align-items-center">
 
     <div class="col">
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
     </div>
+
     <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+    
+    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+    
+        <form asp-controller="PME" asp-action="Index">
+        
+            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Restablecer" />
+
+            <button type="button" class="btn btn-secondary btn-sm col-xs-1">
+            <a href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
+            </button>
+
+            <button type="submit" class="btn btn-secondary btn-sm col-xs-1">
+                <a href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+            </button>
+
+        </form>
+    </div>
+    
+
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
         <form asp-controller="PME" asp-action="Index">
-            <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
 
             <input type="text" name="buscarPme" placeholder="Buscar por nombre..." class="fluid border-0 bg-light col">
 
-            <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
+           <input type="submit" class="btn btn-secondary btn-sm col-xs-1" value="Buscar" />
         </form>
     </div>
+
 </div>
 
 <div class="table-responsive">

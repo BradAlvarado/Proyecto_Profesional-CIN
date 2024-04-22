@@ -27,7 +27,6 @@ namespace Sistema_CIN.Models
         [Compare("Clave", ErrorMessage = "Las contraseñas no coinciden.")]
         public string? ConfirmarClave { get; set; }
 
-        public string? Token { get; set; }
         public bool? EstadoU { get; set; }
         public bool? AccesoU { get; set; }
         public int? IdRol { get; set; }
