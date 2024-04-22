@@ -27,7 +27,9 @@
         <tr class="highlight">
             <th scope="col">ID</th>
             <th scope="col">Nombre del Rol</th>
+            <th scope="col">Detalles</th>
             <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
 
         </tr>
     </thead>
@@ -41,8 +43,23 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.NombreRol)
                 </td>
-                <td>
-                    <a class="btn btn-outlinbe-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
+
+                <td class="text-center">
+                    <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdRol"><i class="fa-regular fa-eye"></i></a>
+                </td>
+               
+
+                <td class="text-center">
+                    <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
+                </td>
+
+                <td class="text-center">
+
+                    <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdRol','@item.NombreRol' ,'RolesPermisos')">
+                        <i class="fa-regular fa-trash-can">
+                        </i>
+
+                    </a>
 
                 </td>
             </tr>
@@ -54,7 +71,7 @@
 </div>
 
 
-@section Scripts{
+@section Scripts {
     @if (TempData["SuccessMessage"] != null)
     {
 

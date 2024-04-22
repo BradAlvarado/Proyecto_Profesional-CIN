@@ -30,6 +30,7 @@ CREATE TABLE Modulos (
 
 
 CREATE TABLE Permisos (
+	id_permiso INT IDENTITY(1,1) PRIMARY KEY,
     id_rol INT,
     id_modulo INT,
     permitido BIT
@@ -104,6 +105,7 @@ CREATE TABLE Personal (
 	id_rol INT  
 );
 
+DROP TABLE PERMISOS;
 -----------------------------------------
 --- ALTERS LLAVES FORANEAS --------------
 
@@ -137,24 +139,3 @@ ALTER TABLE Encargados
 
 ------ CREATE STORED PROCEDURES -------------
 
-CREATE PROCEDURE SP_Registrarse
-	@Foto VARBINARY(MAX),
-    @NombreU VARCHAR(50),
-	@Correo VARCHAR(50),
-    @Clave VARCHAR(50),
-	@Token VARCHAR(100),
-	@Estado BIT, -- ACTIVO - INACTIVO 
-	@Acceso BIT,
-	@IdRol INT
-AS BEGIN
-	INSERT INTO Usuarios VALUES(@Foto, @NombreU, @Correo, @Clave, @Token,@Estado,@Acceso, @IdRol)
-END
-
-CREATE PROCEDURE SP_Validar
-	@Token VARCHAR(100)
-AS BEGIN
-	DECLARE @Correo VARCHAR(50)
-	SET @Correo =(SELECT correo_u FROM Usuarios where token = @Token)
-	UPDATE Usuarios SET estado_u=1 WHERE token = @Token
-	UPDATE Usuarios SET token = null WHERE correo_u = @Correo
-END

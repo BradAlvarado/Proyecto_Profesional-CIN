@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@ViewData["Title"] - Sistema_CIN</title>
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" asp-append-version="true" />
@@ -19,7 +22,7 @@
 
         <!----------SIDEBAR NAV--------->
 
-        <aside id="sidebar" class="">
+        <aside id="sidebar">
 
             <!----------LOGO NAV--------->
             <div class="d-flex">
@@ -27,43 +30,18 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="sidebar-logo">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        string userRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "desconocido";
 
-                    <div class="dropdown">
-
-
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle hide" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
-                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                            Administrador
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small hide" aria-labelledby="dropdownUser1" data-popper-placement="top-start" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);">
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
-
-                            <li>
-                                <a>
-                                    <div class="form-check form-switch form-check-reverse">
-                                        <label class="form-check-label" for="flexSwitchCheckReverse">Modo oscuro</label>
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse">
-
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a href="#" class="dropdown-item">Salir</a>
-                            </li>
-
-                        </ul>
-
-                    </div>
-
-
+                        <h1 class="text-white fs-6">Rol <span class="text-primary">@userRole</span></h1>
+                    }
                 </div>
             </div><!----------LOGO NAV--------->
             <!----------MODULOS NAV--------->
             <ul class="sidebar-nav">
                 <!----------MODULO INICIO NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
 
                     <a asp-controller="Home" asp-action="Index" class="sidebar-link" id="sb-l">
                         <i class="lni lni-home"></i>
@@ -73,7 +51,7 @@
 
                 </li>
                 <!----------MODULO MANTENIMIENTO NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                        data-bs-target="#mant" aria-expanded="false" aria-controls="mant">
                         <i class="lni lni-cogs"></i>
@@ -94,7 +72,7 @@
                 </li>
 
                 <!----------MODULO ADMINISTRAR NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                        data-bs-target="#admin" aria-expanded="false" aria-controls="admin">
                         <i class="lni lni-user"></i>
@@ -105,35 +83,15 @@
                             <a asp-controller="Usuarios" asp-action="Index" class="sidebar-link">Usuarios</a>
                         </li>
                         <li class="sidebar-item">
-                            <a asp-controller="Roles" asp-action="Index" class="sidebar-link">Roles</a>
+                            <a asp-controller="RolesPermisos" asp-action="Index" class="sidebar-link">Roles y Permisos</a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Permisos</a>
-                        </li>
+                        
                     </ul>
                 </li>
-                <!----------MODULO REPORTES NAV--------->
-                <li class="sidebar-item mb-2">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
-                       data-bs-target="#reportes" aria-expanded="false" aria-controls="reportes">
-                        <i class="lni lni-remove-file"></i>
-                        <span>Reportes</span>
-                    </a>
-                    <ul id="reportes" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Personal</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">PME</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Encargados</a>
-                        </li>
-                    </ul>
-                </li>
+               
 
                 <!----------MODULO BITACORAS NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" id="sb-l" data-bs-toggle="collapse"
                        data-bs-target="#bitacoras" aria-expanded="false" aria-controls="bitacoras">
                         <i class="lni lni-graph"></i>
@@ -151,7 +109,7 @@
                 </li>
 
                 <!----------MODULO AYUDA NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                        data-bs-target="#help" aria-expanded="false" aria-controls="help">
                         <i class="lni lni-question-circle"></i>
@@ -164,7 +122,7 @@
                     </ul>
                 </li>
                 <!----------MODULO ACERCA DE NAV--------->
-                <li class="sidebar-item mb-2">
+                <li class="sidebar-item">
                     <a asp-controller="Home" asp-action="Privacy" class="sidebar-link">
                         <i class="lni lni-information"></i>
                         <span>Acerca de</span>
@@ -175,10 +133,12 @@
             </ul><!----------END MODULOS NAV--------->
             <!----------CERRAR SESION NAV--------->
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link text-danger">
+
+                <a asp-controller="Cuenta" asp-action="Logout" class="sidebar-link text-danger">
                     <i class="lni lni-exit"></i>
                     <span>Cerrar Sesión</span>
                 </a>
+
             </div>
         </aside>
         <!----------END SIDEBAR NAV--------->
@@ -186,11 +146,30 @@
         <div class="main">
 
             <!----------NAV HEADER--------->
-            <nav class="navbar navbar-expand px-4 py-3 bg-white">
-                <div class="d-flex">
-                    <div class="sidebar-logo">
-                        <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
-                    </div>
+            <nav class="navbar navbar-expand px-4 py-3 bg-white row">
+                <div class="sidebar-logo col-auto text-start">
+                    <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
+                </div>
+                <div class="col text-end">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        string email = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+                        string idUser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0";
+
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="~/images/Default_Profile_photo.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
+                                <span>@email </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                                <li><a class="dropdown-item" asp-route-id="@idUser" asp-controller="Cuenta" asp-action="EditProfile">Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a href="#" class="dropdown-item text-danger">Salir</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
                 </div>
             </nav>
 

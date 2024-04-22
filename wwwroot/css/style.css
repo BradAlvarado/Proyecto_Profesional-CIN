@@ -92,12 +92,13 @@ body {
 }
 
 a.sidebar-link {
-    padding: .625rem 1.625rem;
+    padding: .825rem 1.625rem;
     color: #FFF;
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.0rem;
     white-space: nowrap;
     border-left: 3px solid transparent;
+
 }
 
 .sidebar-link i,

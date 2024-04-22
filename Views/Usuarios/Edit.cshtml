@@ -1,60 +1,107 @@
 ﻿@model Sistema_CIN.Models.Usuario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Usuarios";
 }
 
-<h1>Edit</h1>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <div class="form-group">
-                <label asp-for="FotoU" class="control-label"></label>
-                <input asp-for="FotoU" class="form-control" />
-                <span asp-validation-for="FotoU" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombreU" class="control-label"></label>
-                <input asp-for="NombreU" class="form-control" />
-                <span asp-validation-for="NombreU" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CorreoU" class="control-label"></label>
-                <input asp-for="CorreoU" class="form-control" />
-                <span asp-validation-for="CorreoU" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Clave" class="control-label"></label>
-                <input asp-for="Clave" class="form-control" />
-                <span asp-validation-for="Clave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdRol" class="control-label"></label>
-                <select asp-for="IdRol" class="form-control" asp-items="ViewBag.IdRol"></select>
-                <span asp-validation-for="IdRol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EstadoU" class="control-label"></label>
-                <input asp-for="EstadoU" class="form-control" />
-                <span asp-validation-for="EstadoU" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary text-white" />
-            </div>
-        </form>
+<div class="row my-2">
+
+
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Administrar > Editar Usuario</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
     </div>
+
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12">
+            <div class="card">
+
+                <div class="card-header mb-3">Datos del Usuario</div>
+                <div class="card-body px-4">
+
+                    <!-------Nombre de Usuario-------->
+                    <div class="mb-4 row">
+                        <label asp-for="NombreU" class="col-lg-4 col-form-label">Nombre Usuario</label>
+                        <div class="col-lg-8 ">
+                            <input asp-for="IdUsuario" type="hidden"/>
+                            <input asp-for="Clave" type="hidden" />
+                            <input asp-for="NombreU" class="form-control" placeholder="nombre del usuario" readonly/>
+                            <span asp-validation-for="NombreU" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-------Correo-------->
+                    <div class="mb-4 row">
+                        <label asp-for="CorreoU" class="col-lg-4 col-form-label">Correo Electrónico</label>
+                        <div class="col-lg-8">
+                            <input type="email" asp-for="CorreoU" class="form-control" readonly />
+
+                            <span asp-validation-for="CorreoU" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!------- ROL -------->
+                    <div class="mb-4 row">
+                        <label asp-for="IdRol" class="col-lg-4 col-form-label">Rol</label>
+                        <div class="col-lg-8">
+                            <select asp-for="IdRol" class="form-select" asp-items="ViewBag.IdRol">
+                                <option>Seleccione un Rol</option>
+                            </select>
+                            <span asp-validation-for="IdRol" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <!------- ACCESO -------->
+                    <div class="mb-4 row">
+                        <label asp-for="AccesoU" class="col-lg-4 col-form-label">Acceso al Sistema</label>
+                        <div class="col-lg-8">
+                            <select asp-for="AccesoU" class="form-select">
+
+                                <option>Seleccione Acceso</option>
+                                <option value="true">Permitir</option>
+                                <option value="false">Denegar</option>
+                            </select>
+                            <span asp-validation-for="AccesoU" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                   
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="mt-5">
+
+            <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+            <button type="reset" class="btn btn-outline-danger btn-sm">Limpiar</button>
+
+        </div>
+    </div>
+</form>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
+        setTimeout(function () {
+            const alertaDiv = document.querySelector('.alerta');
+            if (alertaDiv) {
+                alertaDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+
 }

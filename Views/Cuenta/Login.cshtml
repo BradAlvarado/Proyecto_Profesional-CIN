@@ -1,0 +1,70 @@
+﻿@model Usuario
+
+@{
+    ViewData["Title"] = "Inicio de sesión";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+
+
+<div>
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-success p-auto" role="alert">
+            <h3 class="fw-bold fs-4">Ya has iniciado sesión</h3>
+
+            <p class="mt-4">
+                <a class="btn btn-primary btn-sm text-white me-3" asp-controller="Home" asp-action="Index">Menú principal</a>
+
+                <a class="btn btn-danger btn-sm" asp-controller="Cuenta" asp-action="Logout">Salir</a>
+            </p>
+           
+        </div>
+    }
+    else
+    {
+
+        <h2 class="text-center fw-bold">Iniciar Sesión</h2>
+        
+        <br />
+        <div asp-validation-summary="ModelOnly" class="text-danger my-2"></div>
+        <form method="post" class="mt-5">
+            <!-------Correo-------->
+            <div class="mb-5 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-envelope"></i>  Correo</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input type ="email" id="correo" name="correo" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="CorreoU" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Clave-------->
+            <div class="mb-5 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-lock"></i>  Contraseña</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="Clave" type="password" id="clave" name="clave" class="form-control text-center border-0 bg-light" placeholder="**********" />
+                    <span asp-validation-for="Clave" class="text-danger"></span>
+                </div>
+            </div>
+
+            <input type="submit" value="Ingresar" class="btn btn-primary text-white form-control" />
+
+        </form>
+
+        <p class="text-center mt-4">
+            <a class="btn-link" asp-action="Register">No tienes una cuenta? Registrarse.</a>
+        </p>
+        
+        
+    }
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

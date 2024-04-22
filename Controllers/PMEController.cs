@@ -1,22 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using Sistema_CIN.Services;
+using System.Security.Claims;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize]
     public class PMEController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
+        private readonly FiltrosPermisos _filters;
 
-        public PMEController(CIN_pruebaContext context)
+        public PMEController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
         {
             _context = context;
+            _filters = filtro;
         }
+
+        private async Task<bool> VerificarPermiso(int idOp)
+        {
+            string emailUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
+            int cantidadOperaciones = await _filters.VerificarPermiso(emailUser, idOp);
+            return cantidadOperaciones > 0;
+        }
+
         private void AsignarCamposVacios(Pme pme)
         {
             pme.PolizaSeguro ??= "Póliza no registrada";
@@ -28,10 +39,13 @@ namespace Sistema_CIN.Controllers
             pme.NivelEducativoPme ??= "No registrado";
         }
 
-
-        // GET: PME
         public async Task<IActionResult> Index(string buscarPME, int? page)
         {
+            if (!await VerificarPermiso(6))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
@@ -46,6 +60,10 @@ namespace Sistema_CIN.Controllers
             if (!String.IsNullOrEmpty(buscarPME))
             {
                 pmes = pmes.Where(s => s.NombrePme!.Contains(buscarPME));
+            }
+            else
+            {
+                return View(await pmes.ToListAsync());
             }
 
             // Paginar los resultados
@@ -64,6 +82,11 @@ namespace Sistema_CIN.Controllers
         // GET: PME/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!await VerificarPermiso(6))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -89,12 +112,17 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: PME/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!await VerificarPermiso(7))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE");
             return View();
-        }
 
+        }
         // POST: PME/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -102,50 +130,60 @@ namespace Sistema_CIN.Controllers
         {
             try
             {
+                // Verificar si la póliza existe
+                var existePoliza = await _context.Pmes.FirstOrDefaultAsync(r => r.PolizaSeguro == pme.PolizaSeguro);
+
+                if (existePoliza != null)
+                {
+                    ModelState.AddModelError("", "Este número de póliza ya está en uso.");
+                    ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE", pme.IdEncargado);
+                    return View(pme);
+                }
+
                 // Verificar si la cédula existe
                 var existeCedula = await _context.Pmes.FirstOrDefaultAsync(r => r.CedulaPme == pme.CedulaPme);
 
                 if (existeCedula != null)
                 {
-                    // Si la cédula ya está en uso, agregar un error de modelo y devolver el formulario de creación
-                    ModelState.AddModelError("", "La cédula ingresada ya está existe");
+                    ModelState.AddModelError("", "La cédula ingresada ya existe");
                     ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE", pme.IdEncargado);
                     return View(pme);
                 }
 
-                if (ModelState.IsValid)
-                {
-                    // Funcion para asignar valores en los campos vacios
-                    AsignarCamposVacios(pme);
-                    // Agregar el nuevo PME 
-                    _context.Add(pme);
-                    await _context.SaveChangesAsync();
+                // Función para asignar valores en los campos vacíos
+                AsignarCamposVacios(pme);
+                // Agregar el nuevo PME 
+                _context.Add(pme);
+                await _context.SaveChangesAsync();
 
-                    // Mostrar un mensaje de éxito al usuario
-                    TempData["SuccessMessage"] = "PME registrado exitosamente!";
-
-                }
+                // Mostrar un mensaje de éxito al usuario
+                TempData["SuccessMessage"] = "PME registrado exitosamente!";
 
                 // Redirigir al usuario a la página de índice después de la creación exitosa
                 return RedirectToAction(nameof(Index));
-
             }
             catch (Exception ex)
             {
                 // Manejar cualquier excepción que ocurra durante la inserción del PME
-                ModelState.AddModelError("", "Error: " + ex);
 
+                // Si hay un error de validación o una excepción, devolver el formulario de creación con los datos proporcionados
+                ModelState.AddModelError("", "Error: " + ex.Message);
+                ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
+                return View(pme);
             }
-
-            // Si hay un error de validación o una excepción, devolver el formulario de creación con los datos proporcionados
-            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
-            return View(pme);
         }
 
 
+
         // GET: PME/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!await VerificarPermiso(8))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             if (id == null || _context.Pmes == null)
             {
                 return NotFound();
@@ -165,71 +203,98 @@ namespace Sistema_CIN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdPme,CedulaPme,PolizaSeguro,NombrePme,ApellidosPme,FechaNacimientoPme,EdadPme,GeneroPme,ProvinciaPme,CantonPme,DistritoPme,NacionalidadPme,SubvencionPme,FechaIngresoPme,FechaEgresoPme,CondiciónMigratoriaPme,NivelEducativoPme,EncargadoPme,IdEncargado")] Pme pme)
         {
+
             if (id != pme.IdPme)
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var existeCedula = await _context.Pmes.AsNoTracking().FirstOrDefaultAsync(r => r.CedulaPme == pme.CedulaPme);
+                    var existeCedula = await _context.Pmes.AsNoTracking().FirstOrDefaultAsync(r => r.CedulaPme == pme.CedulaPme && r.IdPme != pme.IdPme);
 
                     if (existeCedula != null)
                     {
-                        // Si el nombre de rol ya existe y no es el mismo que el original, mostrar un error
-                        if (existeCedula.IdPme != pme.IdPme)
-                        {
-                            ModelState.AddModelError("", "Este número de celular ya está en uso.");
-                            return View(pme);
-                        }
+                        ModelState.AddModelError("", "Este número de cédula ya está en uso.");
+                        return View(pme);
                     }
 
                     _context.Update(pme);
                     await _context.SaveChangesAsync();
 
-                    TempData["SuccessMessage"] = "Menos " + pme.NombrePme + " actualizado exitosamente!";
-
+                    TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " actualizado exitosamente!";
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PmeExists(pme.IdPme))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["IdEncargado"] = new SelectList(_context.Roles, "IdEncargado", "IdEncargado", pme.IdEncargado);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PmeExists(pme.IdPme))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
             return View(pme);
         }
+
 
 
         // POST: PME/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            if (_context.Pmes == null)
+            try
             {
-                return Problem("Entity set 'CINContext.Pmes'  is null.");
+                // Verificar si el conjunto de entidades Rols es null
+                if (_context.Rols == null)
+                {
+                    return Problem("Entity set 'CINContext.Rols' is null.");
+                }
+
+                // Buscar el rol por su ID
+                var rol = await _context.Rols.FindAsync(id);
+
+                // Si el rol no se encuentra, devolver un JSON indicando que no se encontró el rol
+                if (rol == null)
+                {
+                    return Json(new { success = false, message = "No se encontró el rol." });
+                }
+
+                //// Buscar el RolOperacion correspondiente al ID del rol
+                //var rolOperacion = await _context.RolOperacions.FirstOrDefaultAsync(r => r.IdRol == id);
+
+                //// Si se encuentra el RolOperacion, eliminarlo
+                //if (rolOperacion != null)
+                //{
+                //    _context.RolOperacions.Remove(rolOperacion);
+                //}
+
+                // Eliminar el rol
+                _context.Rols.Remove(rol);
+
+                // Guardar los cambios en la base de datos
+                await _context.SaveChangesAsync();
+
+                // Establecer un mensaje de éxito en TempData
+                TempData["SuccessMessage"] = "Rol " + rol.NombreRol + " eliminado exitosamente!";
+
+                // Devolver un JSON indicando el éxito de la operación de eliminación
+                return Json(new { success = true });
             }
-            var pme = await _context.Pmes.FindAsync(id);
-            if (pme == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                // Manejar cualquier excepción que pueda ocurrir durante el proceso de eliminación
+                return Json(new { success = false, message = "Ocurrió un error al eliminar el rol: " + ex.Message });
             }
-
-            _context.Pmes.Remove(pme);
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " eliminado exitosamente!";
-
-            // Json para enviar el success del Delete del registro
-            return Json(new { success = true });
         }
+
 
         private bool PmeExists(int id)
         {

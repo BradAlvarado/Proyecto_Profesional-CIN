@@ -1,16 +1,23 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+﻿@model Sistema_CIN.Models.PagedList<Sistema_CIN.Models.Personal>
+
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Mantenimiento de Personal";
 }
 
 <h3 class="fw-bold fs-4">Mantenimiento > Personal</h3>
-<div class="row my-4 ">
+
+
+<div class="row my-4 align-items-center">
     <div class="col">
+        
+
+      
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
     </div>
-    <div asp-validation-summary="ModelOnly" class="alert" role="alert"></div>
+
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+
         <form asp-controller="Personal" asp-action="Index">
             <i class="fa-solid fa-magnifying-glass"></i>
 
@@ -21,90 +28,130 @@
     </div>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                N.Cédula
-            </th>
-            <th>
-                Nombre Completo
-            </th>
-            <th>
-                Edad
-            </th>
+<div class="table-responsive">
 
-            <th>
-                Correo Electrónico
-            </th>
-            <th>
-                Teléfono
-            </th>
-            <th>
-                Dirección
-            </th>
-            <th>
-                Puesto
-            </th>
 
-            <th>Detalles</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @foreach (var item in Model)
-        {
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CedulaP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreP) @Html.DisplayFor(modelItem => item.ApellidosP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EdadP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CorreoP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TelefonoP)
-                </td>
+                <th>
+                    N.Cédula
+                </th>
+                <th>
+                    Nombre Completo
+                </th>
+                <th>
+                    Edad
+                </th>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProvinciaP) @Html.DisplayFor(modelItem => item.CantonP)  @Html.DisplayFor(modelItem => item.DistritoP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
-                </td>
+                <th>
+                    Correo Electrónico
+                </th>
+                <th>
+                    Teléfono
+                </th>
+                <th>
+                    Dirección
+                </th>
+                <th>
+                    Puesto
+                </th>
 
-
-                <td>
-                    <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-eye"></i></a>
-                </td>
-
-                <td>
-                    <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-pen-to-square"></i></a>
-                </td>
-                <td>
-
-                    <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdPersonal','@item.NombreP' ,'Personal')">
-                        <i class="fa-regular fa-trash-can">
-                        </i>
-
-                    </a>
-
-                </td>
+                <th>Detalles</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
 
-</table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.CedulaP)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombreP) @Html.DisplayFor(modelItem => item.ApellidosP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EdadP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CorreoP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TelefonoP)
+                    </td>
 
-<div class="my-5">
-    <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProvinciaP) @Html.DisplayFor(modelItem => item.CantonP)  @Html.DisplayFor(modelItem => item.DistritoP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
+                    </td>
+
+
+                    <td class="text-center">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-eye"></i></a>
+                    </td>
+
+                    <td class="text-center">
+                        <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPersonal"><i class="fa-regular fa-pen-to-square"></i></a>
+                    </td>
+                    <td class="text-center">
+
+                        <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdPersonal','@item.NombreP' ,'Personal')">
+                            <i class="fa-regular fa-trash-can">
+                            </i>
+
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
+
+    <!------Paginacion------>
+    <div class="row my-4">
+        <div class="col">
+            <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+        </div>
+        <nav aria-label="Page navigation" class="col justify-content-center">
+            <ul class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?pagina=@(Model.PageIndex - 1)" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?pagina=@(Model.PageIndex + 1)" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
 </div>
 
 
@@ -117,15 +164,5 @@
         <script>registroExito("@TempData["SuccessMessage"]");</script>
 
     }
-    <script>
-
-
-        // Espera 3 segundos (3000 milisegundos) antes de ocultar la alerta
-        setTimeout(function () {
-            const alertaDiv = document.querySelector('.alert');
-            if (alertaDiv) {
-                alertaDiv.style.display = 'none';
-            }
-        }, 3000);
-    </script>
+    
 }

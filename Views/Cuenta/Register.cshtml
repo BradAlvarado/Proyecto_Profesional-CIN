@@ -1,0 +1,102 @@
+﻿@model Usuario
+
+@{
+    ViewData["Title"] = "Registrarse";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+
+
+<div>
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-success p-auto" role="alert">
+            <p>Ya has iniciado sesión. Serás redirigido al Inicio en <span class="fw-bold" id="contador">3</span> segundos...</p>
+
+            <script>
+                // Inicializar el contador en 3
+                var contador = 3;
+
+                // Función para actualizar y mostrar el contador cada segundo
+                var intervalo = setInterval(function () {
+                    contador--; // Decrementar el contador
+                    document.getElementById('contador').innerText = contador; // Mostrar el contador en el span
+
+                    // Si el contador llega a 0, detener el intervalo y redirigir a la página de inicio
+                    if (contador === 0) {
+                        clearInterval(intervalo); // Detener el intervalo
+                        window.location.href = '@Url.Action("Index", "Home")'; // Redirigir a la página de inicio
+                    }
+                }, 1000); // 1000 milisegundos = 1 segundo
+            </script>
+        </div>
+    }
+    else
+    {
+
+
+        <h2 class="text-center text-secondary">Registrarse</h2>
+        <br />
+        <div asp-validation-summary="ModelOnly" class="text-danger my-2"></div>
+
+        <form asp-action="Register" method="post" class="mt-4">
+
+            <!-------Nombre U-------->
+            <div class="mb-4 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-user"></i>  Nombre</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="NombreU" class="form-control text-center border-0 bg-light" placeholder="Nombre de Usuario" />
+                    <span asp-validation-for="NombreU" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Correo U-------->
+            <div class="mb-4 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-envelope"></i>  Correo</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="CorreoU" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com" type="email"/>
+                    <span asp-validation-for="CorreoU" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Clave-------->
+            <div class="mb-4 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-lock"></i>  Contraseña</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input type="password" asp-for="Clave" class="form-control text-center border-0 bg-light" placeholder="**********" />
+                    <span asp-validation-for="Clave" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-------Confirmar Clave-------->
+            <div class="mb-4 row border-bottom">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-lock"></i>  Confirmar</label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input type="password" asp-for="ConfirmarClave" class="form-control text-center border-0 bg-light" placeholder="Confirmar contraseña" />
+                    <span asp-validation-for="ConfirmarClave" class="text-danger"></span>
+                </div>
+            </div>
+
+            <input type="submit" value="Registrarse" class="btn btn-primary text-white form-control" />
+
+        </form>
+
+        <p class="text-center mt-4">
+            <a class="btn-link" asp-action="Login">Ya tienes una cuenta? Ingresar</a>
+        </p>
+
+        
+    }
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

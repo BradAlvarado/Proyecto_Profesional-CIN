@@ -4,24 +4,32 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize(Policy = "RequireAdmin")]
     public class UsuariosController : Controller
     {
-        private readonly CIN_pruebaContext _context;
+        private readonly SistemaCIN_dbContext _context;
 
-        public UsuariosController(CIN_pruebaContext context)
+
+        public UsuariosController(SistemaCIN_dbContext context)
         {
             _context = context;
+
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() //no tiene Search User
         {
             var cINContext = _context.Usuarios.Include(u => u.IdRolNavigation);
             return View(await cINContext.ToListAsync());
@@ -49,7 +57,7 @@ namespace Sistema_CIN.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol");
+            ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol");
             return View();
         }
 
@@ -80,7 +88,7 @@ namespace Sistema_CIN.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
+                ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", usuario.IdRol);
                 return View(usuario);
             }
             catch (Exception)
@@ -109,7 +117,7 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "NombreRol", usuario.IdRol);
+            ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
@@ -118,36 +126,40 @@ namespace Sistema_CIN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,ImagenU,NombreU,CorreoU,Clave,NombreRolU,EstadoU,IdRol")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,NombreU,CorreoU,Clave,AccesoU,IdRol")] Usuario usuario)
         {
             if (id != usuario.IdUsuario)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+
+                if (usuario.AccesoU == false)
                 {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.IdUsuario))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "IdRol", usuario.IdRol);
-            return View(usuario);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(usuario.IdUsuario))
+                {
+                    ModelState.AddModelError("", "Error al obtener el Usuario");
+                    return View(usuario);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
