@@ -1,0 +1,56 @@
+﻿@model Sistema_CIN.Models.Rol
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="my-4">
+    <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+
+</div>
+
+<div class="card mb-4">
+
+
+    <h4 class="fw-bold fs-5 card-header">Nombre del rol:  @Html.DisplayFor(model => model.NombreRol) </h4>
+
+    <div class="card-body">
+
+        <div class="row">
+            @if (Model.RolOperacions.Any())
+            {
+                var groupedOperations = Model.RolOperacions.GroupBy(ro => ro.IdOpNavigation.IdModuloNavigation.NombreModulo);
+
+                foreach (var group in groupedOperations)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="m-2 bg-light rounded">
+
+                            <div class="col-6 fw-bold">@group.Key</div>
+
+
+                            @foreach (var operation in group)
+                            {
+                                <div class="col-6">
+                                    @operation.IdOpNavigation.NombreOp
+                                </div>
+                            }
+                        </div>
+
+
+                    </div>
+
+                }
+            }
+            else
+            {
+                <p>No hay operaciones asociadas a este rol.</p>
+            }
+
+
+
+        </div>
+    </div>
+
+</div>
+

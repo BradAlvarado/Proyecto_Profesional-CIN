@@ -13,6 +13,7 @@ using Sistema_CIN.Services;
 
 namespace Sistema_CIN.Controllers
 {
+    [Authorize]
     public class BitacoraIngresoSalidasController : Controller
     {
         private readonly SistemaCIN_dbContext _context;

@@ -14,7 +14,7 @@
 <!----------MAIN--------->
 <h3 class="fw-bold fs-4 mb-3">Inicio > Resumen Contadores</h3>
 <div class="mb-3">
-    
+
 
     <div class="row mt-4">
         <!----------EMPIEZA CONTADORES--------->
@@ -94,7 +94,7 @@
                             <h6 class="card-title fw-bold">Padres</h6>
                             <p class="card-text">Total  <span class="text-success fw-bold">@encargadosCount</span></p>
                             <p class="card-text">
-                                <a asp-controller ="Encargados" asp-action="Index" class="nav-link text-secondary">
+                                <a asp-controller="Encargados" asp-action="Index" class="nav-link text-secondary">
 
                                     <span>Más detalles</span>
                                 </a>
@@ -105,38 +105,46 @@
             </div>
         </div>
 
-        
+
         <!----------USUARIOS--------->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 ">
+        @if (usuariosCount > 0)
+        {
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4 ">
 
-            <div class="card mb-3 shadow" style="max-width: 540px;">
+                <div class="card mb-3 shadow" style="max-width: 540px;">
 
 
-                <div class="row g-0">
+                    <div class="row g-0">
 
-                    <div class="col-4 d-flex align-items-center justify-content-center bg-secondary">
+                        <div class="col-4 d-flex align-items-center justify-content-center bg-secondary">
 
-                        <i class="fa-solid fa-users display-4 text-center p-2 text-white"></i>
-                    </div>
+                            <i class="fa-solid fa-users display-4 text-center p-2 text-white"></i>
+                        </div>
 
-                    <div class="col-8">
-                        <div class="card-body">
-                            <h6 class="card-title fw-bold">Usuarios</h6>
-                            <p class="card-text">Total  <span class="text-primary fw-bold">@usuariosCount</span></p>
-                            <p class="card-text">
-                                <a asp-controller="Usuarios" asp-action="Index" class="nav-link text-secondary">
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Usuarios</h6>
+                                <p class="card-text">
+                                    Total  <span class="text-primary fw-bold">
+                                        @usuariosCount
+                                    </span>
+                                </p>
+                                <p class="card-text">
+                                    <a asp-controller="Usuarios" asp-action="Index" class="nav-link text-secondary">
 
-                                    <span>Más detalles</span>
-                                </a>
-                            </p>
+                                        <span>Más detalles</span>
+                                    </a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+        
     </div><!----------END CONTADORES--------->
 
-    
+
 </div>
 
 

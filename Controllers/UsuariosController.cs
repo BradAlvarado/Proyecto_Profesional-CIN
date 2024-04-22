@@ -4,12 +4,15 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Sistema_CIN.Controllers
 {
@@ -18,9 +21,11 @@ namespace Sistema_CIN.Controllers
     {
         private readonly SistemaCIN_dbContext _context;
 
+
         public UsuariosController(SistemaCIN_dbContext context)
         {
             _context = context;
+
         }
 
         // GET: Usuarios
@@ -132,6 +137,12 @@ namespace Sistema_CIN.Controllers
             {
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
+
+                if (usuario.AccesoU == false)
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+
                 TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }

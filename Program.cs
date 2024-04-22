@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Sistema_CIN.Filters;
 using System.Configuration;
 using Sistema_CIN.Services;
 

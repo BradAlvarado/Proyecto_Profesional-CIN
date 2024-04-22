@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    .icon {
+        font-size: 12px; 
+    }
+</style>
 
 <h3 class="fw-bold fs-4 mb-3">Bitácoras > Ingresos y Salidas > Usuarios</h3>
 
@@ -20,19 +25,19 @@
         <thead class="table-dark">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.IdBitacora)
+                    ID
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UsuarioB)
+                    Usuario
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FechaIngreso)
+                    Fecha ingreso
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FechaSalida)
+                    Fecha Salida
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.EstadoActual)
+                    Estado
                 </th>
              
             </tr>
@@ -59,12 +64,12 @@
                         @{
                             if (item.EstadoActual == 1)
                             {
-                                <text><span class="text-success">En línea</span></text>
+                                <text><span class="text-success"><i class="fa-solid fa-circle icon"></i> Conectado</span></text>
                             }
                             else
                             {
 
-                                <text><i class="fa-regular fa-circle text-danger"></i>  Desconectado</text>
+                                <text><span class="text-danger"><i class="fa-solid fa-circle icon"></i> Desconectado</span></text>
                             }
 
 

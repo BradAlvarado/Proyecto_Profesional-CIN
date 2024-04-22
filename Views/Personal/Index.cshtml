@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+﻿@model Sistema_CIN.Models.PagedList<Sistema_CIN.Models.Personal>
+
 
 @{
     ViewData["Title"] = "Mantenimiento de Personal";
@@ -9,6 +10,9 @@
 
 <div class="row my-4 align-items-center">
     <div class="col">
+        
+
+      
         <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
     </div>
 
@@ -111,10 +115,43 @@
 
     <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 
-</div>
+    <!------Paginacion------>
+    <div class="row my-4">
+        <div class="col">
+            <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+        </div>
+        <nav aria-label="Page navigation" class="col justify-content-center">
+            <ul class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?pagina=@(Model.PageIndex - 1)" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                    </li>
+                }
 
-<div class="my-5">
-    <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?pagina=@(Model.PageIndex + 1)" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
 </div>
 
 

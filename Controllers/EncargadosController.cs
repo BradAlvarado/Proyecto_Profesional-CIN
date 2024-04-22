@@ -36,7 +36,7 @@ namespace Sistema_CIN.Controllers
         private void AsignarCamposVacios(Encargados encargado)
         {
             encargado.LugarTrabajoE ??= "No ingresado";
-           
+
         }
 
         // GET: Encargados
@@ -99,12 +99,16 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Encargados/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            
+            if (!await VerificarPermiso(12))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme");
             return View();
         }
+
 
         // POST: Encargados/Create
 
@@ -114,10 +118,6 @@ namespace Sistema_CIN.Controllers
         {
             try
             {
-                if (!await VerificarPermiso(12))
-                {
-                    return RedirectToAction("AccessDenied", "Cuenta");
-                }
                 // Verificar si la cédula ya existe en el contexto
                 var existeCedula = await _context.Encargados.FirstOrDefaultAsync(e => e.CedulaE == encargados.CedulaE);
                 if (existeCedula != null)
@@ -127,24 +127,21 @@ namespace Sistema_CIN.Controllers
                     return View(encargados);
                 }
 
-                if (ModelState.IsValid)
-                {
-                    AsignarCamposVacios(encargados);
-                    _context.Add(encargados);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Encargado registrado exitosamente!";
-                    return RedirectToAction(nameof(Index));
-                }
+                AsignarCamposVacios(encargados);
+                _context.Add(encargados);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Encargado registrado exitosamente!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores aquí, como registrar el error, mostrar un mensaje al usuario, etc.
+                ModelState.AddModelError("", "Ocurrió un error al procesar la solicitud: " + ex.Message);
                 ViewData["IdPme"] = new SelectList(_context.Pmes, "IdPme", "NombrePme", encargados.IdPme);
                 return View(encargados);
             }
-            catch (Exception)
-            {
-                // Manejo de errores aquí, como registrar el error, mostrar un mensaje al usuario, etc.
-                ModelState.AddModelError("", "Ocurrió un error al procesar la solicitud.");
-                return View(encargados);
-            }
         }
+
 
 
         // GET: Encargados/Edit/5
@@ -169,15 +166,11 @@ namespace Sistema_CIN.Controllers
         }
 
         // POST: Encargados/Edit/5
-     
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdEncargado,CedulaE,NombreE,ApellidosE,FechaNaceE,Edad,CorreoE,DireccionE,TelefonoE,LugarTrabajoE,IdPme")] Encargados encargados)
         {
-            if (!await VerificarPermiso(13))
-            {
-                return RedirectToAction("AccessDenied", "Cuenta");
-            }
             if (id != encargados.IdEncargado)
             {
                 return NotFound();
@@ -237,7 +230,7 @@ namespace Sistema_CIN.Controllers
 
         private bool EncargadosExists(int id)
         {
-          return (_context.Encargados?.Any(e => e.IdEncargado == id)).GetValueOrDefault();
+            return (_context.Encargados?.Any(e => e.IdEncargado == id)).GetValueOrDefault();
         }
     }
 }

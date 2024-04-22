@@ -42,7 +42,7 @@ function registroExito(message) {
         icon: "success",
         title: message,
         showConfirmButton: false,
-        timer: 2000
+        timer: 1500
     });
 }
 
