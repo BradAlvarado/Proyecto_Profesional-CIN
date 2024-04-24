@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
@@ -45,7 +46,7 @@ namespace Sistema_CIN.Controllers
             var pageSize = 10; // Número de elementos por página
 
 
-            var pmes = from pme in _context.Pmes select pme;
+            var pmes = _context.Pmes.AsQueryable();
             pmes = _context.Pmes.Include(p => p.IdEncargadoNavigation);
 
 
@@ -59,32 +60,29 @@ namespace Sistema_CIN.Controllers
                 pmes = pmes.Where(s => s.NombrePme!.Contains(buscarPME));
             }
 
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    pmes = pmes.OrderBy(p => p.NombrePme);
+                    break;
+                case "name_des":
+                    pmes = pmes.OrderByDescending(p => p.NombrePme);
+                    break;
+                case "edad_asc":
+                    pmes = pmes.OrderBy(p => p.EdadPme);
+                    break;
+                case "edad_des":
+                    pmes = pmes.OrderByDescending(p => p.EdadPme);
+                    break;
+                default:
+                    // Ordenamiento predeterminado
+                    pmes = pmes.OrderBy(p => p.NombrePme);
+                    break;
+            }
 
             //Filtro A-Z
             // Establece el valor predeterminado para AgeSortParm
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
-
-            if (sortOrder == "name_asc")
-            {
-                pmes = pmes.OrderBy(p => p.NombrePme);
-            }
-            if (sortOrder == "name_des")
-            {
-                pmes = pmes.OrderByDescending(p => p.NombrePme);
-            }
-
-            //Filtro EDAD
-            // Establece el valor predeterminado para AgeSortParm
-            ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
-
-            if (sortOrder == "edad_asc")
-            {
-                pmes = pmes.OrderBy(p => p.EdadPme);
-            }
-            if (sortOrder == "edad_des")
-            {
-                pmes = pmes.OrderByDescending(p => p.EdadPme);
-            }
+          
 
 
 
@@ -97,10 +95,47 @@ namespace Sistema_CIN.Controllers
 
             // Crear un objeto de modelo para la paginación
             var pagedModel = new PagedList<Pme>(pagedPmes, pageNumber, pageSize, totalItems, totalPages);
+            ViewData["SortOrder"] = sortOrder;
 
             return View(pagedModel);
 
 
+        }
+
+        public ActionResult ReportePMEs(string sortOrder)
+        {
+
+            var pmes = _context.Pmes.AsQueryable();
+
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "name_asc")
+                {
+                    pmes = pmes.OrderBy(p => p.NombrePme);
+                }
+                if (sortOrder == "name_des")
+                {
+                    pmes = pmes.OrderByDescending(p => p.NombrePme);
+                }
+                if (sortOrder == "edad_asc")
+                {
+                    pmes = pmes.OrderBy(p => p.EdadPme);
+                }
+                if (sortOrder == "edad_des")
+                {
+                    pmes = pmes.OrderByDescending(p => p.EdadPme);
+                }
+            }
+            // Capturar la fecha y hora actual
+            DateTime fechaActual = DateTime.Now;
+
+            return new ViewAsPdf("ReportePMEs", pmes.ToList())
+            {
+                FileName = $"Reporte_Pmes_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
+            //return View(pme);
         }
 
 

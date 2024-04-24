@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Pme>
+
+@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <title>Reporte</title>
+
+</head>
+<body>
+    <div class="contenedor">
+
+        <div class="encabezado">
+
+            <div class="logo">
+                <a><img class="logo cin" src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" /></a>
+            </div>
+
+            <div class="titulo">
+                <h4 class="">Reporte de PMES</h4>
+
+
+            </div>
+
+            <div class="fecha ">
+                <h4>Fecha @DateTime.Now.ToString("dd/MM/yyyy")</h4>
+                
+            </div>
+
+        </div>
+
+        <div class="info">
+            <h4 class="title2">Centro Infantil el Naranjito</h4>
+            <p>Higuito, San José</p>
+
+        </div>
+
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>
+                        Cédula
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Apellidos
+                    </th>
+
+                    <th>
+                        Fecha Nacimiento
+                    </th>
+                    <th>
+                        Edad
+                    </th>
+                    <th>
+                        Nacionalidad
+                    </th>
+                    <th>
+                        Fecha Ingreso
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <th>
+
+                            @Html.DisplayFor(modelItem => item.CedulaPme)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombrePme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApellidosPme)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaNacimientoPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EdadPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NacionalidadPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaIngresoPme)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>

@@ -138,11 +138,6 @@ namespace Sistema_CIN.Controllers
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
 
-                if (usuario.AccesoU == false)
-                {
-                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                }
-
                 TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }

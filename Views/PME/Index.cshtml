@@ -9,7 +9,12 @@
 
     <div class="col">
         <a class="btn btn-primary btn-sm text-white me-1" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
-        <a class="btn btn-success btn-sm text-white" asp-action="Export">Exportar <i class="fa-solid fa-file-pdf"></i></a>
+        
+        <form asp-controller="PME" asp-action="ReportePMEs" method="get">
+  
+            <input type="hidden" name="sortOrder" value="@ViewData["SortOrder"]" />
+            <button type="submit" class="btn btn-success btn-sm text-white">Descargar <i class="fa-solid fa-file-pdf"></i></button>
+        </form>
     </div>
     <div class="col-auto">
 

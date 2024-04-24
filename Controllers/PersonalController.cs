@@ -14,12 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Hosting.Internal;
+using Rotativa.AspNetCore;
+using Sistema_CIN.Models.ViewModels;
+
 
 
 
@@ -59,6 +56,7 @@ namespace Sistema_CIN.Controllers
             var empleado = from personal in _context.Personals select personal;
             empleado = _context.Personals.Include(p => p.IdRolNavigation);
 
+          
             if (empleado.Count() < 1)
             {
                 ModelState.AddModelError("", "No existen PME registrados");
@@ -81,93 +79,26 @@ namespace Sistema_CIN.Controllers
             return View(pagedModel);
         }
 
-        public ActionResult IndexPDF(string sortOrder)
-        {
-            var empleados = from personal in _context.Personals select personal;
-            empleados = _context.Personals.Include(p => p.IdRolNavigation);
-
-            if (empleados.Count() < 1)
-            {
-                ModelState.AddModelError("", "No existen PME registrados");
-            }
-
-            // Ordenar según el valor de sortOrder
-            switch (sortOrder)
-            {
-                case "name_asc":
-                    empleados = empleados.OrderBy(p => p.NombreP);
-                    break;
-                case "name_des":
-                    empleados = empleados.OrderByDescending(p => p.NombreP);
-                    break;
-                case "edad_asc":
-                    empleados = empleados.OrderBy(p => p.EdadP);
-                    break;
-                case "edad_des":
-                    empleados = empleados.OrderByDescending(p => p.EdadP);
-                    break;
-                default:
-                    // Orden predeterminado (por nombre ascendente)
-                    empleados = empleados.OrderBy(p => p.NombreP);
-                    break;
-            }
-
-            return View(empleados);
-        }
-
-        // POST Reporte
-       
-
         // GET
-        [HttpGet]
-        public ActionResult ReportePersonal(string sortOrder)
+
+        public ActionResult ReportePersonal()
         {
-            var empleados = from personals in _context.Personals select personals;
-            empleados = _context.Personals.Include(p => p.IdRolNavigation);
 
-            if (empleados.Count() < 1)
+            var empleado = from personal in _context.Personals select personal;
+            empleado = _context.Personals.Include(p => p.IdRolNavigation);
+
+            // Capturar la fecha y hora UTC actual
+            DateTime fechaActual = DateTime.UtcNow;
+
+            return new ViewAsPdf("ReportePersonal", empleado)
             {
-                ModelState.AddModelError("", "No existen PME registrados");
-            }
-
-            // Ordenar según el valor de sortOrder
-            switch (sortOrder)
-            {
-                case "name_asc":
-                    empleados = empleados.OrderBy(p => p.NombreP);
-                    break;
-                case "name_des":
-                    empleados = empleados.OrderByDescending(p => p.NombreP);
-                    break;
-                case "edad_asc":
-                    empleados = empleados.OrderBy(p => p.EdadP);
-                    break;
-                case "edad_des":
-                    empleados = empleados.OrderByDescending(p => p.EdadP);
-                    break;
-                default:
-                    // Orden predeterminado (por nombre ascendente)
-                    empleados = empleados.OrderBy(p => p.NombreP);
-                    break;
-            }
-
-            return View(empleados);
-            var personal = PersonalServices.GetPersonal();
-            PersonalServices.AddPersonal(personal);
-            return View(personal);
+                FileName = $"Reporte_personal_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
         }
 
-        [HttpPost]
-        public ActionResult ReportePersonal(Personal personal)
-        {
-            IronPdf.Installation.TempFolderPath = $@"{AppDomain.CurrentDomain.BaseDirectory}/irontemp/";
-            IronPdf.Installation.LinuxAndDockerDependenciesAutoConfig = true;
-
-            var html = this.RenderViewAsync("_TicketPdf", personal);
-            var ironPdfRender = new IronPdf.ChromePdfRenderer();
-            using var pdfDoc = ironPdfRender.RenderHtmlAsPdf(html.Result);
-            return File(pdfDoc.Stream.ToArray(), "application/pdf");
-        }
+   
         // GET: Personal/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -1,31 +1,15 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="es">
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Bienvenidos </title>
+    <title>Reporte</title>
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
-
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand px-4 py-3 bg-white">
-            <div class="d-flex">
-                <div class="sidebar-logo">
-                    <a><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
-                </div>
-            </div>
-        </nav>
-
-        <br />
-
+   
         @RenderBody()
-
-    </div>
 </body>
 </html>
-<script src="https://kit.fontawesome.com/80d7803e22.js" crossorigin="anonymous"></script>
-<script src="~/js/script.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

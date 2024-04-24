@@ -224,7 +224,10 @@ namespace Sistema_CIN.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios
+               .Include(u => u.IdRolNavigation)
+               .FirstOrDefaultAsync(m => m.IdUsuario == id);
+
             if (usuario == null)
             {
                 return NotFound();

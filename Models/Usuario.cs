@@ -13,11 +13,12 @@ namespace Sistema_CIN.Models
         public string NombreU { get; set; } = null!;
 
         [Required(ErrorMessage = "El campo Correo es obligatorio.")]
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.EmailAddress, ErrorMessage ="El campo no es tipo email")]
         public string? CorreoU { get; set; }
+
         [Required(ErrorMessage = "El campo Contraseña es obligatorio.")]
         [DataType(DataType.Password)]
-
+        [MinLength(6, ErrorMessage = "Tu contraseña es muy corta")]
         public string Clave { get; set; } = null!;
 
         [NotMapped]

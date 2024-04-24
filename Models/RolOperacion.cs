@@ -12,6 +12,5 @@ namespace Sistema_CIN.Models
         public virtual Operaciones? IdOpNavigation { get; set; }
         public virtual Rol? IdRolNavigation { get; set; }
 
-       
     }
 }

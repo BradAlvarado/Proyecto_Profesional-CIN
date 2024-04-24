@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Sistema_CIN.Services;
-using IronPdf;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Variable del String de la conexion de la BD
 var connectionString = builder.Configuration.GetConnectionString("connection_db");
 
-builder.Services.AddSingleton(typeof(HtmlToPdf), new HtmlToPdf());
+
 
 builder.Services.AddDbContext<SistemaCIN_dbContext>(options =>
 {
@@ -42,7 +42,7 @@ builder.Services
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.LoginPath = "/Cuenta/Login";
         options.AccessDeniedPath = "/Cuenta/AccessDenied";
         options.LogoutPath = "/Home/Logout";
@@ -72,5 +72,8 @@ app.MapControllerRoute(
     pattern: "{controller=Cuenta}/{action=Login}/{id?}");
 
 app.MapRazorPages();
+
+IWebHostEnvironment env = app.Environment;
+Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, "../Rotativa/Windows");
 
 app.Run();

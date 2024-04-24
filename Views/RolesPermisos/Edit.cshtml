@@ -1,34 +1,66 @@
 ﻿@model Sistema_CIN.Models.Rol
 
 @{
-    ViewData["Title"] = "Editar Rol";
-    var rol = ViewData["Rol"] as Sistema_CIN.Models.Rol;
-    var operacionesPorModulo = ViewData["OperacionesPorModulo"] as Dictionary<int, List<string>>;
+    ViewData["Title"] = "Editar Rol y Permisos";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Administar > Editar Rol</h3>
-<div class="mb-3">
-    <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+<div class="row my-2">
+    <div class="col py-2">
+        <h3 class="fw-bold fs-4 mb-3">Administrar > Editar Rol y Permisos</h3>
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 </div>
 
 <form method="post" asp-action="Edit">
-    <!-- Resto del formulario de edición -->
-    @foreach (var kvp in operacionesPorModulo)
-    {
-        <div class="border rounded bg-light p-2">
-            @* Mostrar el nombre del módulo *@
-            <h4 class="fw-bold fs-6 my-3">Módulo @(kvp.Key)</h4>
+    <input type="hidden" asp-for="IdRol" />
 
-            @* Iterar sobre todas las operaciones disponibles para este módulo *@
-            @foreach (var operacion in kvp.Value)
+    <div class="row mt-4">
+        <div class="col-lg-6 col-sm-12">
+            <div class="mb-4 row">
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre del Rol<span class="text-danger">*</span></label>
+
+                <div class="col-lg-8 col-md-9 col-sm-12">
+                    <input asp-for="NombreRol" class="form-control" />
+                    <span asp-validation-for="NombreRol" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold fs-5 my-3">Permisos</h4>
+
+        <div class="mb-4 row">
+            @foreach (var modulo in Model.RolOperacions.GroupBy(ro => ro.IdOpNavigation.IdModuloNavigation))
             {
-                <div class="form-check">
-                    @* Utilizar la propiedad "checked" para marcar los checkbox que estaban seleccionados en el formulario de creación *@
-                    <input name="operacionesPorModulo[@kvp.Key][@(operacion)]" class="form-check-input" type="checkbox" value="true" id="@($"{kvp.Key}-{operacion}Checkbox")" @(rol.RolOperacions.Any(ro => ro.IdOpNavigation.NombreOp == operacion) ? "checked" : "")>
-                    <label class="form-check-label" for="@($"{kvp.Key}-{operacion}Checkbox")">@operacion</label>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                    <div class="border rounded bg-light p-2">
+                        <h4 class="fw-bold fs-6 my-3"></h4>
+
+
+                        <div class="form-check">
+                            <input name="operacionesPorModulo[@modulo.Key.IdModulo][Todos]" class="form-check-input todos-checkbox" type="checkbox" id="todosCheckbox@modulo.Key.IdModulo">
+                            <label class="form-check-label" for="todosCheckbox@modulo.Key.IdModulo">Todos</label>
+                        </div>
+
+                        <div class="ms-3">
+                            @foreach (var operacion in modulo)
+                            {
+                                <div class="form-check">
+                                    <input name="operacionesPorModulo[@modulo.Key.IdModulo][@operacion.IdOpNavigation.NombreOp]" class="form-check-input" type="checkbox" value="true" id="operacionCheckbox@operacion.IdOp"
+                                    @(Model.RolOperacions.Any(ro => ro.IdOp == operacion.IdOpNavigation.IdOp) ? "checked" : "")>
+
+                                    <label class="form-check-label" for="operacionCheckbox@operacion.IdOp">@operacion.IdOpNavigation.NombreOp</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
         </div>
-    }
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+    </div>
 </form>
