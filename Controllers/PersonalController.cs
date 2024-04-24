@@ -46,10 +46,14 @@ namespace Sistema_CIN.Controllers
             return cantidadOperaciones > 0;
         }
 
-        // GET: Personal
+        // GET: Personal 1
 
         public async Task<IActionResult> Index(string buscarEmpleado, int? page)
         {
+            if (!await VerificarPermiso(1))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
@@ -66,7 +70,6 @@ namespace Sistema_CIN.Controllers
             {
                 empleado = empleado.Where(s => s.NombreP!.Contains(buscarEmpleado));
             }
-
             // Paginar los resultados
             var pagedempleado = await empleado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             // Calcular el número total de páginas
@@ -79,27 +82,7 @@ namespace Sistema_CIN.Controllers
             return View(pagedModel);
         }
 
-        // GET
-
-        public ActionResult ReportePersonal()
-        {
-
-            var empleado = from personal in _context.Personals select personal;
-            empleado = _context.Personals.Include(p => p.IdRolNavigation);
-
-            // Capturar la fecha y hora UTC actual
-            DateTime fechaActual = DateTime.UtcNow;
-
-            return new ViewAsPdf("ReportePersonal", empleado)
-            {
-                FileName = $"Reporte_personal_{fechaActual}.pdf",
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
-                PageSize = Rotativa.AspNetCore.Options.Size.A4
-            };
-        }
-
-   
-        // GET: Personal/Details/5
+        // GET: Personal/Details/1
         public async Task<IActionResult> Details(int? id)
         {
             if (!await VerificarPermiso(1))
@@ -122,7 +105,7 @@ namespace Sistema_CIN.Controllers
             return View(personal);
         }
 
-        // GET: Personal/Create
+        // GET: Personal/Create/2
         public async Task<IActionResult> Create()
         {
             if (!await VerificarPermiso(2))
@@ -135,7 +118,7 @@ namespace Sistema_CIN.Controllers
             return View();
         }
 
-        // POST: Personal/Create
+        // POST: Personal/Create/2
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdPersonal,CedulaP,NombreP,ApellidosP,CorreoP,PuestoP,FechaNaceP,EdadP,GeneroP,ProvinciaP,CantonP,DistritoP,TelefonoP,IdRol")] Personal personal)
@@ -173,8 +156,7 @@ namespace Sistema_CIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // GET: Personal/Edit/5
+        // GET: Personal/Edit/3
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -200,7 +182,7 @@ namespace Sistema_CIN.Controllers
             return View(personal);
         }
 
-        // POST: Personal/Edit/5
+        // POST: Personal/Edit/3
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -246,8 +228,30 @@ namespace Sistema_CIN.Controllers
             return View(personal);
         }
 
+        // GET ReportePersonal/4
+        public async Task<ActionResult> ReportePersonal()
+        {
+            if (!await VerificarPermiso(4))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            var empleado = await _context.Personals.Include(p => p.IdRolNavigation).ToListAsync();
 
-        // POST: Personal/Delete
+
+            // Capturar la fecha y hora UTC actual
+            DateTime fechaActual = DateTime.UtcNow;
+
+            return new ViewAsPdf("ReportePersonal", empleado)
+            {
+                FileName = $"Reporte_personal_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
+        }
+
+
+
+        // POST: Personal/Delete/5
         [HttpPost]
 
         public async Task<IActionResult> Delete(int id)
@@ -274,7 +278,6 @@ namespace Sistema_CIN.Controllers
 
             return Json(new { success = true });
         }
-
 
         private bool PersonalExists(int id)
         {

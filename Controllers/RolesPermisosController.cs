@@ -37,7 +37,7 @@ namespace Sistema_CIN.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "No existen Roles");
+                ModelState.AddModelError("", "No existen Roles registrados");
                 return View(await roles.ToListAsync());
             }
             return View(await roles.ToListAsync());
@@ -124,28 +124,12 @@ namespace Sistema_CIN.Controllers
 
         // GET: Roles/Edit/5
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            // Buscar el rol por su ID
-            var rol = await _context.Rols
-                .Include(r => r.RolOperacions)
-                .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
-                .FirstOrDefaultAsync(r => r.IdRol == id);
-
-            if (rol == null)
-            {
-                return NotFound();
-            }
-
-            // Pasar el rol y sus operaciones asociadas a la vista
-            return View(rol);
-        }
         //public async Task<IActionResult> Edit(int id)
         //{
+        //    // Buscar el rol por su ID
         //    var rol = await _context.Rols
         //        .Include(r => r.RolOperacions)
-        //            .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
-        //                .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
+        //        .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
         //        .FirstOrDefaultAsync(r => r.IdRol == id);
 
         //    if (rol == null)
@@ -153,36 +137,52 @@ namespace Sistema_CIN.Controllers
         //        return NotFound();
         //    }
 
-        //    var operacionesPorModulo = new Dictionary<string, Dictionary<string, bool>>();
-
-        //    // Iterar sobre las operaciones del rol y agregarlas al diccionario
-        //    foreach (var rolOperacion in rol.RolOperacions)
-        //    {
-        //        string nombreModulo = rolOperacion.IdOpNavigation?.IdModuloNavigation?.NombreModulo;
-        //        string nombreOperacion = rolOperacion.IdOpNavigation?.NombreOp;
-
-        //        if (!string.IsNullOrEmpty(nombreModulo) && !string.IsNullOrEmpty(nombreOperacion))
-        //        {
-        //            bool isChecked = true; // Por defecto, marcamos todas las operaciones en la edición
-
-        //            if (!operacionesPorModulo.ContainsKey(nombreModulo))
-        //            {
-        //                operacionesPorModulo[nombreModulo] = new Dictionary<string, bool>();
-        //            }
-
-        //            operacionesPorModulo[nombreModulo][nombreOperacion] = isChecked;
-        //        }
-        //    }
-
-        //    var rolesPermisos = new RolesPermisos
-        //    {
-        //        Rol = rol,
-        //        OperacionesPorModulo = operacionesPorModulo,
-        //        NombreRol = rol.NombreRol // Asignar el nombre del rol
-        //    };
-
-        //    return View(rolesPermisos);
+        //    // Pasar el rol y sus operaciones asociadas a la vista
+        //    return View(rol);
         //}
+        public async Task<IActionResult> Edit(int id)
+        {
+            var rol = await _context.Rols
+                .Include(r => r.RolOperacions)
+                    .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
+                        .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
+                .FirstOrDefaultAsync(r => r.IdRol == id);
+
+            if (rol == null)
+            {
+                return NotFound();
+            }
+
+            var operacionesPorModulo = new Dictionary<string, Dictionary<string, bool>>();
+
+            // Iterar sobre las operaciones del rol y agregarlas al diccionario
+            foreach (var rolOperacion in rol.RolOperacions)
+            {
+                string nombreModulo = rolOperacion.IdOpNavigation?.IdModuloNavigation?.NombreModulo;
+                string nombreOperacion = rolOperacion.IdOpNavigation?.NombreOp;
+
+                if (!string.IsNullOrEmpty(nombreModulo) && !string.IsNullOrEmpty(nombreOperacion))
+                {
+                    bool isChecked = true; // Por defecto, marcamos todas las operaciones en la edición
+
+                    if (!operacionesPorModulo.ContainsKey(nombreModulo))
+                    {
+                        operacionesPorModulo[nombreModulo] = new Dictionary<string, bool>();
+                    }
+
+                    operacionesPorModulo[nombreModulo][nombreOperacion] = isChecked;
+                }
+            }
+
+            var rolesPermisos = new RolesPermisos
+            {
+                Rol = rol,
+                OperacionesPorModulo = operacionesPorModulo,
+                NombreRol = rol.NombreRol // Asignar el nombre del rol
+            };
+
+            return View(rolesPermisos);
+        }
 
         /*
          

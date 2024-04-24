@@ -13,14 +13,33 @@
 	</div>
 	<div class="col-auto">
 
-		<form asp-controller="Encargados" asp-action="Index">
+		<form class="row" asp-controller="PME" asp-action="Index">
 
-			<input type="submit" class="btn btn-outline-danger btn-sm col-xs-1" value="Restablecer" />
+			<div class="btn-group col">
+				<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					Ordenar Nombre
+				</button>
+				<ul class="dropdown-menu me-1">
 
-			<a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
-			<a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
-			<a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
-			<a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+					<li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a></li>
+					<li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a></li>
+
+
+				</ul>
+			</div>
+
+			<div class="btn-group col">
+				<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					Ordenar por edad
+				</button>
+				<ul class="dropdown-menu me-1">
+					<li> <a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "edad_asc" })">0 - 12</a></li>
+					<li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "edad_des" })">12 - 0</a></li>
+				</ul>
+			</div>
+
+
+
 		</form>
 	</div>
 

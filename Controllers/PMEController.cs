@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace Sistema_CIN.Controllers
     {
         private readonly SistemaCIN_dbContext _context;
         private readonly FiltrosPermisos _filters;
+
 
         public PMEController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
         {
@@ -42,6 +44,11 @@ namespace Sistema_CIN.Controllers
 
         public async Task<IActionResult> Index(string buscarPME, int? page, string sortOrder)
         {
+            if (!await VerificarPermiso(6))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
@@ -80,12 +87,6 @@ namespace Sistema_CIN.Controllers
                     break;
             }
 
-            //Filtro A-Z
-            // Establece el valor predeterminado para AgeSortParm
-          
-
-
-
             // Paginar los resultados
             var pagedPmes = await pmes.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -101,43 +102,6 @@ namespace Sistema_CIN.Controllers
 
 
         }
-
-        public ActionResult ReportePMEs(string sortOrder)
-        {
-
-            var pmes = _context.Pmes.AsQueryable();
-
-            if (!string.IsNullOrEmpty(sortOrder))
-            {
-                if (sortOrder == "name_asc")
-                {
-                    pmes = pmes.OrderBy(p => p.NombrePme);
-                }
-                if (sortOrder == "name_des")
-                {
-                    pmes = pmes.OrderByDescending(p => p.NombrePme);
-                }
-                if (sortOrder == "edad_asc")
-                {
-                    pmes = pmes.OrderBy(p => p.EdadPme);
-                }
-                if (sortOrder == "edad_des")
-                {
-                    pmes = pmes.OrderByDescending(p => p.EdadPme);
-                }
-            }
-            // Capturar la fecha y hora actual
-            DateTime fechaActual = DateTime.Now;
-
-            return new ViewAsPdf("ReportePMEs", pmes.ToList())
-            {
-                FileName = $"Reporte_Pmes_{fechaActual}.pdf",
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
-                PageSize = Rotativa.AspNetCore.Options.Size.A4
-            };
-            //return View(pme);
-        }
-
 
         // GET: PME/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -190,13 +154,17 @@ namespace Sistema_CIN.Controllers
         {
             try
             {
-                // Verificar si la póliza existe
+                if (!await VerificarPermiso(6))
+                {
+                    return RedirectToAction("AccessDenied", "Cuenta");
+                }
+                //Verificar si la póliza existe
                 var existePoliza = await _context.Pmes.FirstOrDefaultAsync(r => r.PolizaSeguro == pme.PolizaSeguro);
+                var user = User.Identity.Name;
 
                 if (existePoliza != null)
                 {
                     ModelState.AddModelError("", "Este número de póliza ya está en uso.");
-                    ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE", pme.IdEncargado);
                     return View(pme);
                 }
 
@@ -206,31 +174,45 @@ namespace Sistema_CIN.Controllers
                 if (existeCedula != null)
                 {
                     ModelState.AddModelError("", "La cédula ingresada ya existe");
-                    ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "NombreE", pme.IdEncargado);
                     return View(pme);
                 }
 
                 // Función para asignar valores en los campos vacíos
                 AsignarCamposVacios(pme);
+
                 // Agregar el nuevo PME 
                 _context.Add(pme);
                 await _context.SaveChangesAsync();
 
+                await CrearBitacora("registró", pme.NombrePme);
+
                 // Mostrar un mensaje de éxito al usuario
                 TempData["SuccessMessage"] = "PME registrado exitosamente!";
-
-                // Redirigir al usuario a la página de índice después de la creación exitosa
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                // Manejar cualquier excepción que ocurra durante la inserción del PME
-
+                // Manejar cualquier excepción que ocurra durante la inserción del 
                 // Si hay un error de validación o una excepción, devolver el formulario de creación con los datos proporcionados
                 ModelState.AddModelError("", "Error: " + ex.Message);
                 ViewData["IdEncargado"] = new SelectList(_context.Encargados, "IdEncargado", "IdEncargado", pme.IdEncargado);
                 return View(pme);
             }
+        }
+
+        public async Task CrearBitacora(string movimiento, string nombrePme)
+        {
+            var user = User.Identity.Name;
+            var bitacoraMovimiento = new BitacoraMovimiento
+            {
+                UsuarioB = user,
+                FechaMovimiento = DateTime.Now,
+                TipoMovimiento = movimiento,
+                Detalle = user + " " + movimiento + " a " + nombrePme
+            };
+
+            _context.BitacoraMovimientos.Add(bitacoraMovimiento);
+            await _context.SaveChangesAsync();
         }
 
 
@@ -283,6 +265,7 @@ namespace Sistema_CIN.Controllers
 
                     _context.Update(pme);
                     await _context.SaveChangesAsync();
+                    await CrearBitacora("actualizó", pme.NombrePme);
 
                     TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " actualizado exitosamente!";
                     return RedirectToAction(nameof(Index));
@@ -304,12 +287,54 @@ namespace Sistema_CIN.Controllers
             return View(pme);
         }
 
+        // GET ReportePMEs
+        public async Task<ActionResult> ReportePMEs(string sortOrder)
+        {
+            if (!await VerificarPermiso(9))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            var pmes = _context.Pmes.AsQueryable();
 
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "name_asc")
+                {
+                    pmes = pmes.OrderBy(p => p.NombrePme);
+                }
+                if (sortOrder == "name_des")
+                {
+                    pmes = pmes.OrderByDescending(p => p.NombrePme);
+                }
+                if (sortOrder == "edad_asc")
+                {
+                    pmes = pmes.OrderBy(p => p.EdadPme);
+                }
+                if (sortOrder == "edad_des")
+                {
+                    pmes = pmes.OrderByDescending(p => p.EdadPme);
+                }
+            }
+            // Capturar la fecha y hora actual
+            DateTime fechaActual = DateTime.Now;
+
+            return new ViewAsPdf("ReportePMEs", pmes.ToList())
+            {
+                FileName = $"Reporte_Pmes_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
+            //return View(pme);
+        }
 
         // POST: PME/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!await VerificarPermiso(10))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             if (_context.Pmes == null)
             {
                 return Problem("Entity set 'CINContext.Pmes'  is null.");
@@ -322,6 +347,7 @@ namespace Sistema_CIN.Controllers
 
             _context.Pmes.Remove(pme);
             await _context.SaveChangesAsync();
+            await CrearBitacora("eliminó", pme.NombrePme);
             TempData["SuccessMessage"] = "Menor " + pme.NombrePme + " eliminado exitosamente!";
 
             // Json para enviar el success del Delete del registro

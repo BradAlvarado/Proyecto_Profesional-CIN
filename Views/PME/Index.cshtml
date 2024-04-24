@@ -8,28 +8,45 @@
 <div class="row my-4 align-items-center">
 
     <div class="col">
-        <a class="btn btn-primary btn-sm text-white me-1" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
-        
+
         <form asp-controller="PME" asp-action="ReportePMEs" method="get">
-  
+            <a class="btn btn-primary btn-sm text-white me-1" asp-controller="PME" asp-action="Create">Añadir <i class="fa-solid fa-plus "></i></a>
+
             <input type="hidden" name="sortOrder" value="@ViewData["SortOrder"]" />
             <button type="submit" class="btn btn-success btn-sm text-white">Descargar <i class="fa-solid fa-file-pdf"></i></button>
         </form>
     </div>
     <div class="col-auto">
 
-        <form asp-controller="PME" asp-action="Index">
+        <form class="row" asp-controller="PME" asp-action="Index">
+            <input type="submit" class="btn btn-danger btn-sm col me-1" value="Restablecer"/>
+           
+            <div class="btn-group col">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ordenar Nombre
+                </button>
+                <ul class="dropdown-menu me-1">
 
-            <input type="submit" class="btn btn-outline-danger btn-sm col-xs-1" value="Restablecer" />
+                    <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a></li>
+                    <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a></li>
 
-            <a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a>
-            <a type="submit" class="btn btn-outline-success btn-sm " href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a>
-            <a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_asc" })">Menor - Mayor</a>
-            <a type="submit" class="btn btn-outline-secondary btn-sm " href="@Url.Action("Index", new { sortOrder = "edad_des" })">Mayor - Menor</a>
+
+                </ul>
+            </div>
+
+            <div class="btn-group col">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ordenar por edad
+                </button>
+                <ul class="dropdown-menu me-1">
+                    <li> <a type="submit"class="btn"  href="@Url.Action("Index", new { sortOrder = "edad_asc" })">0 - 12</a></li>
+                    <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "edad_des" })">12 - 0</a></li>
+                </ul>
+            </div>
         </form>
     </div>
-    
-    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+
+    <div class="container-fluid col-auto bg-light p-1 shadow-sm rounded">
 
 
         <form asp-controller="PME" asp-action="Index">
@@ -43,90 +60,73 @@
 </div>
 
 <div class="table-responsive">
-<table class="table table-striped table-bordered align-middle">
+    <table class="table table-striped table-bordered align-middle">
         <thead class="table-dark">
-        <tr>
-            <th>
-                Cédula
-            </th>
-            <th>
-                Nombre Completo
-            </th>
-            <th>
-                N.Póliza
-            </th>
-            <th>
-                Edad
-            </th>
-            <th>
-                Género
-            </th>
-            <th>
-                Dirección
-            </th>
-            <th>
-                Fecha Ingreso
-            </th>
-
-
-
-            <th>Detalles</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
             <tr>
-                <th>
-                    @Html.DisplayFor(modelItem => item.CedulaPme)
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombrePme) 	@Html.DisplayFor(modelItem => item.ApellidosPme)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PolizaSeguro)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EdadPme)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GeneroPme)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProvinciaPme)
-
-                    @{
-                        if (item.CantonPme != "No registrado")
-                        {
-                            Html.DisplayFor(modelItem => item.CantonPme);
-                        }
-                        if (item.DistritoPme != "No registrado")
-                        {
-                            Html.DisplayFor(modelItem => item.DistritoPme);
-                        }
-                    }
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaIngresoPme, "{0:d}")
-                </td>
-
-
-                <td class="text-center">
-                    <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdPme"><i class="fa-regular fa-eye"></i></a>
-                </td>
-                <td class="text-center">
-                    <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPme"><i class="fa-regular fa-pen-to-square"></i></a>
-                </td>
-                <td class="text-center">
-                    <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdPme','@item.NombrePme','PME')"><i class="fa-solid fa-trash-can"></i></a>
-                </td>
+                <th>Cédula</th>
+                <th>Nombre Completo</th>
+                <th>N.Póliza</th>
+                <th>Edad</th>
+                <th>Género</th>
+                <th>Dirección</th>
+                <th>Fecha Ingreso</th>
+                <th>Detalles</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.CedulaPme)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombrePme) 	@Html.DisplayFor(modelItem => item.ApellidosPme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PolizaSeguro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EdadPme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GeneroPme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProvinciaPme)
+
+                        @{
+                            if (item.CantonPme != "No registrado")
+                            {
+                                Html.DisplayFor(modelItem => item.CantonPme);
+                            }
+                            if (item.DistritoPme != "No registrado")
+                            {
+                                Html.DisplayFor(modelItem => item.DistritoPme);
+                            }
+                        }
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaIngresoPme)
+                    </td>
+
+
+                    <td class="text-center">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdPme"><i class="fa-regular fa-eye"></i></a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdPme"><i class="fa-regular fa-pen-to-square"></i></a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdPme','@item.NombrePme','PME')"><i class="fa-solid fa-trash-can"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
     <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 </div>
 <!------Paginacion------>

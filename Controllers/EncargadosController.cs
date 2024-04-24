@@ -38,9 +38,12 @@ namespace Sistema_CIN.Controllers
         // GET: Encargados
         public async Task<IActionResult> Index(string buscarEncargado, int? page, string sortOrder)
         {
+            if (!await VerificarPermiso(11))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
-
 
             var encargado = from Encargados in _context.Encargados select Encargados;
             encargado = _context.Encargados.Include(p => p.IdPmeNavigation);
