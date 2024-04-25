@@ -12,13 +12,15 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
-    <title>Reporte</title>
+    <title>Reporte PMEs</title>
 
 </head>
 <body>
     <div class="contenedor">
 
         <div class="encabezado">
+
+            
 
             <div class="logo">
                 <a><img class="logo cin" src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" /></a>
@@ -76,9 +78,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <th>
+                        <td class="rtable">
                             @Html.DisplayFor(modelItem => item.CedulaPme)
-                        </th>
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.NombrePme)
                         </td>
@@ -87,7 +89,7 @@
                         </td>
 
                         <td>
-                            @Html.DisplayFor(modelItem => item.FechaNacimientoPme.ToString("dd/MM/yyyy"))
+                            @Html.DisplayFor(modelItem => item.FechaNacimientoPme)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EdadPme)

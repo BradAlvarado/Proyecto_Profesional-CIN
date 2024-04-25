@@ -81,10 +81,6 @@ namespace Sistema_CIN.Controllers
                 case "edad_des":
                     pmes = pmes.OrderByDescending(p => p.EdadPme);
                     break;
-                default:
-                    // Ordenamiento predeterminado
-                    pmes = pmes.OrderBy(p => p.NombrePme);
-                    break;
             }
 
             // Paginar los resultados
@@ -134,6 +130,7 @@ namespace Sistema_CIN.Controllers
 
             return View(pme);
         }
+
 
         // GET: PME/Create
         public async Task<IActionResult> Create()
@@ -324,7 +321,7 @@ namespace Sistema_CIN.Controllers
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
                 PageSize = Rotativa.AspNetCore.Options.Size.A4
             };
-            //return View(pme);
+            //return View(pmes);
         }
 
         // POST: PME/Delete/5

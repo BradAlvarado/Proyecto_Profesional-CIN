@@ -16,6 +16,7 @@ using Sistema_CIN.Models;
 using Sistema_CIN.Services;
 using Rotativa.AspNetCore;
 using Sistema_CIN.Models.ViewModels;
+using Microsoft.Data.SqlClient;
 
 
 
@@ -48,7 +49,7 @@ namespace Sistema_CIN.Controllers
 
         // GET: Personal 1
 
-        public async Task<IActionResult> Index(string buscarEmpleado, int? page)
+        public async Task<IActionResult> Index(string buscarEmpleado, int? page, string sortOrder)
         {
             if (!await VerificarPermiso(1))
             {
@@ -69,6 +70,21 @@ namespace Sistema_CIN.Controllers
             if (!String.IsNullOrEmpty(buscarEmpleado))
             {
                 empleado = empleado.Where(s => s.NombreP!.Contains(buscarEmpleado));
+            }
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    empleado = empleado.OrderBy(p => p.NombreP);
+                    break;
+                case "name_des":
+                    empleado = empleado.OrderByDescending(p => p.NombreP);
+                    break;
+                case "edad_asc":
+                    empleado = empleado.OrderBy(p => p.EdadP);
+                    break;
+                case "edad_des":
+                    empleado = empleado.OrderByDescending(p => p.EdadP);
+                    break;
             }
             // Paginar los resultados
             var pagedempleado = await empleado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -157,7 +173,6 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Personal/Edit/3
-
         public async Task<IActionResult> Edit(int? id)
         {
             if (!await VerificarPermiso(3))
@@ -229,24 +244,45 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET ReportePersonal/4
-        public async Task<ActionResult> ReportePersonal()
+        public async Task<ActionResult> ReportePersonal(string sortOrder)
         {
             if (!await VerificarPermiso(4))
             {
                 return RedirectToAction("AccessDenied", "Cuenta");
             }
-            var empleado = await _context.Personals.Include(p => p.IdRolNavigation).ToListAsync();
+            var personal = _context.Personals
+                .Include(personal => personal.IdRolNavigation)
+                .AsQueryable();
 
-
-            // Capturar la fecha y hora UTC actual
-            DateTime fechaActual = DateTime.UtcNow;
-
-            return new ViewAsPdf("ReportePersonal", empleado)
+            if (!string.IsNullOrEmpty(sortOrder))
             {
-                FileName = $"Reporte_personal_{fechaActual}.pdf",
+                if (sortOrder == "name_asc")
+                {
+                    personal = personal.OrderBy(p => p.NombreP);
+                }
+                if (sortOrder == "name_des")
+                {
+                    personal = personal.OrderByDescending(p => p.NombreP);
+                }
+                if (sortOrder == "edad_asc")
+                {
+                    personal = personal.OrderBy(p => p.EdadP);
+                }
+                if (sortOrder == "edad_des")
+                {
+                    personal = personal.OrderByDescending(p => p.EdadP);
+                }
+            }
+            // Capturar la fecha y hora actual
+            DateTime fechaActual = DateTime.Now;
+
+            return new ViewAsPdf("ReportePersonal", personal.ToList())
+            {
+                FileName = $"Reporte_Personal_{fechaActual}.pdf",
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
                 PageSize = Rotativa.AspNetCore.Options.Size.A4
             };
+            //return View(personal);
         }
 
 

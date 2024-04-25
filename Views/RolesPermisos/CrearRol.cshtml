@@ -1,0 +1,18 @@
+﻿@model Sistema_CIN.Models.ViewModels.RolOpViewModel
+
+<h1>Permission operations</h1>
+
+<form asp-action="CrearRol" method="post">
+    @foreach (var module in Model.Modulos)
+    {
+        <h2>@module.NombreModulo</h2>
+        @foreach (var operation in Model.Operacion.Where(op => op.IdModulo == module.IdModulo))
+        {
+            <div>
+                <input type="checkbox" asp-for="@Model.OperacionChecked[operation.IdOp]" />
+                <label>@operation.NombreOp</label>
+            </div>
+        }
+    }
+    <button type="submit">Save</button>
+</form>
