@@ -25,6 +25,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="Rol.NombreRol" class="form-control" placeholder="Nombre del Rol" />
                     <span asp-validation-for="Rol.NombreRol" class="text-danger"></span>
+                    <input name="operacionesPorModulo[6][Ver]" class="form-check-input" type="hidden" value="true" id="verCheckbox" checked>
                 </div>
             </div>
         </div>
@@ -38,10 +39,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                     <div class="border rounded bg-light p-2">
                         <h4 class="fw-bold fs-6 my-3">@modulo.NombreModulo</h4>
-                        <div class="form-check">
-                            <input name="OperacionesPorModulo[@modulo.IdModulo][Todos]" class="form-check-input todos-checkbox" type="checkbox" id="todosCheckbox_@modulo.IdModulo">
-                            <label class="form-check-label" for="todosCheckbox_@modulo.IdModulo">Todos</label>
-                        </div>
+                 
                         <div class="ms-3">
                             @foreach (var operacion in Model.Operaciones)
                             {
@@ -65,7 +63,7 @@
         }
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <button type="submit" class="btn btn-primary btn-sm">Guardar <i class="fa-solid fa-floppy-disk"></i></button>
 </form>
 
 

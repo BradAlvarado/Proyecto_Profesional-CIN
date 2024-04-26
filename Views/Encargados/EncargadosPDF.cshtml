@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+﻿@model IEnumerable<Sistema_CIN.Models.Encargados>
 
 @{
 
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
-    <title>Reporte Personal</title>
+    <title>Reporte Encargados</title>
 
 </head>
 <body>
@@ -26,7 +26,7 @@
                     </td>
 
                     <td class="titulo">
-                        <h4 >REPORTE DE PERSONAL</h4>
+                        <h4 class="">REPORTE DE ENCARGADOS</h4>
                         <p>Centro Infantil el Naranjito</p>
                     </td>
                     <td class="fecha">
@@ -35,9 +35,6 @@
                     </td>
                 </tr>
             </table>
-
-
-
         </nav>
 
         <table style="width: 100%;" class="border">
@@ -63,7 +60,7 @@
                         Correo
                     </th>
                     <th>
-                        Puesto
+                        Dirección
                     </th>
 
                 </tr>
@@ -74,27 +71,27 @@
                 {
                     <tr>
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.CedulaP)
+                            @Html.DisplayFor(modelItem => item.CedulaE)
                         </td>
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.NombreP)
+                            @Html.DisplayFor(modelItem => item.NombreE)
                         </td>
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.ApellidosP)
-                        </td>
-
-                        <td class="td">
-                            @Html.DisplayFor(modelItem => item.EdadP)
+                            @Html.DisplayFor(modelItem => item.ApellidosE)
                         </td>
 
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.TelefonoP)
+                            @Html.DisplayFor(modelItem => item.Edad)
+                        </td>
+
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.TelefonoE)
                         </td>
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.CorreoP)
+                            @Html.DisplayFor(modelItem => item.CorreoE)
                         </td>
                         <td class="td">
-                            @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
+                            @Html.DisplayFor(modelItem => item.DireccionE)
                         </td>
 
                     </tr>

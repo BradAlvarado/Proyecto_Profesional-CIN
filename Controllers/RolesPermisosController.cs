@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Models.ViewModels;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -44,81 +45,6 @@ namespace Sistema_CIN.Controllers
             return View(await roles.ToListAsync());
 
         }
-
-        // GET: RolesPermisos/Create
-        //[HttpGet]
-        //public IActionResult CrearRol(int roleId)
-        //{
-        //    var viewModel = new RolOpViewModel
-        //    {
-        //        RoleId = roleId,
-        //        Modulos = _context.Modulos.ToList(),
-        //        Operacion = _context.Operaciones.ToList()
-        //    };
-
-        //    var operationsByModule = viewModel.Operacion.GroupBy(op => op.IdModulo);
-        //    viewModel.ModuloChecked = new Dictionary<int, bool>();
-
-        //    foreach (var modulo in viewModel.Modulos)
-        //    {
-        //        // Add module ID to SelectedModules dictionary
-        //        viewModel.ModuloChecked.Add(modulo.IdModulo, false);
-
-        //        // Get operations for the current module
-        //        var operationsForModule = operationsByModule.FirstOrDefault(g => g.Key == modulo.IdModulo)?.ToList();
-
-        //        // If operations exist for the module, add them to the ViewModel
-        //        if (operationsForModule != null)
-        //        {
-        //            foreach (var operation in operationsForModule)
-        //            {
-        //                viewModel.OperacionChecked.Add(operation.IdOp, false);
-        //            }
-        //        }
-        //    }
-
-        //    return View(viewModel);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult CrearRol(RolOpViewModel viewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Iterate through selected modules and operations
-        //        foreach (var moduleId in viewModel.ModuloChecked.Where(kv => kv.Value).Select(kv => kv.Key))
-        //        {
-        //            foreach (var operationId in viewModel.OperacionChecked.Where(kv => kv.Value).Select(kv => kv.Key))
-        //            {
-        //                // Check if the role operation already exists for this role and operation
-        //                var existingRoleOperation = _context.RolOperacions
-        //                    .FirstOrDefault(ro => ro.IdRol == viewModel.RoleId && ro.IdOp == operationId);
-
-        //                // If the role operation doesn't exist, create a new one
-        //                if (existingRoleOperation == null)
-        //                {
-        //                    var newRoleOperation = new RolOperacion
-        //                    {
-        //                        IdRol = viewModel.RoleId,
-        //                        IdOp = operationId
-        //                    };
-        //                    _context.RolOperacions.Add(newRoleOperation);
-        //                }
-        //            }
-        //        }
-
-        //        // Save changes to the database
-        //        _context.SaveChanges();
-
-        //        // Redirect to the index page or wherever you want
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    // If the model state is not valid, return the view with errors
-        //    return View(viewModel);
-        //}
-
 
         public ActionResult Create()
         {
@@ -254,10 +180,10 @@ namespace Sistema_CIN.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var rol = await _context.Rols
-        .Include(r => r.RolOperacions)
-        .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
-        .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
-        .FirstOrDefaultAsync(r => r.IdRol == id);
+                .Include(r => r.RolOperacions)
+                .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
+                .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
+                .FirstOrDefaultAsync(r => r.IdRol == id);
 
             if (rol == null)
             {
@@ -265,7 +191,7 @@ namespace Sistema_CIN.Controllers
             }
 
             var modulos = await _context.Modulos.ToListAsync(); // Obtener todos los módulos
-            var operaciones = await _context.Operaciones.ToListAsync(); // Obtener todas las operaciones
+            var operaciones = await _context.Operaciones.ToListAsync(); 
 
             var rolesPermisos = new RolesPermisos
             {
@@ -279,55 +205,66 @@ namespace Sistema_CIN.Controllers
             return View(rolesPermisos);
         }
 
+        // POST/ EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Dictionary<int, Dictionary<string, bool>> operacionesPorModulo, Rol rol)
+        public async Task<ActionResult> Edit(int id, Rol rol, Dictionary<int, Dictionary<string, bool>> operacionesPorModulo)
         {
-
-            if (id != rol.IdRol)
+            try
             {
-                return NotFound();
-            }
-            // Insertar el nuevo rol en la tabla Rol
-            _context.Update(rol);
-            await _context.SaveChangesAsync();
+                // Buscar el rol existente en la base de datos
+                var existingRol = await _context.Rols
+                    .Include(r => r.RolOperacions)
+                    .FirstOrDefaultAsync(r => r.IdRol == id);
 
-            // Obtener el ID del rol recién insertado
-            int idRol = rol.IdRol;
-
-            // Iterar sobre los módulos y sus operaciones asociadas
-            foreach (var kvp in operacionesPorModulo)
-            {
-                int idModulo = kvp.Key;
-                var operaciones = kvp.Value;
-
-                foreach (var operacion in operaciones)
+                if (existingRol == null)
                 {
-                    bool isChecked = operacion.Value;
+                    return NotFound();
+                }
 
-                    string nombreOp = operacion.Key;
+                // Actualizar las propiedades del rol existente con los datos del formulario
+                existingRol.NombreRol = rol.NombreRol;
 
-                    var idOperacion = await _context.Operaciones
-                        .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
-                        .FirstOrDefaultAsync();
+                // Limpiar las operaciones existentes asociadas al rol
+                _context.RolOperacions.RemoveRange(existingRol.RolOperacions);
 
-                    if (isChecked)
+                // Iterar sobre los módulos y sus operaciones asociadas en el formulario
+                foreach (var kvp in operacionesPorModulo)
+                {
+                    int idModulo = kvp.Key;
+                    var operaciones = kvp.Value;
+
+                    foreach (var operacion in operaciones)
                     {
-                        _context.RolOperacions.Update(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
-                    }
-                    else
-                    {
-                        _context.RolOperacions.Remove(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
+                        bool isChecked = operacion.Value;
+
+                        if (isChecked)
+                        {
+                            string nombreOp = operacion.Key;
+
+                            // Buscar la operación correspondiente en la base de datos
+                            var idOperacion = await _context.Operaciones
+                                .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
+                                .Select(o => o.IdOp)
+                                .FirstOrDefaultAsync();
+
+                            // Agregar la relación de rol-operación al rol existente
+                            existingRol.RolOperacions.Add(new RolOperacion { IdOp = idOperacion });
+                        }
                     }
                 }
+
+                // Guardar los cambios en la base de datos
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Rol actualizado exitosamente!";
+                return RedirectToAction("Index");
             }
-
-            await _context.SaveChangesAsync(); // Guardar los cambios una vez fuera del bucle
-            TempData["SuccessMessage"] = "Rol actualizado exitosamente!";
-
-            return RedirectToAction("Index");
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Este rol ya existe!");
+                return View();
+            }
         }
-
 
         // POST: RolesPermisos/Delete/5
         [HttpPost]

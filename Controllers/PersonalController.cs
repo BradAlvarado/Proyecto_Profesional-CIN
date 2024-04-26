@@ -94,7 +94,7 @@ namespace Sistema_CIN.Controllers
 
             // Crear un objeto de modelo para la paginación
             var pagedModel = new PagedList<Personal>(pagedempleado, pageNumber, pageSize, totalItems, totalPages);
-
+            ViewData["SortOrder"] = sortOrder;
             return View(pagedModel);
         }
 
@@ -243,6 +243,8 @@ namespace Sistema_CIN.Controllers
             return View(personal);
         }
 
+
+  
         // GET ReportePersonal/4
         public async Task<ActionResult> ReportePersonal(string sortOrder)
         {

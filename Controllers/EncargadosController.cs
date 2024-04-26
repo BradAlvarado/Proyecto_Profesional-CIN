@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
@@ -59,32 +60,22 @@ namespace Sistema_CIN.Controllers
                 encargado = encargado.Where(s => s.NombreE!.Contains(buscarEncargado));
             }
 
-
-            //Filtro A-Z
-            // Establece el valor predeterminado para AgeSortParm
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_asc" : "";
-
-            if (sortOrder == "name_asc")
+            switch (sortOrder)
             {
-                encargado = encargado.OrderBy(p => p.NombreE);
-            }
-            if (sortOrder == "name_des")
-            {
-                encargado = encargado.OrderByDescending(p => p.NombreE);
+                case "name_asc":
+                    encargado = encargado.OrderBy(p => p.NombreE);
+                    break;
+                case "name_des":
+                    encargado = encargado.OrderByDescending(p => p.NombreE);
+                    break;
+                case "edad_asc":
+                    encargado = encargado.OrderBy(p => p.Edad);
+                    break;
+                case "edad_des":
+                    encargado = encargado.OrderByDescending(p => p.Edad);
+                    break;
             }
 
-            //Filtro EDAD
-            // Establece el valor predeterminado para AgeSortParm
-            ViewData["AgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "edad_asc" : "";
-
-            if (sortOrder == "edad_asc")
-            {
-                encargado = encargado.OrderBy(p => p.Edad);
-            }
-            if (sortOrder == "edad_des")
-            {
-                encargado = encargado.OrderByDescending(p => p.Edad);
-            }
             // Paginar los resultados
             var pagedEncargado = await encargado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -94,13 +85,8 @@ namespace Sistema_CIN.Controllers
 
             // Crear un objeto de modelo para la paginación
             var pagedModel = new PagedList<Encargados>(pagedEncargado, pageNumber, pageSize, totalItems, totalPages);
-
-
-
-
+            ViewData["SortOrder"] = sortOrder;
             return View(pagedModel);
-
-
         }
 
         // GET: Encargados/Details/5
@@ -229,6 +215,46 @@ namespace Sistema_CIN.Controllers
             return View(encargados);
         }
 
+
+        // GET ReporteEncargados/4
+        public async Task<ActionResult> EncargadosPDF(string sortOrder)
+        {
+            if (!await VerificarPermiso(14))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            var encargados = _context.Encargados.AsQueryable();
+
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "name_asc")
+                {
+                    encargados = encargados.OrderBy(p => p.NombreE);
+                }
+                if (sortOrder == "name_des")
+                {
+                    encargados = encargados.OrderByDescending(p => p.NombreE);
+                }
+                if (sortOrder == "edad_asc")
+                {
+                    encargados = encargados.OrderBy(p => p.Edad);
+                }
+                if (sortOrder == "edad_des")
+                {
+                    encargados = encargados.OrderByDescending(p => p.Edad);
+                }
+            }
+            // Capturar la fecha y hora actual
+            DateTime fechaActual = DateTime.Today;
+
+            return new ViewAsPdf("EncargadosPDF", encargados.ToList())
+            {
+                FileName = $"Reporte_Encargados_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
+            //return View(personal);
+        }
 
         // POST: Encargados/Delete/5
         [HttpPost]

@@ -17,33 +17,25 @@
 </head>
 <body>
     <div class="contenedor">
+        <nav class="mb-3">
 
-        <div class="encabezado">
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <img src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" />
+                    </td>
 
-            
-
-            <div class="logo">
-                <a><img class="logo cin" src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" /></a>
-            </div>
-
-            <div class="titulo">
-                <h4 class="">Reporte de PMES</h4>
-
-
-            </div>
-
-            <div class="fecha ">
-                <h4>Fecha @DateTime.Now.ToString("dd/MM/yyyy")</h4>
-                
-            </div>
-
-        </div>
-
-        <div class="info">
-            <h4 class="title2">Centro Infantil el Naranjito</h4>
-            <p>Higuito, San José</p>
-
-        </div>
+                    <td class="titulo">
+                        <h4 class="">REPORTE DE ENCARGADOS</h4>
+                        <p>Centro Infantil el Naranjito</p>
+                    </td>
+                    <td class="fecha">
+                        <h4 class="">Fecha del Reporte</h4>
+                        <p>@DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    </td>
+                </tr>
+            </table>
+        </nav>
 
         <table style="width: 100%;">
             <thead>
