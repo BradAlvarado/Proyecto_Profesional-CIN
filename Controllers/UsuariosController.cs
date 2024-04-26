@@ -138,6 +138,18 @@ namespace Sistema_CIN.Controllers
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
 
+                if(usuario.AccesoU != true)
+                {
+                    // Obtener el ID del usuario de la sesión actual
+                    var userId = HttpContext.Session.GetString("IdUsuario");
+                    
+                    // Verificar si el usuario editado es el mismo usuario que está en sesión
+                    if (userId != null && userId == usuario.IdUsuario.ToString())
+                    {
+                        // Cerrar la sesión actual del usuario
+                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    }
+                }
                 TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }

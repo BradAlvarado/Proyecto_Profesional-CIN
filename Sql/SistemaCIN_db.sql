@@ -353,7 +353,7 @@ delete from Bitacora_ingreso_salida;
 
 
 INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
-values('Vilma Badilla','admin@sistema.cin', 'Admin123#!', 0,1,1);
+values('Brad','bradsistema.cin', 'Admin123#!', 0,1,1);
 
 INSERT INTO Rol (nombre_rol) values('Invitado')
 
@@ -366,6 +366,10 @@ INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');               -- 5
 INSERT INTO Modulos(nombre_modulo) values('Ayuda');                       -- 6
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');                   -- 7
 
+update Usuarios 
+set id_rol = 1 where id_usuario = 11;
+
+DELETE from Usuarios;
 Select * from Usuarios; 
 Select * from Rol; 
 Select * from Modulos; 

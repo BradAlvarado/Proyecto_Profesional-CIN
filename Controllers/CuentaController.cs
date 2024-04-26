@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
 using System.Security.Cryptography;
 using System.Numerics;
-using Microsoft.Extensions.Hosting.Internal;
 
 
 namespace Sistema_CIN.Controllers
@@ -20,12 +19,12 @@ namespace Sistema_CIN.Controllers
     public class CuentaController : Controller
     {
         private readonly SistemaCIN_dbContext _context;
-        private readonly HostingEnvironment _hostingEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CuentaController(SistemaCIN_dbContext context, HostingEnvironment hostingEnvironment)
+        public CuentaController(SistemaCIN_dbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public static string EncryptPassword(string password)
@@ -59,40 +58,45 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(Usuario usuario)
         {
+            var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
+            
 
+            if (existeCorreo != null)
+            {
+                ModelState.AddModelError("", "Este correo ya está en uso");
+                return View(usuario);
+            }
+            
             if (usuario == null)
             {
                 ModelState.AddModelError("", "Existen campos sin completar");
                 return View(usuario);
             }
+
             try
             {
 
-                var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
                 var userRol = await _context.Rols
-                   .FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
-
-                if (existeCorreo != null)
-                {
-                    ModelState.AddModelError("", "Este correo ya está en uso");
-                    return View(usuario);
-                }
-
+               .FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
                 if (userRol != null)
                 {
                     usuario.IdRol = userRol.IdRol;
 
                 }
+
                 // Asigno variables
                 usuario.Clave = PasswordHelper.EncryptPassword(usuario.Clave);
                 usuario.EstadoU = true;
                 usuario.AccesoU = true;
+                usuario.FotoU = "default-user-photo.jpg";
                 _context.Add(usuario);
+                await _context.SaveChangesAsync();
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
+                identity.AddClaim(new Claim("FotoU", usuario.FotoU));
 
                 // Obtener el rol del usuario y agregarlo como reclamación
                 var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuario.IdRol);
@@ -100,16 +104,13 @@ namespace Sistema_CIN.Controllers
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
                 }
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                // Inicia Sesión
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                HttpContext.Session.SetString("IdUsuario", usuario.IdUsuario.ToString());
+                HttpContext.Session.SetString("CorreoU", usuario.CorreoU);
+                HttpContext.Session.SetString("IdRol", usuario.IdRol.ToString());
+                HttpContext.Session.SetString("FotoU", usuario.FotoU);
 
-
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 return RedirectToAction("Index", "Home");
-
-
             }
             catch (DbException ex)
             {
@@ -130,57 +131,61 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string correo, string clave)
         {
+            var usuarioRegistrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == correo);
+
+
+            if (correo == null || clave == null)
+            {
+                ModelState.AddModelError("", "Correo o contraseña sin ingresar");
+                return View();
+            }
+            if (usuarioRegistrado == null)
+            {
+                ModelState.AddModelError("", "Correo o contraseña inválidos");
+                return View();
+            }
+
+            if (usuarioRegistrado.AccesoU != true)
+            {
+                ModelState.AddModelError("", "No tienes acceso al Sistema");
+                return View();
+            }
+
+            if (usuarioRegistrado.Clave != PasswordHelper.EncryptPassword(clave))
+            {
+                ModelState.AddModelError("", "Contraseña incorrecta");
+                return View();
+            }
+
             try
             {
-                var usuarioRegistrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == correo);
+                // Actualiza el campo EstadoU a true para el usuario que ha iniciado 
+                usuarioRegistrado.EstadoU = true;
+                _context.Update(usuarioRegistrado);
+                await _context.SaveChangesAsync();
 
-                if (correo == null || clave == null)
+                // Creación de las reclamaciones del usuario para la autenticación
+
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.Email, usuarioRegistrado.CorreoU));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuarioRegistrado.IdUsuario.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, usuarioRegistrado.NombreU));
+
+                // Obtener el rol del usuario y agregarlo como reclamación
+                var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuarioRegistrado.IdRol);
+
+                if (rolUser != null)
                 {
-                    ModelState.AddModelError("", "Correo o contraseña sin ingresar");
-                    return View();
+                    identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
                 }
+                HttpContext.Session.SetString("CorreoU", usuarioRegistrado.CorreoU);
+                HttpContext.Session.SetString("IdRol", usuarioRegistrado.IdRol.ToString());
+                HttpContext.Session.SetString("IdUsuario", usuarioRegistrado.IdUsuario.ToString());
+                HttpContext.Session.SetString("AccesoU", usuarioRegistrado.AccesoU.ToString());
 
-                if (usuarioRegistrado != null)
-                {
-                    // Encriptar la contraseña ingresada por el usuario para compararla con la contraseña encriptada almacenada
-                    string claveEncriptada = PasswordHelper.EncryptPassword(clave);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                    if (claveEncriptada == usuarioRegistrado.Clave)
-                    {
-                        if (usuarioRegistrado.AccesoU == true)
-                        {
-                            // Actualiza el campo EstadoU a true para el usuario que ha iniciado sesión
-                            usuarioRegistrado.EstadoU = true;
-                            _context.Update(usuarioRegistrado);
-                            await _context.SaveChangesAsync();
-
-                            // Creación de las reclamaciones del usuario para la autenticación
-                            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                            identity.AddClaim(new Claim(ClaimTypes.Email, usuarioRegistrado.CorreoU));
-                            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuarioRegistrado.IdUsuario.ToString()));
-                            identity.AddClaim(new Claim(ClaimTypes.Name, usuarioRegistrado.NombreU));
-
-                            // Obtener el rol del usuario y agregarlo como reclamación
-                            var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuarioRegistrado.IdRol);
-                            if (rolUser != null)
-                            {
-                                identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
-                            }
-
-                            // Iniciar sesión
-                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "No tienes acceso al Sistema. Consulta con el administrador");
-                            return View();
-                        }
-                    }
-                }
-
-                ModelState.AddModelError("", "Correo o contraseña inválidas");
-                return View();
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
@@ -212,6 +217,9 @@ namespace Sistema_CIN.Controllers
             return View(); //Vista HTML Logout.cshtml <h2>Has cerrado sesión<h2>
 
         }
+
+
+
 
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> EditProfile(int? id)
@@ -269,17 +277,32 @@ namespace Sistema_CIN.Controllers
                 // actualiza el nombre
                 user.NombreU = usuario.NombreU;
 
-                if (imageFile != null && imageFile.Length > 0)
+                // Subimos foto
+
+                var files = HttpContext.Request.Form.Files;
+
+                foreach (var formFile in files)
                 {
-                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images");
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-                    var filePath = Path.Combine(imagePath, fileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (formFile.Length > 0)
                     {
-                        await imageFile.CopyToAsync(stream);
+                        // Generar un nombre único para el archivo
+                        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+
+                        var filePath = Path.Combine("wwwroot/images/imageUser", uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+                        usuario.FotoU = uniqueFileName;
                     }
-                    usuario.FotoU = fileName;
                 }
+                user.FotoU = usuario.FotoU;
+                if (!string.IsNullOrEmpty(usuario.FotoU))
+                {
+                    HttpContext.Session.SetString("FotoU", usuario.FotoU);
+                }
+
                 _context.Update(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
