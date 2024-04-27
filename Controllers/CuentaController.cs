@@ -60,61 +60,63 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(Usuario usuario)
         {
-            if (ModelState.IsValid)
+
+            var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
+
+            if (existeCorreo != null)
             {
-                var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
-
-                if (existeCorreo != null)
-                {
-                    ModelState.AddModelError("", "Este correo ya está en uso.");
-                }
-                else
-                {
-                    try
-                    {
-                        var userRol = await _context.Rols.FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
-                        if (userRol != null)
-                        {
-                            usuario.IdRol = userRol.IdRol;
-                        }
-
-                        // Asigno variables
-                        usuario.Clave = PasswordHelper.EncryptPassword(usuario.Clave);
-                        usuario.EstadoU = true;
-                        usuario.AccesoU = true;
-                        usuario.FotoU = "default-user-photo.jpg";
-                        _context.Add(usuario);
-                        await _context.SaveChangesAsync();
-
-                        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                        identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
-                        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
-                        identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
-
-                        // Obtener el rol del usuario y agregarlo como reclamación
-                        var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuario.IdRol);
-                        if (rolUser != null)
-                        {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
-                        }
-                        HttpContext.Session.SetString("IdUsuario", usuario.IdUsuario.ToString());
-                        HttpContext.Session.SetString("CorreoU", usuario.CorreoU);
-                        HttpContext.Session.SetString("Rol", usuario.IdRolNavigation.NombreRol.ToString());
-                        HttpContext.Session.SetString("FotoU", usuario.FotoU);
-
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-                        return RedirectToAction("Index", "Home");
-                    }
-                    catch (DbException ex)
-                    {
-                        ModelState.AddModelError("", "Error al registrarse: " + ex.Message);
-                    }
-                }
+                ModelState.AddModelError("", "Este correo ya está en uso.");
             }
             else
             {
-                ModelState.AddModelError("", "Existen campos sin completar o inválidos.");
+                try
+                {
+                    var userRol = await _context.Rols.FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
+                    if (userRol != null)
+                    {
+                        usuario.IdRol = userRol.IdRol;
+                    }
+
+                    if (usuario.Clave != usuario.ConfirmarClave)
+                    {
+                        ModelState.AddModelError("", "Contraseñas no coinciden");
+                        return View(usuario);
+                    }
+
+                    // Asigno variables
+                    usuario.Clave = PasswordHelper.EncryptPassword(usuario.Clave);
+                    usuario.EstadoU = true;
+                    usuario.AccesoU = true;
+                    usuario.FotoU = "default-user-photo.jpg";
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
+                    identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
+
+                    // Obtener el rol del usuario y agregarlo como reclamación
+                    var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuario.IdRol);
+                    if (rolUser != null)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
+                    }
+                    HttpContext.Session.SetString("IdUsuario", usuario.IdUsuario.ToString());
+                    HttpContext.Session.SetString("CorreoU", usuario.CorreoU);
+                    HttpContext.Session.SetString("Rol", usuario.IdRolNavigation.NombreRol.ToString());
+                    HttpContext.Session.SetString("FotoU", usuario.FotoU);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (DbException ex)
+                {
+                    ModelState.AddModelError("", "Error al registrarse: " + ex.Message);
+                }
             }
+
+
 
             return View(usuario);
         }
