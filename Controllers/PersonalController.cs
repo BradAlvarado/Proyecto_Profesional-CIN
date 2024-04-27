@@ -18,10 +18,6 @@ using Rotativa.AspNetCore;
 using Sistema_CIN.Models.ViewModels;
 using Microsoft.Data.SqlClient;
 
-
-
-
-
 namespace Sistema_CIN.Controllers
 {
 

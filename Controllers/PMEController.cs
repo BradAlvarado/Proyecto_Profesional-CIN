@@ -40,6 +40,7 @@ namespace Sistema_CIN.Controllers
             pme.FechaEgresoPme ??= null;
             pme.CondiciónMigratoriaPme ??= "No registrado";
             pme.NivelEducativoPme ??= "No registrado";
+            
         }
 
         public async Task<IActionResult> Index(string buscarPME, int? page, string sortOrder)
@@ -176,7 +177,8 @@ namespace Sistema_CIN.Controllers
 
                 // Función para asignar valores en los campos vacíos
                 AsignarCamposVacios(pme);
-
+          
+    
                 // Agregar el nuevo PME 
                 _context.Add(pme);
                 await _context.SaveChangesAsync();

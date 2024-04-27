@@ -307,30 +307,6 @@ END;
 --------------------------------------------------
 
 
----- Carlos
-
-
----- BRAD
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 3;
-
----- ISAAC
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 5;
-
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 6;
-
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 6;
-
-select * from Bitacora_ingreso_salida;
-SELECT * FROM Usuarios;
-
 ---- Nuevo usuario
 INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
 values('Vilma','vilma@gmail.com', 'v1234', 1,1,1);
@@ -367,9 +343,9 @@ INSERT INTO Modulos(nombre_modulo) values('Ayuda');                       -- 6
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');                   -- 7
 
 update Usuarios 
-set id_rol = 1 where id_usuario = 11;
+set id_rol = 1 where id_usuario = 18;
 
-DELETE from Usuarios;
+
 Select * from Usuarios; 
 Select * from Rol; 
 Select * from Modulos; 
@@ -389,6 +365,10 @@ Delete from Rol_operacion;
 
 Delete from Rol_operacion where id_rol =9;
 Delete from Rol where id_rol = 9;
+
+DELETE Operaciones where id_op = 24
+
+select * from Bitacora_ingreso_salida;
 
 UPDATE Usuarios 
 SET id_rol = 1

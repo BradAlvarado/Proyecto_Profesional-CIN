@@ -50,60 +50,7 @@ namespace Sistema_CIN.Controllers
         {
             return View();
         }
-        /*
-         * 
-         * I want to develop a dynamic role manager asp .net core 6 mvc, i need to you help me to 
-         * make a CRUD for that. This one is gonna be structured for these tables an their data examples:
-         * A. Role [idUer, userName, idRole]
-         * idUer    |   userName    |   idRole(fk)
-         * 1            Charlie     |   1 
-         * 2            Brad        |   2
-         * 
-         * B. Role [idRole, roleName]
-         * idRole   |   roleName
-         * 1            Manager
-         * 2            Teacher
-         * 
-         * C. Modules [idModule, moduleName] // Could be controllers o pages that rol would have access or not
-         * idModule   |   moduleName
-         * 1              studentsManager
-         * 2              employeesManager
-         * 
-         * D. Operations [idOperation, operationName, idModule(FK)] // Operations or actions that user will be able to do in any Module 
-         * idOperation   |  operationName    |   idModule
-         * 1                View                 1
-         * 2                View                 2
-         * 3                Create               2
-         * 
-         * E. RolOPeration [idRolOperation (fk), idRole (fk), idOperation (fk) //
-         * idRolOperation   |   idRole  |   idOperation
-         * 1                    1           1       
-         * 2                    1           2    
-         * 3                    1           3    
-         * 4                    2           1    
-         * 
-         * RolOperation is a table that will define who or who does not access to any module
-         * for example in this case the Rol manager can to access to every module, while Teacher manager don't.
-         * 
-         * Did you understand my tables structure?
-         * 
-         * Excellent, first, now i wanna you help me to develop a create controller and its cshtml.
-         * 
-         * i want the cshtml form to be like this;
-         * 
-         * 
-         * Permission operations
-         * 
-         * Students Module:
-         * [ ] View
-         * 
-         * Employees Module
-         * [ ] View
-         * [ ] Create
-         * 
-         * The user will be able to mark checkboxes to create an RolOperation
 
-         */
 
         //POST: RolesPermisos/Create
         [HttpPost]
@@ -115,49 +62,49 @@ namespace Sistema_CIN.Controllers
             if (existingRole != null)
             {
                 ModelState.AddModelError("", "Este rol ya existe!");
-                return View(rol);
-            }
-            try
-            {
-                _context.Rols.Add(rol);
-                await _context.SaveChangesAsync();
 
-                // Obtener el ID del rol recién insertado
-                int idRol = rol.IdRol;
-
-                // Iterar sobre los módulos y sus operaciones asociadas
-                foreach (var kvp in operacionesPorModulo)
+                var rolesPermisos = new RolesPermisos
                 {
-                    int idModulo = kvp.Key;
-                    var operaciones = kvp.Value;
+                    Rol = rol,
+                    // Otras asignaciones necesarias para el modelo RolesPermisos
+                };
 
-                    foreach (var operacion in operaciones)
+                return View(rolesPermisos);
+            }
+
+            // Insertar el nuevo rol en la tabla Rol
+            _context.Rols.Add(rol);
+            await _context.SaveChangesAsync();
+
+            // Obtener el ID del rol recién insertado
+            int idRol = rol.IdRol;
+
+            // Iterar sobre los módulos y sus operaciones asociadas
+            foreach (var kvp in operacionesPorModulo)
+            {
+                int idModulo = kvp.Key;
+                var operaciones = kvp.Value;
+
+                foreach (var operacion in operaciones)
+                {
+                    bool isChecked = operacion.Value;
+
+                    if (isChecked)
                     {
-                        bool isChecked = operacion.Value;
+                        string nombreOp = operacion.Key;
 
-                        if (isChecked)
-                        {
-                            string nombreOp = operacion.Key;
+                        var idOperacion = await _context.Operaciones
+                            .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
+                            .FirstOrDefaultAsync();
 
-                            var idOperacion = await _context.Operaciones
-                                .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
-                                .FirstOrDefaultAsync();
-
-                            _context.RolOperacions.Add(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
-                        }
+                        _context.RolOperacions.Add(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
                     }
                 }
-
-                await _context.SaveChangesAsync(); // Guardar los cambios una vez fuera del bucle
-                TempData["SuccessMessage"] = "Rol registrado exitosamente!";
-
-                return RedirectToAction("Index");
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Error: "+ex);
-                return View(rol);
-            }
+
+            await _context.SaveChangesAsync(); // Guardar los cambios una vez fuera del bucle
+            TempData["SuccessMessage"] = "Rol registrado exitosamente!";
+            return RedirectToAction("Index");
             // Insertar el nuevo rol en la tabla             
         }
 
@@ -188,7 +135,7 @@ namespace Sistema_CIN.Controllers
             var rol = await _context.Rols
                 .Include(r => r.RolOperacions)
                 .ThenInclude(ro => ro.IdOpNavigation) // Cargar las operaciones asociadas a través de RolOperacion
-                .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
+               .ThenInclude(op => op.IdModuloNavigation) // Cargar la navegación del módulo para cada operación
                 .FirstOrDefaultAsync(r => r.IdRol == id);
 
             if (rol == null)
@@ -197,7 +144,7 @@ namespace Sistema_CIN.Controllers
             }
 
             var modulos = await _context.Modulos.ToListAsync(); // Obtener todos los módulos
-            var operaciones = await _context.Operaciones.ToListAsync(); 
+            var operaciones = await _context.Operaciones.ToListAsync();
 
             var rolesPermisos = new RolesPermisos
             {
@@ -262,7 +209,7 @@ namespace Sistema_CIN.Controllers
 
                 // Guardar los cambios en la base de datos
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Rol actualizado exitosamente!";
+                TempData["SuccessMessage"] = "Rol " + rol.NombreRol +" actualizado exitosamente!";
                 return RedirectToAction("Index");
             }
             catch (Exception)

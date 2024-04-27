@@ -56,7 +56,7 @@ namespace Sistema_CIN.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AcercaDe()
         {
             return View();
         }

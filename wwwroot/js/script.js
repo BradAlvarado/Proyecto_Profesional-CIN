@@ -3,6 +3,7 @@ var currentPath = window.location.pathname;
         //Busca los elementos de enlace en tu menú de navegación
 var navLinks = document.querySelectorAll('.sidebar-link');
 
+
         //Itera sobre los enlaces y verifica si la URL coincide
 navLinks.forEach(function (link) {
     if (link.getAttribute('href') === currentPath) {

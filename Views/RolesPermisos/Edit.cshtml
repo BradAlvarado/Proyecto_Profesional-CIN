@@ -25,7 +25,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="Rol.NombreRol" class="form-control" placeholder="Nombre del Rol" />
                     <span asp-validation-for="Rol.NombreRol" class="text-danger"></span>
-                    <input name="operacionesPorModulo[6][Ver]" class="form-check-input" type="hidden" value="true" id="verCheckbox" checked>
+
                 </div>
             </div>
         </div>
@@ -41,31 +41,20 @@
                         <h4 class="fw-bold fs-6 my-3">@modulo.NombreModulo</h4>
 
                         <div class="ms-3">
-                            @foreach (var operacion in Model.Operaciones)
+                            @foreach (var operacion in Model.Operaciones.Where(op => op.IdModulo == modulo.IdModulo))
                             {
-                                if (operacion.IdModulo == modulo.IdModulo)
-                                {
-                                    var checkedState = Model.RolOperaciones.Any(ro => ro.IdOp == operacion.IdOp) ? "checked" : "";
+                                var checkedState = Model.RolOperaciones.Any(ro => ro.IdOp == operacion.IdOp) ? "checked" : "";
 
-                                    // Verifica si la operación ya se ha mostrado
-                                    var operacionYaMostrada = Model.RolOperaciones.Any(ro => ro.IdOp == operacion.IdOp);
-                                    if (!operacionYaMostrada)
-                                    {
-                                        <div class="form-check">
-                                            <input name="OperacionesPorModulo[@modulo.IdModulo][@operacion.NombreOp]" class="form-check-input" type="checkbox" value="true" id="chk_@modulo.IdModulo@operacion.NombreOp" @(checkedState)>
-                                            <label class="form-check-label" for="chk_@modulo.IdModulo@operacion.NombreOp">@operacion.NombreOp</label>
-                                        </div>
-                                    }
-                                }
+                                <div class="form-check">
+                                    <input name="OperacionesPorModulo[@modulo.IdModulo][@operacion.NombreOp]" class="form-check-input" type="checkbox" value="true" id="chk_@modulo.IdModulo@operacion.NombreOp" @(checkedState)>
+                                    <label class="form-check-label" for="chk_@modulo.IdModulo@operacion.NombreOp">@operacion.NombreOp</label>
+                                </div>
                             }
                         </div>
                     </div>
                 </div>
             }
-        }
-        else
-        {
-            <p>No se encontraron módulos.</p>
+
         }
     </div>
 
