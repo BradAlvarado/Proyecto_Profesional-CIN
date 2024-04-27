@@ -115,45 +115,51 @@ namespace Sistema_CIN.Controllers
             if (existingRole != null)
             {
                 ModelState.AddModelError("", "Este rol ya existe!");
-
                 return View(rol);
             }
-            // Insertar el nuevo rol en la tabla Rol
-            _context.Rols.Add(rol);
-            await _context.SaveChangesAsync();
-
-            // Obtener el ID del rol recién insertado
-            int idRol = rol.IdRol;
-
-            // Iterar sobre los módulos y sus operaciones asociadas
-            foreach (var kvp in operacionesPorModulo)
+            try
             {
-                int idModulo = kvp.Key;
-                var operaciones = kvp.Value;
+                _context.Rols.Add(rol);
+                await _context.SaveChangesAsync();
 
-                foreach (var operacion in operaciones)
+                // Obtener el ID del rol recién insertado
+                int idRol = rol.IdRol;
+
+                // Iterar sobre los módulos y sus operaciones asociadas
+                foreach (var kvp in operacionesPorModulo)
                 {
-                    bool isChecked = operacion.Value;
+                    int idModulo = kvp.Key;
+                    var operaciones = kvp.Value;
 
-                    if (isChecked)
+                    foreach (var operacion in operaciones)
                     {
-                        string nombreOp = operacion.Key;
+                        bool isChecked = operacion.Value;
 
-                        var idOperacion = await _context.Operaciones
-                            .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
-                            .FirstOrDefaultAsync();
+                        if (isChecked)
+                        {
+                            string nombreOp = operacion.Key;
 
-                        _context.RolOperacions.Add(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
+                            var idOperacion = await _context.Operaciones
+                                .Where(o => o.NombreOp == nombreOp && o.IdModulo == idModulo)
+                                .FirstOrDefaultAsync();
+
+                            _context.RolOperacions.Add(new RolOperacion { IdRol = idRol, IdOp = idOperacion.IdOp });
+                        }
                     }
                 }
+
+                await _context.SaveChangesAsync(); // Guardar los cambios una vez fuera del bucle
+                TempData["SuccessMessage"] = "Rol registrado exitosamente!";
+
+                return RedirectToAction("Index");
             }
-
-            await _context.SaveChangesAsync(); // Guardar los cambios una vez fuera del bucle
-            TempData["SuccessMessage"] = "Rol registrado exitosamente!";
-
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error: "+ex);
+                return View(rol);
+            }
+            // Insertar el nuevo rol en la tabla             
         }
-
 
 
         // GET RolesPermisos Details

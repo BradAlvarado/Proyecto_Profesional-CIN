@@ -61,49 +61,6 @@ namespace Sistema_CIN.Controllers
             return View();
         }
 
-        // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdUsuario,FotoU,NombreU,CorreoU,Clave,EstadoU,IdRol")] Usuario usuario)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
-
-                    if (existeCorreo != null)
-                    {
-                        ModelState.AddModelError("", "Este correo ya está en uso");
-
-                        return View(usuario);
-
-                    }
-
-                    _context.Add(usuario);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Usuario registrado con éxito";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", usuario.IdRol);
-                return View(usuario);
-            }
-            catch (Exception)
-            {
-
-                ModelState.AddModelError("", "Error al registrar el usuario");
-
-                return View(usuario);
-            }
-
-
-
-
-        }
-
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

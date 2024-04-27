@@ -96,7 +96,6 @@ namespace Sistema_CIN.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, usuario.NombreU));
-                identity.AddClaim(new Claim("FotoU", usuario.FotoU));
 
                 // Obtener el rol del usuario y agregarlo como reclamación
                 var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuario.IdRol);
@@ -106,7 +105,7 @@ namespace Sistema_CIN.Controllers
                 }
                 HttpContext.Session.SetString("IdUsuario", usuario.IdUsuario.ToString());
                 HttpContext.Session.SetString("CorreoU", usuario.CorreoU);
-                HttpContext.Session.SetString("IdRol", usuario.IdRol.ToString());
+                HttpContext.Session.SetString("Rol", usuario.IdRolNavigation.NombreRol.ToString());
                 HttpContext.Session.SetString("FotoU", usuario.FotoU);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
@@ -161,6 +160,7 @@ namespace Sistema_CIN.Controllers
             {
                 // Actualiza el campo EstadoU a true para el usuario que ha iniciado 
                 usuarioRegistrado.EstadoU = true;
+                usuarioRegistrado.FotoU = usuarioRegistrado.FotoU;
                 _context.Update(usuarioRegistrado);
                 await _context.SaveChangesAsync();
 
@@ -179,9 +179,14 @@ namespace Sistema_CIN.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
                 }
                 HttpContext.Session.SetString("CorreoU", usuarioRegistrado.CorreoU);
-                HttpContext.Session.SetString("IdRol", usuarioRegistrado.IdRol.ToString());
+                HttpContext.Session.SetString("Rol", usuarioRegistrado.IdRolNavigation.NombreRol.ToString());
                 HttpContext.Session.SetString("IdUsuario", usuarioRegistrado.IdUsuario.ToString());
-                HttpContext.Session.SetString("AccesoU", usuarioRegistrado.AccesoU.ToString());
+
+                if (!string.IsNullOrEmpty(usuarioRegistrado.FotoU))
+                {
+                    HttpContext.Session.SetString("FotoU", usuarioRegistrado.FotoU);
+                }
+
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
@@ -254,28 +259,34 @@ namespace Sistema_CIN.Controllers
 
             try
             {
-                // Verificar la contraseña actual
                 var user = await _context.Usuarios.FindAsync(id);
-                if (!string.IsNullOrEmpty(currentPassword) && user.Clave != PasswordHelper.EncryptPassword(currentPassword))
-                {
-                    ModelState.AddModelError("CurrentPassword", "La contraseña actual es incorrecta.");
-                    return View(usuario);
-                }
 
-                // Verificar que la nueva contraseña y la confirmación coincidan
-                if (!string.IsNullOrEmpty(newPassword) && newPassword != confirmNewPassword)
+                // Verificar la contraseña actual
+                if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(confirmNewPassword))
                 {
-                    ModelState.AddModelError("ConfirmNewPassword", "Las contraseñas no coinciden.");
-                    return View(usuario);
-                }
+                    
+                    if (!string.IsNullOrEmpty(currentPassword) && user.Clave != PasswordHelper.EncryptPassword(currentPassword))
+                    {
+                        ModelState.AddModelError("CurrentPassword", "La contraseña actual es incorrecta.");
+                        return View(usuario);
+                    }
 
-                // Actualizar la contraseña
-                if (!string.IsNullOrEmpty(newPassword))
-                {
-                    user.Clave = PasswordHelper.EncryptPassword(newPassword);
+                    // Verificar que la nueva contraseña y la confirmación coincidan
+                    if (!string.IsNullOrEmpty(newPassword) && newPassword != confirmNewPassword)
+                    {
+                        ModelState.AddModelError("ConfirmNewPassword", "Las contraseñas no coinciden.");
+                        return View(usuario);
+                    }
+
+                    // Actualizar la contraseña
+                    if (!string.IsNullOrEmpty(newPassword))
+                    {
+                        user.Clave = PasswordHelper.EncryptPassword(newPassword);
+                    }
                 }
                 // actualiza el nombre
                 user.NombreU = usuario.NombreU;
+                
 
                 // Subimos foto
 
@@ -297,10 +308,16 @@ namespace Sistema_CIN.Controllers
                         usuario.FotoU = uniqueFileName;
                     }
                 }
-                user.FotoU = usuario.FotoU;
+                // Si se ha seleccionado una nueva foto, actualizarla
                 if (!string.IsNullOrEmpty(usuario.FotoU))
                 {
                     HttpContext.Session.SetString("FotoU", usuario.FotoU);
+                    user.FotoU = usuario.FotoU;
+                }
+                else
+                {
+                    // Si no se ha seleccionado una nueva foto, mantener la foto actual
+                    usuario.FotoU = user.FotoU;
                 }
 
                 _context.Update(user);

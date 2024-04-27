@@ -38,31 +38,35 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdRol)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NombreRol)
-                    </td>
+                    @if (item.NombreRol != "Administrador" && item.NombreRol != "Invitado")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdRol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreRol)
+                        </td>
 
-                    <td class="text-center">
-                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdRol"><i class="fa-regular fa-eye"></i></a>
-                    </td>
+                        <td class="text-center">
+                            <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdRol"><i class="fa-regular fa-eye"></i></a>
+                        </td>
 
 
-                    <td class="text-center">
-                        <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
-                    </td>
+                        <td class="text-center">
+                            <a class="btn btn-outline-success btn-sm" asp-action="Edit" asp-route-id="@item.IdRol"><i class="fa-regular fa-pen-to-square"></i></a>
+                        </td>
 
-                    <td class="text-center">
+                        <td class="text-center">
 
-                        <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdRol','@item.NombreRol' ,'RolesPermisos')">
-                            <i class="fa-regular fa-trash-can">
-                            </i>
+                            <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete('@item.IdRol','@item.NombreRol' ,'RolesPermisos')">
+                                <i class="fa-regular fa-trash-can">
+                                </i>
 
-                        </a>
+                            </a>
 
-                    </td>
+                        </td>
+                    }
+
                 </tr>
             }
         </tbody>

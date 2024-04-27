@@ -1,60 +1,77 @@
 ﻿@model Sistema_CIN.Models.Usuario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de Usuario";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Usuario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FotoU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FotoU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CorreoU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CorreoU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Clave)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Clave)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdRolNavigation.NombreRol)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdRolNavigation.NombreRol)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstadoU)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstadoU)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdRolNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdRolNavigation.IdRol)
-        </dd>
-    </dl>
+<h3 class="fw-bold fs-4 mb-3">Mantenimiento > Detalles de Usuario</h3>
+<div class="mb-4">
+    <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdUsuario">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+<div class="card mb-4 ">
+
+
+    <h4 class="fw-bold fs-5 card-header">Nombre de Usuario:  @Html.DisplayFor(model => model.NombreU) </h4>
+
+    <div class="card-body">
+
+        <div class="row">
+
+
+
+            <div class="col-lg-12">
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Nombre de Usuario</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.NombreU)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Correo electrónico</div>
+
+                    <div class="col-6">
+                        @Html.DisplayFor(model => model.CorreoU)
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Estado</div>
+
+                    <div class="col-6">
+                        @if (Model.EstadoU == true)
+                        {
+                            <span class="text-success">Conectado</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Desconectado</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="mb-4 row">
+                    <div class="col-6 fw-bold">Permiso al sistema</div>
+
+                    <div class="col-6">
+                        @if (Model.AccesoU == true)
+                        {
+                            <span class="text-success">Permitido</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Denegado</span>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>

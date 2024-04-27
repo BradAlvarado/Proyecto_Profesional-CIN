@@ -34,7 +34,7 @@
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         var httpContext = ViewContext.HttpContext;
-                        var rol = httpContext.Session.GetString("IdRol");
+                        var rol = httpContext.Session.GetString("Rol");
 
                         <h1 class="text-white fs-6">Rol <span class="text-primary">@rol</span></h1>
                     }

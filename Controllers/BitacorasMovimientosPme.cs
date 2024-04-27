@@ -38,11 +38,8 @@ namespace Sistema_CIN.Controllers
                     return RedirectToAction("AccessDenied", "Cuenta");
                 }
 
-      
-                var pageNumber = page ?? 1; // Número de página actual
-                var pageSize = 15; // Número de elementos por página
 
-                var bitacoraMovimientos = from BitacoraMovimiento in _context.BitacoraMovimientos select BitacoraMovimiento;
+                var bitacoraMovimientos = _context.BitacoraMovimientos.AsQueryable();
 
 
                 if (bitacoraMovimientos != null)
@@ -53,19 +50,9 @@ namespace Sistema_CIN.Controllers
                 {
                     ModelState.AddModelError("", "No existen Movimientos registrados");
                 }
-                var pagedBitacora = await bitacoraMovimientos.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+               
 
-                // Calcular el número total de páginas
-                var totalItems = await bitacoraMovimientos.CountAsync();
-                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-                // Crear un objeto de modelo para la paginación
-                var pagedModel = new PagedList<BitacoraMovimiento>(pagedBitacora, pageNumber, pageSize, totalItems, totalPages);
-
-
-
-
-                return View(pagedModel);
+                return View(bitacoraMovimientos);
 
             }
             catch (Exception ex)

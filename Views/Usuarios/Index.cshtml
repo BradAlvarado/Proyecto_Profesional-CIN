@@ -7,9 +7,7 @@
 <h3 class="fw-bold fs-4">Administrar > Usuarios</h3>
 
 <div class="row my-4 align-items-center">
-    <div class="col">
-        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
-    </div>
+    
 
     <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
         <form asp-controller="Roles" asp-action="Index">
@@ -65,6 +63,8 @@
                             <span class="text-danger">Denegado</span>
                         }
                     </td>
+
+
 
                     <td class="text-center">
                         <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-eye"></i></a>

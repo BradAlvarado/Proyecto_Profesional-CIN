@@ -27,6 +27,7 @@
                 <div class="card-body text-center">
 
                     <div class="mb-4 row">
+                        <button type="button" class="btn btn-outline-danger btn-sm my-3" onclick="removePhoto()">Eliminar foto <i class="fa-solid fa-trash"></i></button>
                         <div class="col-lg-12 text-center">
 
                             @if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -34,17 +35,15 @@
                                 // Obtener el ID del usuario autenticado
 
                                 var httpContext = ViewContext.HttpContext;
-                             
+
                                 var fotoU = httpContext.Session.GetString("FotoU");
-                               
+
 
                                 <img src="~/images/imageUser/@fotoU" id="imagePreview" class="img-fluid img-thumbnail rounded-circle my-3" style="height: 300px;" />
                                 <input asp-for="FotoU" class="form-control" type="file" id="foto" onchange="loadFile(event)">
                                 <span asp-validation-for="FotoU" class="text-danger"></span>
                             }
                         </div>
-
-
                     </div>
 
                 </div>
@@ -88,7 +87,7 @@
                     </div>
 
 
-                    <h6>Cambiar contraseña</h6>
+                    <h6><b>Cambiar contraseña</b></h6>
 
                     <hr />
                     <!-------Contraseña Actual-------->
@@ -158,8 +157,16 @@
             var output = document.getElementById('imagePreview');
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
-            }
+                URL.revokeObjectURL(output.src); // Liberar memoria
+            };
         };
+
+        function removePhoto() {
+            // Restablecer la imagen de perfil a la predeterminada
+            document.getElementById("imagePreview").src = "/images/imageUser/default-user-photo.jpg"; // Cambia la ruta aquí
+
+            // Actualizar la propiedad usuario.FotoU con el valor "default-user-photo.jpg"
+            document.getElementById("FotoU").value = "default-user-photo.jpg";
+        }
     </script>
 }
