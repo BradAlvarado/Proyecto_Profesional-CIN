@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Personal>
+
+@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <title>Reporte Personal</title>
+
+</head>
+<body>
+    <div class="contenedor">
+        <nav class="mb-3">
+
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <img src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" />
+                    </td>
+
+                    <td class="titulo">
+                        <h4 >REPORTE DE PERSONAL</h4>
+                        <p>Centro Infantil el Naranjito</p>
+                    </td>
+                    <td class="fecha">
+                        <h4 class="">Fecha del Reporte</h4>
+                        <p>@DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    </td>
+                </tr>
+            </table>
+
+
+
+        </nav>
+
+        <table style="width: 100%;" class="border">
+            <thead>
+                <tr>
+                    <th>
+                        Cédula
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Apellidos
+                    </th>
+
+                    <th>
+                        Edad
+                    </th>
+                    <th>
+                        Teléfono
+                    </th>
+                    <th>
+                        Correo
+                    </th>
+                    <th>
+                        Puesto
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.CedulaP)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.NombreP)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.ApellidosP)
+                        </td>
+
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.EdadP)
+                        </td>
+
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.TelefonoP)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.CorreoP)
+                        </td>
+                        <td class="td">
+                            @Html.DisplayFor(modelItem => item.IdRolNavigation.NombreRol)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>
+

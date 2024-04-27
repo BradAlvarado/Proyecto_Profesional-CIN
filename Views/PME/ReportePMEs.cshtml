@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Sistema_CIN.Models.Pme>
+
+@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/reportes.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <title>Reporte PMEs</title>
+
+</head>
+<body>
+    <div class="contenedor">
+        <nav class="mb-3">
+
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <img src="~/images/Screenshot 2024-03-16 160647.png" style="width: 150px;" />
+                    </td>
+
+                    <td class="titulo">
+                        <h4 class="">REPORTE DE ENCARGADOS</h4>
+                        <p>Centro Infantil el Naranjito</p>
+                    </td>
+                    <td class="fecha">
+                        <h4 class="">Fecha del Reporte</h4>
+                        <p>@DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    </td>
+                </tr>
+            </table>
+        </nav>
+
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>
+                        Cédula
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Apellidos
+                    </th>
+
+                    <th>
+                        Fecha Nacimiento
+                    </th>
+                    <th>
+                        Edad
+                    </th>
+                    <th>
+                        Nacionalidad
+                    </th>
+                    <th>
+                        Fecha Ingreso
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="rtable">
+                            @Html.DisplayFor(modelItem => item.CedulaPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombrePme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApellidosPme)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaNacimientoPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EdadPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NacionalidadPme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaIngresoPme)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>

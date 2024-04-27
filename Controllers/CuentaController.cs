@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
 using System.Security.Cryptography;
+using System.Numerics;
 
 
 namespace Sistema_CIN.Controllers
@@ -18,10 +19,12 @@ namespace Sistema_CIN.Controllers
     public class CuentaController : Controller
     {
         private readonly SistemaCIN_dbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CuentaController(SistemaCIN_dbContext context)
+        public CuentaController(SistemaCIN_dbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public static string EncryptPassword(string password)
@@ -43,6 +46,8 @@ namespace Sistema_CIN.Controllers
                 return stringBuilder.ToString();
             }
         }
+
+
         // GET /Register
         [AllowAnonymous]
         public IActionResult Register()
@@ -55,37 +60,37 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(Usuario usuario)
         {
-            try
+
+            var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
+
+            if (existeCorreo != null)
             {
-                if (usuario != null)
+                ModelState.AddModelError("", "Este correo ya está en uso.");
+            }
+            else
+            {
+                try
                 {
-                    var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU);
-
-                    if (existeCorreo != null)
+                    var userRol = await _context.Rols.FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
+                    if (userRol != null)
                     {
-                        ModelState.AddModelError("", "Este correo ya está en uso");
-
-                        return View(usuario);
-
+                        usuario.IdRol = userRol.IdRol;
                     }
 
                     if (usuario.Clave != usuario.ConfirmarClave)
                     {
-
+                        ModelState.AddModelError("", "Contraseñas no coinciden");
                         return View(usuario);
                     }
 
+                    // Asigno variables
                     usuario.Clave = PasswordHelper.EncryptPassword(usuario.Clave);
-                    usuario.FotoU = "~/images/Default_Profile_photo.jpg";
-                    var userRol = await _context.Rols
-                        .FirstOrDefaultAsync(r => r.NombreRol == "Invitado");
+                    usuario.EstadoU = true;
+                    usuario.AccesoU = true;
+                    usuario.FotoU = "default-user-photo.jpg";
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
 
-                    if (userRol != null)
-                    {
-                        usuario.IdRol = userRol.IdRol;
-                        usuario.EstadoU = true;
-                        usuario.AccesoU = true;
-                    }
                     var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                     identity.AddClaim(new Claim(ClaimTypes.Email, usuario.CorreoU));
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()));
@@ -97,29 +102,25 @@ namespace Sistema_CIN.Controllers
                     {
                         identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
                     }
-                    _context.Add(usuario);
-                    await _context.SaveChangesAsync();
-                    // Inicia Sesión
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    HttpContext.Session.SetString("IdUsuario", usuario.IdUsuario.ToString());
+                    HttpContext.Session.SetString("CorreoU", usuario.CorreoU);
+                    HttpContext.Session.SetString("Rol", usuario.IdRolNavigation.NombreRol.ToString());
+                    HttpContext.Session.SetString("FotoU", usuario.FotoU);
 
-
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                     return RedirectToAction("Index", "Home");
                 }
-                else
+                catch (DbException ex)
                 {
-                    ModelState.AddModelError("", "Ingrese los datos");
-                    return View(usuario);
+                    ModelState.AddModelError("", "Error al registrarse: " + ex.Message);
                 }
+            }
 
 
-            }
-            catch (DbException ex)
-            {
-                ModelState.AddModelError("", "Error al registrarse " + ex);
-                return View(usuario);
-            }
+
+            return View(usuario);
         }
+
 
 
         // GET /Login
@@ -133,57 +134,67 @@ namespace Sistema_CIN.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string correo, string clave)
         {
+            var usuarioRegistrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == correo);
+
+
+            if (correo == null || clave == null)
+            {
+                ModelState.AddModelError("", "Correo o contraseña sin ingresar");
+                return View();
+            }
+            if (usuarioRegistrado == null)
+            {
+                ModelState.AddModelError("", "Correo o contraseña inválidos");
+                return View();
+            }
+
+            if (usuarioRegistrado.AccesoU != true)
+            {
+                ModelState.AddModelError("", "No tienes acceso al Sistema");
+                return View();
+            }
+
+            if (usuarioRegistrado.Clave != PasswordHelper.EncryptPassword(clave))
+            {
+                ModelState.AddModelError("", "Contraseña incorrecta");
+                return View();
+            }
+
             try
             {
-                var usuarioRegistrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == correo);
+                // Actualiza el campo EstadoU a true para el usuario que ha iniciado 
+                usuarioRegistrado.EstadoU = true;
+                usuarioRegistrado.FotoU = usuarioRegistrado.FotoU;
+                _context.Update(usuarioRegistrado);
+                await _context.SaveChangesAsync();
 
-                if (correo == null || clave == null)
+                // Creación de las reclamaciones del usuario para la autenticación
+
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.Email, usuarioRegistrado.CorreoU));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuarioRegistrado.IdUsuario.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, usuarioRegistrado.NombreU));
+
+                // Obtener el rol del usuario y agregarlo como reclamación
+                var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuarioRegistrado.IdRol);
+
+                if (rolUser != null)
                 {
-                    ModelState.AddModelError("", "Correo o contraseña sin ingresar");
-                    return View();
+                    identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
+                }
+                HttpContext.Session.SetString("CorreoU", usuarioRegistrado.CorreoU);
+                HttpContext.Session.SetString("Rol", usuarioRegistrado.IdRolNavigation.NombreRol.ToString());
+                HttpContext.Session.SetString("IdUsuario", usuarioRegistrado.IdUsuario.ToString());
+
+                if (!string.IsNullOrEmpty(usuarioRegistrado.FotoU))
+                {
+                    HttpContext.Session.SetString("FotoU", usuarioRegistrado.FotoU);
                 }
 
-                if (usuarioRegistrado != null)
-                {
-                    // Encriptar la contraseña ingresada por el usuario para compararla con la contraseña encriptada almacenada
-                    string claveEncriptada = PasswordHelper.EncryptPassword(clave);
 
-                    if (claveEncriptada == usuarioRegistrado.Clave)
-                    {
-                        if (usuarioRegistrado.AccesoU == true)
-                        {
-                            // Actualiza el campo EstadoU a true para el usuario que ha iniciado sesión
-                            usuarioRegistrado.EstadoU = true;
-                            _context.Update(usuarioRegistrado);
-                            await _context.SaveChangesAsync();
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                            // Creación de las reclamaciones del usuario para la autenticación
-                            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                            identity.AddClaim(new Claim(ClaimTypes.Email, usuarioRegistrado.CorreoU));
-                            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuarioRegistrado.IdUsuario.ToString()));
-                            identity.AddClaim(new Claim(ClaimTypes.Name, usuarioRegistrado.NombreU));
-
-                            // Obtener el rol del usuario y agregarlo como reclamación
-                            var rolUser = await _context.Rols.FirstOrDefaultAsync(r => r.IdRol == usuarioRegistrado.IdRol);
-                            if (rolUser != null)
-                            {
-                                identity.AddClaim(new Claim(ClaimTypes.Role, rolUser.NombreRol));
-                            }
-
-                            // Iniciar sesión
-                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "No tienes acceso al Sistema. Consulta con el administrador");
-                            return View();
-                        }
-                    }
-                }
-
-                ModelState.AddModelError("", "Correo o contraseña inválidas");
-                return View();
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
@@ -216,6 +227,9 @@ namespace Sistema_CIN.Controllers
 
         }
 
+
+
+
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> EditProfile(int? id)
         {
@@ -224,11 +238,15 @@ namespace Sistema_CIN.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios
+               .Include(u => u.IdRolNavigation)
+               .FirstOrDefaultAsync(m => m.IdUsuario == id);
+
             if (usuario == null)
             {
                 return NotFound();
             }
+
 
             ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "NombreRol");
             return View(usuario);
@@ -236,68 +254,100 @@ namespace Sistema_CIN.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(Usuario usuario, IFormFile photoFile)
+        public async Task<IActionResult> EditProfile(int id, Usuario usuario, IFormFile imageFile, string currentPassword, string newPassword, string confirmNewPassword)
         {
+            if (id != usuario.IdUsuario)
+            {
+                return NotFound();
+            }
+
             try
             {
-                if (usuario != null)
-                {
-                    var existeCorreo = await _context.Usuarios.FirstOrDefaultAsync(r => r.CorreoU == usuario.CorreoU && r.IdUsuario != usuario.IdUsuario);
+                var user = await _context.Usuarios.FindAsync(id);
 
-                    if (existeCorreo != null)
+                // Verificar la contraseña actual
+                if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(confirmNewPassword))
+                {
+
+                    if (!string.IsNullOrEmpty(currentPassword) && user.Clave != PasswordHelper.EncryptPassword(currentPassword))
                     {
-                        ModelState.AddModelError("", "Este correo ya está en uso");
+                        ModelState.AddModelError("CurrentPassword", "La contraseña actual es incorrecta.");
                         return View(usuario);
                     }
 
-                    if (!string.IsNullOrEmpty(usuario.Clave))
+                    // Verificar que la nueva contraseña y la confirmación coincidan
+                    if (!string.IsNullOrEmpty(newPassword) && newPassword != confirmNewPassword)
                     {
-                        if (usuario.Clave != usuario.ConfirmarClave)
-                        {
-                            ModelState.AddModelError("", "Las contraseñas no coinciden");
-                            return View(usuario);
-                        }
+                        ModelState.AddModelError("ConfirmNewPassword", "Las contraseñas no coinciden.");
+                        return View(usuario);
                     }
 
-                    // Manejar la carga de la imagen de perfil
-                    if (photoFile != null && photoFile.Length > 0)
+                    // Actualizar la contraseña
+                    if (!string.IsNullOrEmpty(newPassword))
                     {
-                        // Guardar la imagen en tu sistema de archivos
-                        var imagePath = "path/to/save/images"; // Reemplaza con la ruta donde deseas guardar las imágenes
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photoFile.FileName);
-                        var filePath = Path.Combine(imagePath, fileName);
+                        user.Clave = PasswordHelper.EncryptPassword(newPassword);
+                    }
+                }
+                // actualiza el nombre
+                user.NombreU = usuario.NombreU;
+
+
+                // Subimos foto
+
+                var files = HttpContext.Request.Form.Files;
+
+                foreach (var formFile in files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        // Generar un nombre único para el archivo
+                        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+
+                        var filePath = Path.Combine("wwwroot/images/imageUser", uniqueFileName);
+
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                            await photoFile.CopyToAsync(stream);
+                            await formFile.CopyToAsync(stream);
                         }
-                        // Actualizar el camino de la foto en el modelo de usuario
-                        usuario.FotoU = filePath;
+                        usuario.FotoU = uniqueFileName;
                     }
-
-                    // Actualizar el usuario en la base de datos
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "Perfil actualizado exitosamente!";
-                    return RedirectToAction(nameof(Index), "Home");
+                }
+                // Si se ha seleccionado una nueva foto, actualizarla
+                if (!string.IsNullOrEmpty(usuario.FotoU))
+                {
+                    HttpContext.Session.SetString("FotoU", usuario.FotoU);
+                    user.FotoU = usuario.FotoU;
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Ingrese los datos");
+                    // Si no se ha seleccionado una nueva foto, mantener la foto actual
+                    usuario.FotoU = user.FotoU;
+                }
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Perfil actualizado exitosamente!";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(usuario.IdUsuario))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error al actualizar tu perfil");
                     return View(usuario);
                 }
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Error al actualizar el perfil " + ex.Message);
-                return View(usuario);
-            }
+
         }
 
 
         private bool UsuarioExists(int id)
         {
-            return (_context.Usuarios?.Any(e => e.IdUsuario == id)).GetValueOrDefault();
+            return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
 
 

@@ -13,21 +13,21 @@ namespace Sistema_CIN.Models
 
         public int IdEncargado { get; set; }
 
-        [Required(ErrorMessage = "El campo Cédula es obligatorio.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string CedulaE { get; set; } = null!;
-        [Required(ErrorMessage = "El campo Nombre es obligatorio.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string NombreE { get; set; } = null!;
-        [Required(ErrorMessage = "El campo Apellidos es obligatorio.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string ApellidosE { get; set; } = null!;
-        [Required(ErrorMessage = "El campo Fecha de nacimiento es obligatorio para completar la Edad.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public DateTime FechaNaceE { get; set; }
-        [Required(ErrorMessage = "El campo Edad es obligatorio.")]
+        
         public int Edad { get; set; }
-
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string? CorreoE { get; set; }
-        [Required(ErrorMessage = "El campo Dirección es obligatorio.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string DireccionE { get; set; } = null!;
-        [Required(ErrorMessage = "El campo Teléfono es obligatorio.")]
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string TelefonoE { get; set; } = null!;
         public string? LugarTrabajoE { get; set; }
         public int? IdPme { get; set; }

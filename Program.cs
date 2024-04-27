@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Configuration;
+using System;
 using Sistema_CIN.Services;
 
 
@@ -9,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Variable del String de la conexion de la BD
 var connectionString = builder.Configuration.GetConnectionString("connection_db");
+
+
+
 builder.Services.AddDbContext<SistemaCIN_dbContext>(options =>
 {
     options.UseSqlServer(connectionString);
@@ -34,13 +37,14 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<FiltrosPermisos>();
 
 
-builder.Services
-   
+
+builder.Services 
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+      
         options.LoginPath = "/Cuenta/Login";
         options.AccessDeniedPath = "/Cuenta/AccessDenied";
         options.LogoutPath = "/Home/Logout";
@@ -63,12 +67,23 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Cuenta}/{action=Login}/{id?}");
 
 app.MapRazorPages();
+
+app.UseStaticFiles(); // Esto ya está agregado, para servir archivos estáticos
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+        System.IO.Path.Combine(app.Environment.ContentRootPath, "wwwroot/images/imageUser")),
+    RequestPath = "/fotos" // Ruta para acceder a los archivos cargados
+});
+
+IWebHostEnvironment env = app.Environment;
+Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, "../Rotativa/Windows");
 
 app.Run();

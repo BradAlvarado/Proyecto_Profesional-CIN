@@ -1,5 +1,6 @@
-﻿@using System.Security.Claims
-
+﻿@using Microsoft.AspNetCore.Http
+@using Sistema_CIN.Models
+@using Sistema_CIN.Data
 
 <!DOCTYPE html>
 <html lang="es">
@@ -32,9 +33,10 @@
                 <div class="sidebar-logo">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        string userRole = User.FindFirst(ClaimTypes.Role)?.Value ?? "desconocido";
+                        var httpContext = ViewContext.HttpContext;
+                        var rol = httpContext.Session.GetString("Rol");
 
-                        <h1 class="text-white fs-6">Rol <span class="text-primary">@userRole</span></h1>
+                        <h1 class="text-white fs-6">Rol <span class="text-primary">@rol</span></h1>
                     }
                 </div>
             </div><!----------LOGO NAV--------->
@@ -85,10 +87,10 @@
                         <li class="sidebar-item">
                             <a asp-controller="RolesPermisos" asp-action="Index" class="sidebar-link">Roles y Permisos</a>
                         </li>
-                        
+
                     </ul>
                 </li>
-               
+
 
                 <!----------MODULO BITACORAS NAV--------->
                 <li class="sidebar-item">
@@ -102,7 +104,7 @@
                             <a asp-controller="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">PME</a>
+                            <a asp-controller="BitacorasMovimientosPme" asp-action="Index" class="sidebar-link">Movimientos PMEs</a>
                         </li>
 
                     </ul>
@@ -123,7 +125,7 @@
                 </li>
                 <!----------MODULO ACERCA DE NAV--------->
                 <li class="sidebar-item">
-                    <a asp-controller="Home" asp-action="Privacy" class="sidebar-link">
+                    <a asp-controller="Home" asp-action="AcercaDe" class="sidebar-link">
                         <i class="lni lni-information"></i>
                         <span>Acerca de</span>
                     </a>
@@ -143,6 +145,7 @@
         </aside>
         <!----------END SIDEBAR NAV--------->
 
+
         <div class="main">
 
             <!----------NAV HEADER--------->
@@ -151,24 +154,34 @@
                     <a asp-controller="Home" asp-action="Index"><img class="logo" src="~/images/Screenshot 2024-03-16 160647.png" /></a>
                 </div>
                 <div class="col text-end">
-                    @if (User.Identity != null && User.Identity.IsAuthenticated)
-                    {
-                        string email = User.FindFirst(ClaimTypes.Email)?.Value ?? "desconocido";
-                        string idUser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0";
+                    @{
 
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="~/images/Default_Profile_photo.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
-                                <span>@email </span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-                                <li><a class="dropdown-item" asp-route-id="@idUser" asp-controller="Cuenta" asp-action="EditProfile">Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a href="#" class="dropdown-item text-danger">Salir</a>
-                                </li>
-                            </ul>
-                        </div>
+                        if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            // Obtener el ID del usuario autenticado
+
+                            var httpContext = ViewContext.HttpContext;
+                            var correoU = httpContext.Session.GetString("CorreoU");
+                            var fotoU = httpContext.Session.GetString("FotoU");
+                            var usuarioId = httpContext.Session.GetString("IdUsuario");
+                            var acceso = httpContext.Session.GetString("AccesoU");
+
+
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/images/imageUser/@fotoU" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <span>@correoU</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                                    <li><a class="dropdown-item" asp-route-id="@usuarioId" asp-controller="Cuenta" asp-action="EditProfile">Perfil</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a asp-controller="Cuenta" asp-action="Logout" class="dropdown-item text-danger">Salir</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        }
                     }
                 </div>
             </nav>
@@ -202,7 +215,30 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
+    <script>
+        $(document).ready(function () {
+            // Hacer una solicitud AJAX para obtener los datos del usuario
+            $.ajax({
+                url: '@Url.Action("EditProfile", "Cuenta")',
+                type: 'GET',
+                success: function (data) {
+                    // Actualizar la información del usuario en el dropdown
+                    $('#dropdownMenu').html(`<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/images/imageUser/${data.fotoU}" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <span>${data.correoU}</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Salir</a></li>
+                                </ul>`);
+                },
+                error: function () {
+                    console.error('Error al obtener los datos del usuario');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 

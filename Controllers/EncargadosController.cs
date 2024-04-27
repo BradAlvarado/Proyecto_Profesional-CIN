@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
+
 
 namespace Sistema_CIN.Controllers
 {
@@ -40,7 +37,7 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Encargados
-        public async Task<IActionResult> Index(string buscarEncargado, int? page)
+        public async Task<IActionResult> Index(string buscarEncargado, int? page, string sortOrder)
         {
             if (!await VerificarPermiso(11))
             {
@@ -49,29 +46,46 @@ namespace Sistema_CIN.Controllers
             var pageNumber = page ?? 1; // Número de página actual
             var pageSize = 10; // Número de elementos por página
 
-            var encargados = from encargado in _context.Encargados select encargado;
-            encargados = _context.Encargados.Include(p => p.IdPmeNavigation);
+            var encargado = from Encargados in _context.Encargados select Encargados;
+            encargado = _context.Encargados.Include(p => p.IdPmeNavigation);
 
-            if (encargados.Count() < 1)
+
+            if (encargado.Count() < 1)
             {
                 ModelState.AddModelError("", "No existen Encargados registrados");
             }
 
             if (!String.IsNullOrEmpty(buscarEncargado))
             {
-                encargados = encargados.Where(s => s.NombreE!.Contains(buscarEncargado));
+                encargado = encargado.Where(s => s.NombreE!.Contains(buscarEncargado));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    encargado = encargado.OrderBy(p => p.NombreE);
+                    break;
+                case "name_des":
+                    encargado = encargado.OrderByDescending(p => p.NombreE);
+                    break;
+                case "edad_asc":
+                    encargado = encargado.OrderBy(p => p.Edad);
+                    break;
+                case "edad_des":
+                    encargado = encargado.OrderByDescending(p => p.Edad);
+                    break;
             }
 
             // Paginar los resultados
-            var pagedEnc = await encargados.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var pagedEncargado = await encargado.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             // Calcular el número total de páginas
-            var totalItems = await encargados.CountAsync();
+            var totalItems = await encargado.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
             // Crear un objeto de modelo para la paginación
-            var pagedModel = new PagedList<Encargados>(pagedEnc, pageNumber, pageSize, totalItems, totalPages);
-
+            var pagedModel = new PagedList<Encargados>(pagedEncargado, pageNumber, pageSize, totalItems, totalPages);
+            ViewData["SortOrder"] = sortOrder;
             return View(pagedModel);
         }
 
@@ -201,6 +215,46 @@ namespace Sistema_CIN.Controllers
             return View(encargados);
         }
 
+
+        // GET ReporteEncargados/4
+        public async Task<ActionResult> EncargadosPDF(string sortOrder)
+        {
+            if (!await VerificarPermiso(14))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            var encargados = _context.Encargados.AsQueryable();
+
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "name_asc")
+                {
+                    encargados = encargados.OrderBy(p => p.NombreE);
+                }
+                if (sortOrder == "name_des")
+                {
+                    encargados = encargados.OrderByDescending(p => p.NombreE);
+                }
+                if (sortOrder == "edad_asc")
+                {
+                    encargados = encargados.OrderBy(p => p.Edad);
+                }
+                if (sortOrder == "edad_des")
+                {
+                    encargados = encargados.OrderByDescending(p => p.Edad);
+                }
+            }
+            // Capturar la fecha y hora actual
+            DateTime fechaActual = DateTime.Today;
+
+            return new ViewAsPdf("EncargadosPDF", encargados.ToList())
+            {
+                FileName = $"Reporte_Encargados_{fechaActual}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
+            //return View(personal);
+        }
 
         // POST: Encargados/Delete/5
         [HttpPost]

@@ -33,7 +33,6 @@ namespace Sistema_CIN.Controllers
 
         public IActionResult Index()
         {
-          
             string userRol = User.FindFirst(ClaimTypes.Role)?.Value ?? "desconocido";
 
             int personalCount = _context.Personals.Count();
@@ -57,7 +56,7 @@ namespace Sistema_CIN.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AcercaDe()
         {
             return View();
         }

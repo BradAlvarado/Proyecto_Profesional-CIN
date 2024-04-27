@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Sistema_CIN.Models.BitacoraMovimiento>
+
+@{
+    ViewData["Title"] = "Bitacora Movimientos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Bitácoras > Movimientos > PMEs</h3>
+
+<hr class="mb-4" />
+
+<div class="mb-5">
+    <a class="btn btn-secondary btn-sm me-3" asp-controller="Home" asp-action="Index">Volver</a>
+
+    <button class="btn btn-primary btn-sm text-white" onclick="recargarPagina()">Actualizar  <i class="fa-solid fa-rotate"></i></button>
+</div>
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Usuario
+            </th>
+            <th>
+                Fecha movimiento
+            </th>
+            <th>
+                Tipo Movimiento
+            </th>
+            <th>
+                Detalle
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdBitacora)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaMovimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoMovimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Detalle)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+
+    }
+    <script>
+        function recargarPagina() {
+            location.reload();
+        }
+    </script>
+
+
+}
+

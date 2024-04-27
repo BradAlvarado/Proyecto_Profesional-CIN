@@ -8,10 +8,10 @@
 
 <div class="row my-4 align-items-center">
     <div class="col">
-        <a class="btn btn-primary btn-sm text-white" asp-action="Create">Añadir <i class="fa-solid fa-plus"></i></a>
+        <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
     </div>
 
-    <div class="container-fluid col-auto bg-light p-2 shadow-sm rounded">
+    <div class="container-fluid col-auto bg-light p-1 shadow-sm rounded">
         <form asp-controller="Roles" asp-action="Index">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" name="buscarRol" placeholder="Buscar aquí..." class="fluid border-0 bg-light col">
@@ -43,7 +43,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FotoU)
+                        <img src="~/images/imageUser/@Html.DisplayFor(modelItem => item.FotoU)" alt="" width="45" height="45" class="rounded-circle me-2">
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NombreU)
@@ -66,6 +66,8 @@
                         }
                     </td>
 
+
+
                     <td class="text-center">
                         <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-eye"></i></a>
                     </td>
@@ -81,9 +83,7 @@
         </tbody>
     </table>
 </div>
-<div class="my-3">
-    <a class="btn btn-secondary btn-sm" asp-controller="Home" asp-action="Index">Volver</a>
-</div>
+
 @section Scripts {
 
     @if (TempData["SuccessMessage"] != null)

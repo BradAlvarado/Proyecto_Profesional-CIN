@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_CIN.Models
 {
@@ -13,6 +14,8 @@ namespace Sistema_CIN.Models
         }
 
         public int IdRol { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string NombreRol { get; set; } = null!;
 
         public virtual ICollection<Personal> Personals { get; set; }

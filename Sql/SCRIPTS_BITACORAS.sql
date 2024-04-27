@@ -1,44 +1,72 @@
-
-----------------------bitacoras------------------------------
-
-CREATE TRIGGER TR_AuditarCambiosPME
-ON PME
-AFTER INSERT, UPDATE, DELETE
+Alter TRIGGER TR_DeleteOldestRecords
+ON Bitacora_movimientos
+AFTER INSERT
 AS
 BEGIN
-    DECLARE @Usuario VARCHAR(50)
-    DECLARE @Movimiento VARCHAR(10)
-    DECLARE @PMEAfectado VARCHAR(100)
-    DECLARE @FechaActual DATETIME
-	DECLARE @Detalle VARCHAR(100)
+    SET NOCOUNT ON;
 
-    SET @Usuario = SYSTEM_USER
-    SET @FechaActual = GETDATE()
+    DECLARE @MaxRecords INT = 10; -- Número máximo de registros permitidos
 
-    IF EXISTS (SELECT * FROM inserted)
+    -- Obtener el número de registros actuales
+    DECLARE @RecordCount INT;
+    SELECT @RecordCount = COUNT(*) FROM Bitacora_movimientos;
+
+    -- Si el número de registros supera el límite máximo
+    IF @RecordCount > @MaxRecords
     BEGIN
-        IF EXISTS (SELECT * FROM deleted)
-		BEGIN
-            SET @Movimiento = 'UPDATE'; -- Actualización
-			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
-		END
-        ELSE
-		BEGIN
-            SET @Movimiento = 'INSERT'; -- Inserción
-			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
-		END
-	END
-    ELSE IF EXISTS(SELECT * FROM deleted)
-		BEGIN
-        SET @Movimiento = 'DELETE'; -- Eliminación
-		SET @PMEAfectado = (SELECT nombre_pme FROM deleted)
-	END
-	
-	SET @Detalle = (@Usuario + ' ' + @Movimiento + ' ' + @PMEAfectado);
+        -- Calcular el número de registros a eliminar
+        DECLARE @RecordsToDelete INT = @RecordCount - @MaxRecords;
 
-    INSERT INTO Bitacora_movimientos(usuario_b, fecha_movimiento, tipo_movimiento, detalle)
-    VALUES (@Usuario, @FechaActual, @Movimiento, @Detalle)
-END
+        -- Eliminar los registros más antiguos
+        DELETE FROM Bitacora_movimientos
+        WHERE id_bitacora IN (
+            SELECT TOP (@RecordsToDelete) id_bitacora
+            FROM Bitacora_movimientos
+            ORDER BY fecha_movimiento ASC -- Ordenar por la fecha más antigua
+        );
+    END
+END;
+
+----------------------bitacoras------------------------------
+-- Lo hicimos en PMEController
+--CREATE TRIGGER TR_AuditarCambiosPME
+--ON PME
+--AFTER INSERT, UPDATE, DELETE
+--AS
+--BEGIN
+--    DECLARE @Usuario VARCHAR(50)
+--    DECLARE @Movimiento VARCHAR(10)
+--    DECLARE @PMEAfectado VARCHAR(100)
+--    DECLARE @FechaActual DATETIME
+--	DECLARE @Detalle VARCHAR(100)
+
+--    SET @Usuario = SYSTEM_USER -- QUiero el usuario en sesión que realizó el cambio
+--    SET @FechaActual = GETDATE()
+
+--    IF EXISTS (SELECT * FROM inserted)
+--    BEGIN
+--        IF EXISTS (SELECT * FROM deleted)
+--		BEGIN
+--            SET @Movimiento = 'UPDATE'; -- Actualización
+--			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
+--		END
+--        ELSE
+--		BEGIN
+--            SET @Movimiento = 'INSERT'; -- Inserción
+--			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
+--		END
+--	END
+--    ELSE IF EXISTS(SELECT * FROM deleted)
+--		BEGIN
+--        SET @Movimiento = 'DELETE'; -- Eliminación
+--		SET @PMEAfectado = (SELECT nombre_pme FROM deleted)
+--	END
+	
+--	SET @Detalle = (@Usuario + ' ' + @Movimiento + ' ' + @PMEAfectado);
+
+--    INSERT INTO Bitacora_movimientos(usuario_b, fecha_movimiento, tipo_movimiento, detalle)
+--    VALUES (@Usuario, @FechaActual, @Movimiento, @Detalle)
+--END
 
 ---------------------------------------------------
 ---------------------------------------------------
@@ -48,18 +76,11 @@ END
 
 
 SELECT * FROM BITACORA_MOVIMIENTOS;
-
+DELETE FROM BITACORA_MOVIMIENTOS;
 
 SELECT * FROM PME;
+DELETE FROM PME;
 
-INSERT INTO PME (cedula_pme,nombre_pme, apellidos_pme, fecha_nacimiento_pme,edad_pme, provincia_pme, genero_pme, nacionalidad_pme, fecha_ingreso_pme)
-values('231253442','Simon', 'Mejia', '2010-03-25 15:28:28.790', 5, 'Heredia', 'M','Paisa', '2021-03-25 15:28:28.790');
-
-UPDATE PME 
-SET provincia_pme = 'Limon'
-WHERE cedula_pme = '231253442';
-
-DELETE FROM PME WHERE cedula_pme = '231253442';
 
 ---------------------------------------------------
 ---------------------------------------------------

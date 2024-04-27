@@ -307,30 +307,6 @@ END;
 --------------------------------------------------
 
 
----- Carlos
-
-
----- BRAD
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 3;
-
----- ISAAC
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 5;
-
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 6;
-
-UPDATE Usuarios 
-SET estado_u = 1
-WHERE id_usuario = 6;
-
-select * from Bitacora_ingreso_salida;
-SELECT * FROM Usuarios;
-
 ---- Nuevo usuario
 INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
 values('Vilma','vilma@gmail.com', 'v1234', 1,1,1);
@@ -353,7 +329,7 @@ delete from Bitacora_ingreso_salida;
 
 
 INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
-values('Vilma Badilla','admin@sistema.cin', 'Admin123#!', 0,1,1);
+values('Brad','bradsistema.cin', 'Admin123#!', 0,1,1);
 
 INSERT INTO Rol (nombre_rol) values('Invitado')
 
@@ -365,6 +341,10 @@ INSERT INTO Modulos(nombre_modulo) values('Bitacoras Ingresos Salidas');  -- 4
 INSERT INTO Modulos(nombre_modulo) values('Bitacoras Pme');               -- 5
 INSERT INTO Modulos(nombre_modulo) values('Ayuda');                       -- 6
 INSERT INTO Modulos(nombre_modulo) values('Acerca de');                   -- 7
+
+update Usuarios 
+set id_rol = 1 where id_usuario = 18;
+
 
 Select * from Usuarios; 
 Select * from Rol; 
@@ -385,6 +365,14 @@ Delete from Rol_operacion;
 
 Delete from Rol_operacion where id_rol =9;
 Delete from Rol where id_rol = 9;
+
+DELETE Operaciones where id_op = 24
+
+select * from Bitacora_ingreso_salida;
+
+UPDATE Usuarios 
+SET id_rol = 1
+WHERE correo_u = 'brad@sistema.cin';
 
 -- AQUI SE GENERAN TODAS LAS OPERACIONES POSIBLES EN CADA MODULO
 INSERT INTO Operaciones(nombre_op, id_modulo) values('Ver', 7);

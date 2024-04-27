@@ -1,0 +1,104 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.contenedor {
+    width: 900px !important;
+    height: 842px !important;
+    margin: auto;
+}
+
+body {
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+}
+
+p .title {
+    font-weight: bold;
+}
+
+p.title2 {
+    font-weight: bold;
+    color: #03A99F;
+    font-size: 20px;
+}
+
+p.text {
+    font-size: 15px;
+    font-weight: 100;
+    color: #858585;
+}
+
+p {
+    margin: 0px
+}
+
+.tbth {
+    text-align: left;
+}
+
+
+table.tbproductos tbody tr td {
+    padding: 10px;
+}
+
+.item {
+    font-size: 15px;
+    font-weight: 100;
+    color: #757575;
+}
+
+.item-2 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #757575;
+    text-align: end;
+}
+
+.item-3 {
+    font-size: 15px;
+    background-color: #03A99F;
+    color: white;
+}
+
+.td-item {
+    border-bottom: 2px solid #E8E8E8 !important;
+}
+
+.encabezado {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.logo, .titulo, .fecha {
+    flex: 1;
+}
+
+.logo {
+    text-align: left;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #383838;
+}
+
+.fecha {
+    font-size: 18px;
+    font-weight: bold;
+    color: #383838;
+    text-align: end;
+}
+
+table thead tr th {
+    background-color: #00757d;
+    color: #fff;
+    text-align: left;
+    padding: 7px 0;
+}
+
+.td {
+    background-color: #f9fffe;
+    border: 1px solid aliceblue;
+    padding: 5px 0;
+}

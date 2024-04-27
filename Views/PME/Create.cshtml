@@ -27,7 +27,7 @@
 
             <!-------Cedula de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="CedulaPme" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" />
@@ -37,7 +37,7 @@
 
             <!-------Nombre de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nombre <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="NombrePme" class="form-control" placeholder="Nombre del Niño" />
@@ -47,7 +47,7 @@
 
             <!-------Apellidos de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Apellidos <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="ApellidosPme" class="form-control" placeholder="Apellido1  Apellido2" />
@@ -67,10 +67,10 @@
 
             <!-------Fecha Nace de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="FechaNacimientoPme" name="FechaNacimientoPme" class="form-control" type="date" />
+                    <input asp-for="FechaNacimientoPme" name="FechaNacimientoPme" class="form-control" type="date"/>
                     <span asp-validation-for="FechaNacimientoPme" class="text-danger"></span>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             </div>
             <!-------Genero de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Género</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Género <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <select asp-for="GeneroPme" class="form-select" required>
@@ -99,7 +99,7 @@
 
             <!-------Nacionalidad de PME-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nacionalidad</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Nacionalidad <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="NacionalidadPme" class="form-control" placeholder="Nacionalidad" />
@@ -114,7 +114,7 @@
         <div class="col-lg-6 col-md-12 col-sm-12">
             <!-------- Provincia PME ---------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia <span class="text-danger">*</span></label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
 
@@ -152,7 +152,7 @@
 
             <!-------- Fecha Ingreso PME ---------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Ingreso</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Fecha de Ingreso <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <input asp-for="FechaIngresoPme" class="form-control" type="date" />
                     <span asp-validation-for="FechaIngresoPme" class="text-danger"></span>

@@ -3,6 +3,7 @@ var currentPath = window.location.pathname;
         //Busca los elementos de enlace en tu menú de navegación
 var navLinks = document.querySelectorAll('.sidebar-link');
 
+
         //Itera sobre los enlaces y verifica si la URL coincide
 navLinks.forEach(function (link) {
     if (link.getAttribute('href') === currentPath) {
@@ -135,4 +136,14 @@ function confirmDelete(id, nombre, controller) {
             });
         }
     })
+}
+
+function showImage(input) {
+    if (input.files && input.files[0]) {
+        var read = new FileReader();
+        read.onload = function (e) {
+            document.getElementsByTagName("img")[0].setAttribute("src", e.target.result);
+        }
+        read.readAsDataURL(input.files[0]);
+    }
 }
