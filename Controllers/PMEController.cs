@@ -390,6 +390,19 @@ namespace Sistema_CIN.Controllers
                 return NotFound();
             }
 
+            var encargadoConPme = await _context.Encargados.Where(u => u.IdPme == id).ToListAsync();
+
+            // Si hay pmes asociados al encargado, cambia su idEncargado a null
+            if (encargadoConPme.Any())
+            {
+                foreach (var encargado in encargadoConPme)
+                {
+                    encargado.IdPme = null;
+                    _context.Encargados.Update(encargado);
+                }
+
+            }
+
             _context.Pmes.Remove(pme);
             await _context.SaveChangesAsync();
             await CrearBitacora("eliminó", pme.NombrePme);

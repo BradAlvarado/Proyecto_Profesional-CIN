@@ -105,8 +105,8 @@
 
 <div class="row">
 
-
-    @if (Model.IdPme == null || !Model.Pmes.Any())
+    <!--Model.IdEncargado == null && !Model.Encargados.Any()  PME el q sirve--> 
+    @if (Model.IdPme == null && !Model.Pmes.Any())
     {
         <p>No se encontraron menores asociados.</p>
     }

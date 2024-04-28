@@ -96,18 +96,28 @@ namespace Sistema_CIN.Controllers
             {
                 return RedirectToAction("AccessDenied", "Cuenta");
             }
-            if (id == null || _context.Encargados == null)
+
+
+            if (id == null)
             {
                 return NotFound();
             }
 
             var encargados = await _context.Encargados
-                .Include(e => e.IdPmeNavigation)
+                .Include(e => e.Pmes)
                 .FirstOrDefaultAsync(m => m.IdEncargado == id);
+
             if (encargados == null)
             {
                 return NotFound();
             }
+
+            // Obtener los encargados registrados mediante ViewBag.IdEncargado
+            var pmesRegistrados = await _context.Pmes
+                .Where(e => e.IdPme == encargados.IdPme) // Filtrar por el IdEncargado del PME
+                .ToListAsync();
+
+            ViewData["PmesRegistrados"] = pmesRegistrados;
 
             return View(encargados);
         }
@@ -273,7 +283,18 @@ namespace Sistema_CIN.Controllers
             {
                 return NotFound();
             }
+            var pmeConEncargado = await _context.Pmes.Where(u => u.IdEncargado == id).ToListAsync();
 
+            // Si hay pmes asociados al encargado, cambia su idEncargado a null
+            if (pmeConEncargado.Any())
+            {
+                foreach (var pme in pmeConEncargado)
+                {
+                    pme.IdEncargado = null;
+                    _context.Pmes.Update(pme);
+                }
+                
+            }
             _context.Encargados.Remove(encargado);
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Encargado " + encargado.NombreE + " eliminado exitosamente!";

@@ -18,11 +18,11 @@
 
             <!-------Cedula de Encargado-------->
             <div class="mb-4 row">
-                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">NCédula</label>
+                <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">N Cédula</label>
                 <input asp-for="IdEncargado" type="hidden"/>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="CedulaE" class="form-control" placeholder="0-0000 0000"  readonly/>
+                    <input asp-for="CedulaE" class="form-control border-0 disabled bg-light" readonly/>
                     <span asp-validation-for="CedulaE" class="text-danger"></span>
                 </div>
             </div>
