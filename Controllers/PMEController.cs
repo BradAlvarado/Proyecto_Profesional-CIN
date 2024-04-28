@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +42,7 @@ namespace Sistema_CIN.Controllers
             
         }
 
-        public async Task<IActionResult> Index(string buscarPME, int? page, string sortOrder)
+        public async Task<IActionResult> Index(string buscarPME, DateTime? fechaIngresoDesde, DateTime? fechaIngresoHasta, int? page, string sortOrder)
         {
             if (!await VerificarPermiso(6))
             {
@@ -82,6 +81,21 @@ namespace Sistema_CIN.Controllers
                 case "edad_des":
                     pmes = pmes.OrderByDescending(p => p.EdadPme);
                     break;
+                case "fecha_ingreso_asc":
+                    pmes = pmes.OrderBy(p => p.FechaIngresoPme);
+                    break;
+                case "fecha_ingreso_des":
+                    pmes = pmes.OrderByDescending(p => p.FechaIngresoPme);
+                    break;
+            }
+            // Aplicar filtros de fecha de ingreso
+            if (fechaIngresoDesde != null)
+            {
+                pmes = pmes.Where(p => p.FechaIngresoPme >= fechaIngresoDesde);
+            }
+            if (fechaIngresoHasta != null)
+            {
+                pmes = pmes.Where(p => p.FechaIngresoPme <= fechaIngresoHasta);
             }
 
             // Paginar los resultados
@@ -201,7 +215,7 @@ namespace Sistema_CIN.Controllers
 
         public async Task CrearBitacora(string movimiento, string nombrePme)
         {
-            var user = User.Identity.Name;
+            var user = HttpContext.Session.GetString("CorreoU");
             var bitacoraMovimiento = new BitacoraMovimiento
             {
                 UsuarioB = user,
@@ -255,12 +269,27 @@ namespace Sistema_CIN.Controllers
                 if (ModelState.IsValid)
                 {
                     var existeCedula = await _context.Pmes.AsNoTracking().FirstOrDefaultAsync(r => r.CedulaPme == pme.CedulaPme && r.IdPme != pme.IdPme);
+                    var originalPme = await _context.Pmes.AsNoTracking().FirstOrDefaultAsync(p => p.IdPme == id);
 
                     if (existeCedula != null)
                     {
                         ModelState.AddModelError("", "Este número de cédula ya está en uso.");
                         return View(pme);
                     }
+                    // Obtener el PME original de la base de datos
+
+                    // Si la fecha original es nula, asigna la fecha actual
+                    if (originalPme.FechaIngresoPme == null)
+                    {
+                        pme.FechaIngresoPme = DateTime.Now;
+                    }
+                    // Si la fecha original no es nula, conserva la fecha original
+                    else
+                    {
+                        pme.FechaIngresoPme = originalPme.FechaIngresoPme;
+                    }
+
+
 
                     _context.Update(pme);
                     await _context.SaveChangesAsync();
@@ -287,33 +316,50 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET ReportePMEs
-        public async Task<ActionResult> ReportePMEs(string sortOrder)
+        public async Task<ActionResult> ReportePMEs(string sortOrder, DateTime? fechaIngresoDesde, DateTime? fechaIngresoHasta)
         {
             if (!await VerificarPermiso(9))
             {
                 return RedirectToAction("AccessDenied", "Cuenta");
             }
+
             var pmes = _context.Pmes.AsQueryable();
+
+            // Aplicar filtros de fecha de ingreso
+            if (fechaIngresoDesde != null)
+            {
+                pmes = pmes.Where(p => p.FechaIngresoPme >= fechaIngresoDesde);
+            }
+            if (fechaIngresoHasta != null)
+            {
+                pmes = pmes.Where(p => p.FechaIngresoPme <= fechaIngresoHasta);
+            }
 
             if (!string.IsNullOrEmpty(sortOrder))
             {
-                if (sortOrder == "name_asc")
+                switch (sortOrder)
                 {
-                    pmes = pmes.OrderBy(p => p.NombrePme);
-                }
-                if (sortOrder == "name_des")
-                {
-                    pmes = pmes.OrderByDescending(p => p.NombrePme);
-                }
-                if (sortOrder == "edad_asc")
-                {
-                    pmes = pmes.OrderBy(p => p.EdadPme);
-                }
-                if (sortOrder == "edad_des")
-                {
-                    pmes = pmes.OrderByDescending(p => p.EdadPme);
+                    case "name_asc":
+                        pmes = pmes.OrderBy(p => p.NombrePme);
+                        break;
+                    case "name_des":
+                        pmes = pmes.OrderByDescending(p => p.NombrePme);
+                        break;
+                    case "edad_asc":
+                        pmes = pmes.OrderBy(p => p.EdadPme);
+                        break;
+                    case "edad_des":
+                        pmes = pmes.OrderByDescending(p => p.EdadPme);
+                        break;
+                    case "fecha_ingreso_asc":
+                        pmes = pmes.OrderBy(p => p.FechaIngresoPme);
+                        break;
+                    case "fecha_ingreso_des":
+                        pmes = pmes.OrderByDescending(p => p.FechaIngresoPme);
+                        break;
                 }
             }
+
             // Capturar la fecha y hora actual
             DateTime fechaActual = DateTime.Now;
 
@@ -323,8 +369,8 @@ namespace Sistema_CIN.Controllers
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
                 PageSize = Rotativa.AspNetCore.Options.Size.A4
             };
-            //return View(pmes);
         }
+
 
         // POST: PME/Delete/5
         [HttpPost]

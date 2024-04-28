@@ -19,13 +19,14 @@
     <div class="col-auto">
 
         <form class="row" asp-controller="PME" asp-action="Index">
+     
             <input type="submit" class="btn btn-danger btn-sm col me-1" value="Restablecer"/>
            
             <div class="btn-group col">
                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Ordenar Nombre
                 </button>
-                <ul class="dropdown-menu me-1">
+                <ul class="dropdown-menu">
 
                     <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_asc" })">A-Z</a></li>
                     <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "name_des" })">Z-A</a></li>
@@ -43,6 +44,18 @@
                     <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "edad_des" })">12 - 0</a></li>
                 </ul>
             </div>
+
+            <div class="btn-group col">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Fecha Ingreso
+                </button>
+                <ul class="dropdown-menu">
+                    <li> <a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "fecha_ingreso_asc" })">Más reciente</a></li>
+                    <li><a type="submit" class="btn" href="@Url.Action("Index", new { sortOrder = "fecha_ingreso_des" })">Más antiguo</a></li>
+                </ul>
+            </div>
+
+           
         </form>
     </div>
 

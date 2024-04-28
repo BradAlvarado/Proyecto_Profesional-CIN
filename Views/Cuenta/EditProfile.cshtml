@@ -42,6 +42,7 @@
                                 <img src="~/images/imageUser/@fotoU" id="imagePreview" class="img-fluid img-thumbnail rounded-circle my-3" style="height: 300px;" />
                                 <input asp-for="FotoU" class="form-control" type="file" id="foto" onchange="loadFile(event)">
                                 <span asp-validation-for="FotoU" class="text-danger"></span>
+                                <input type="hidden" id="borrar" name="borrar" value="false">
                             }
                         </div>
                     </div>
@@ -162,9 +163,12 @@
         };
 
         function removePhoto() {
+            
+            var borrar = document.getElementById("borrar");
+            borrar.value = "true";
+
             // Restablecer la imagen de perfil a la predeterminada
             document.getElementById("imagePreview").src = "/images/imageUser/default-user-photo.jpg"; // Cambia la ruta aquí
-
             // Actualizar la propiedad usuario.FotoU con el valor "default-user-photo.jpg"
             document.getElementById("FotoU").value = "default-user-photo.jpg";
         }

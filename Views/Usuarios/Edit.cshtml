@@ -32,7 +32,7 @@
                         <div class="col-lg-8 ">
                             <input asp-for="IdUsuario" type="hidden"/>
                             <input asp-for="Clave" type="hidden" />
-                            <input asp-for="NombreU" class="form-control" placeholder="nombre del usuario" readonly/>
+                            <input asp-for="NombreU" class="form-control disabled border-0 bg-light" placeholder="nombre del usuario" readonly />
                             <span asp-validation-for="NombreU" class="text-danger"></span>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                     <div class="mb-4 row">
                         <label asp-for="CorreoU" class="col-lg-4 col-form-label">Correo Electrónico</label>
                         <div class="col-lg-8">
-                            <input type="email" asp-for="CorreoU" class="form-control" readonly />
+                            <input type="email" asp-for="CorreoU" class="form-control disabled border-0 bg-light" readonly />
 
                             <span asp-validation-for="CorreoU" class="text-danger"></span>
                         </div>
@@ -66,7 +66,7 @@
 
                                 <option>Seleccione Acceso</option>
                                 <option value="true">Permitir</option>
-                                <option value="false">Denegar</option>
+                                <option value="false">;a</option>
                             </select>
                             <span asp-validation-for="AccesoU" class="text-danger"></span>
                         </div>

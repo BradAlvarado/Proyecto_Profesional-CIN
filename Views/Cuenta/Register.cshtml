@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-
-
 <div>
     @if (User.Identity != null && User.Identity.IsAuthenticated)
     {
@@ -66,7 +64,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-lock"></i>  Contraseña</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input type="password" asp-for="Clave" class="form-control text-center border-0 bg-light" placeholder="**********" />
+                    <input type="password" asp-for="Clave" class="form-control text-center border-0 bg-light" placeholder="Crear contraseña" />
                     <span asp-validation-for="Clave" class="text-danger"></span>
                 </div>
             </div>

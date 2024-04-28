@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Sistema_CIN.Models
+﻿namespace Sistema_CIN.Models
 {
     public class RolesPermisos
     {

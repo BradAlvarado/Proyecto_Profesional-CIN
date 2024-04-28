@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_CIN.Models
 {
@@ -22,7 +19,9 @@ namespace Sistema_CIN.Models
         public string NombrePme { get; set; } = null!;
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string ApellidosPme { get; set; } = null!;
+
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [DataType(DataType.Date)]
         public DateTime FechaNacimientoPme { get; set; }
         public int EdadPme { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio.")]
@@ -35,6 +34,7 @@ namespace Sistema_CIN.Models
         public string NacionalidadPme { get; set; } = null!;
         public bool? SubvencionPme { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [DataType(DataType.Date)]
         public DateTime FechaIngresoPme { get; set; }
 		
 		public DateTime? FechaEgresoPme { get; set; }

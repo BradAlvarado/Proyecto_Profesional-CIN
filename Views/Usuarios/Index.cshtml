@@ -33,6 +33,7 @@
                 <th scope="col">Correo</th>
                 <th scope="col">Rol</th>
                 <th scope="col">Acceso</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Detalles</th>
                 <th scope="col">Editar</th>
                 <th scope="col">Eliminar</th>
@@ -43,7 +44,14 @@
             {
                 <tr>
                     <td>
-                        <img src="~/images/imageUser/@Html.DisplayFor(modelItem => item.FotoU)" alt="" width="45" height="45" class="rounded-circle me-2">
+                        @if (item.FotoU == null)
+                        {
+                            <img src="~/images/imageUser/default-user-photo.jpg" alt="" width="45" height="45" class="rounded-circle me-2">
+                        }
+                        else
+                        {
+                            <img src="~/images/imageUser/@Html.DisplayFor(modelItem => item.FotoU)" alt="" width="45" height="45" class="rounded-circle me-2">
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NombreU)
@@ -65,8 +73,16 @@
                             <span class="text-danger">Denegado</span>
                         }
                     </td>
-
-
+                    <td>
+                        @if (item.EstadoU == true)
+                        {
+                            <span class="text-success">Conectado</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Desconectado</span>
+                        }
+                    </td>
 
                     <td class="text-center">
                         <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@item.IdUsuario"><i class="fa-regular fa-eye"></i></a>
