@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Data;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
 using Rotativa.AspNetCore;
-using Sistema_CIN.Models.ViewModels;
-using Microsoft.Data.SqlClient;
 
 namespace Sistema_CIN.Controllers
 {
@@ -67,6 +58,7 @@ namespace Sistema_CIN.Controllers
             {
                 empleado = empleado.Where(s => s.NombreP!.Contains(buscarEmpleado));
             }
+
             switch (sortOrder)
             {
                 case "name_asc":

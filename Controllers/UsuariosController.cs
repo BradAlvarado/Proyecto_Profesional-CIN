@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
-using Microsoft.AspNetCore.Identity;
+
 
 namespace Sistema_CIN.Controllers
 {
@@ -25,7 +18,7 @@ namespace Sistema_CIN.Controllers
         public UsuariosController(SistemaCIN_dbContext context)
         {
             _context = context;
-
+       
         }
 
         // GET: Usuarios
@@ -78,9 +71,24 @@ namespace Sistema_CIN.Controllers
             return View(usuario);
         }
 
+        public async Task<IActionResult> CerrarSesionOtroUsuario(int idUsuario)
+        {
+            // Obtener el usuario por su ID (puedes adaptar esto según tu estructura)
+            var usuario = await _context.Usuarios.FindAsync(idUsuario);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            // Cerrar la sesión del usuario seleccionado
+            await HttpContext.SignOutAsync();
+
+            TempData["SuccessMessage"] = "Sesión cerrada para el usuario " + usuario.NombreU;
+            return RedirectToAction(nameof(Index));
+        }
+
         // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,NombreU,CorreoU,Clave,AccesoU,IdRol")] Usuario usuario)
@@ -92,21 +100,16 @@ namespace Sistema_CIN.Controllers
 
             try
             {
+                // Actualizar el usuario en la base de datos
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
 
-                if(usuario.AccesoU != true)
+                if(usuario.AccesoU == false)
                 {
-                    // Obtener el ID del usuario de la sesión actual
-                    var userId = HttpContext.Session.GetString("IdUsuario");
-                    
-                    // Verificar si el usuario editado es el mismo usuario que está en sesión
-                    if (userId != null && userId == usuario.IdUsuario.ToString())
-                    {
-                        // Cerrar la sesión actual del usuario
-                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    }
+                    await HttpContext.SignOutAsync();
                 }
+
+
                 TempData["SuccessMessage"] = "Usuario " + usuario.NombreU + " actualizado exitosamente!";
                 return RedirectToAction(nameof(Index));
             }

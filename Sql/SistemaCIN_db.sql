@@ -187,19 +187,19 @@ END
 ---------------------------------------------------
 
 
-SELECT * FROM BITACORA_MOVIMIENTOS;
+--SELECT * FROM BITACORA_MOVIMIENTOS;
 
 
-SELECT * FROM PME;
+--SELECT * FROM PME;
 
-INSERT INTO PME (cedula_pme,nombre_pme, apellidos_pme, fecha_nacimiento_pme,edad_pme, provincia_pme, genero_pme, nacionalidad_pme, fecha_ingreso_pme)
-values('231253442','Simon', 'Mejia', '2010-03-25 15:28:28.790', 5, 'Heredia', 'M','Paisa', '2021-03-25 15:28:28.790');
+--INSERT INTO PME (cedula_pme,nombre_pme, apellidos_pme, fecha_nacimiento_pme,edad_pme, provincia_pme, genero_pme, nacionalidad_pme, fecha_ingreso_pme)
+--values('231253442','Simon', 'Mejia', '2010-03-25 15:28:28.790', 5, 'Heredia', 'M','Paisa', '2021-03-25 15:28:28.790');
 
-UPDATE PME 
-SET provincia_pme = 'Limon'
-WHERE cedula_pme = '231253442';
+--UPDATE PME 
+--SET provincia_pme = 'Limon'
+--WHERE cedula_pme = '231253442';
 
-DELETE FROM PME WHERE cedula_pme = '231253442';
+--DELETE FROM PME WHERE cedula_pme = '231253442';
 
 ---------------------------------------------------
 ---------------------------------------------------

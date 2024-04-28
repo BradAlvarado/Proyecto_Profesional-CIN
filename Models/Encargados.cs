@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_CIN.Models
 {
@@ -19,7 +17,9 @@ namespace Sistema_CIN.Models
         public string NombreE { get; set; } = null!;
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string ApellidosE { get; set; } = null!;
+
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [DataType(DataType.Date)]
         public DateTime FechaNaceE { get; set; }
         
         public int Edad { get; set; }

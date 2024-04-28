@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Sistema_CIN.Models
+﻿namespace Sistema_CIN.Models
 {
     public class PagedList<T> : List<T>
     {

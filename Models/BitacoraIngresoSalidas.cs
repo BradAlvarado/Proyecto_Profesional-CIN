@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Sistema_CIN.Models
+﻿namespace Sistema_CIN.Models
 {
     public partial class BitacoraIngresoSalidas
     {

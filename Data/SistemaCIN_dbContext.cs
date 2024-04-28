@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Sistema_CIN.Models;
 
 namespace Sistema_CIN.Data
 {
     public partial class SistemaCIN_dbContext : DbContext
     {
-        public SistemaCIN_dbContext()
-        {
-        }
+        //public SistemaCIN_dbContext()
+        //{
+        //}
 
         public SistemaCIN_dbContext(DbContextOptions<SistemaCIN_dbContext> options)
             : base(options)
@@ -27,14 +24,6 @@ namespace Sistema_CIN.Data
         public virtual DbSet<Rol> Rols { get; set; } = null!;
         public virtual DbSet<RolOperacion> RolOperacions { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
