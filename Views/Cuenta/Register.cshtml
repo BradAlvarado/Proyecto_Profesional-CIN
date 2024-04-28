@@ -44,7 +44,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-user"></i>  Nombre</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="NombreU" class="form-control text-center border-0 bg-light" placeholder="Nombre de Usuario"/>
+                    <input asp-for="NombreU" class="form-control text-center border-0 bg-light" placeholder="Nombre de Usuario" />
                     <span asp-validation-for="NombreU" class="text-danger"></span>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-envelope"></i>  Correo</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="CorreoU" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com"/>
+                    <input asp-for="CorreoU" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com" />
                     <span asp-validation-for="CorreoU" class="text-danger"></span>
                 </div>
             </div>
@@ -87,11 +87,9 @@
             <a class="btn-link" asp-action="Login">Ya tienes una cuenta? Ingresar</a>
         </p>
 
-        
+
     }
 </div>
-
-
 
 @section Scripts {
     @{

@@ -1,7 +1,7 @@
 ﻿@model Sistema_CIN.Models.Pme
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar PMEs";
 }
 
 <h3 class="fw-bold fs-4 mb-3">Mantenimiento > Editar PME</h3>
@@ -23,7 +23,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cédula</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input asp-for="CedulaPme" class="form-control" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" readonly/>
+                    <input asp-for="CedulaPme" class="form-control disabled border-0 bg-light" id="cedula" pattern="[0-9]{1}-[0-9]{4} [0-9]{4}" placeholder="Número de Cédula" oninput="formatCedula(this)" readonly/>
                     <span asp-validation-for="CedulaPme" class="text-danger"></span>
                 </div>
             </div>

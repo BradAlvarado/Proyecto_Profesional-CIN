@@ -141,74 +141,6 @@ ALTER TABLE Encargados
 
 ----------------------bitacoras------------------------------
 
-CREATE TRIGGER TR_AuditarCambiosPME
-ON PME
-AFTER INSERT, UPDATE, DELETE
-AS
-BEGIN
-    DECLARE @Usuario VARCHAR(50)
-    DECLARE @Movimiento VARCHAR(10)
-    DECLARE @PMEAfectado VARCHAR(100)
-    DECLARE @FechaActual DATETIME
-	DECLARE @Detalle VARCHAR(100)
-
-    SET @Usuario = SYSTEM_USER
-    SET @FechaActual = GETDATE()
-
-    IF EXISTS (SELECT * FROM inserted)
-    BEGIN
-        IF EXISTS (SELECT * FROM deleted)
-		BEGIN
-            SET @Movimiento = 'UPDATE'; -- Actualización
-			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
-		END
-        ELSE
-		BEGIN
-            SET @Movimiento = 'INSERT'; -- Inserción
-			SET @PMEAfectado = (SELECT nombre_pme FROM inserted)
-		END
-	END
-    ELSE IF EXISTS(SELECT * FROM deleted)
-		BEGIN
-        SET @Movimiento = 'DELETE'; -- Eliminación
-		SET @PMEAfectado = (SELECT nombre_pme FROM deleted)
-	END
-	
-	SET @Detalle = (@Usuario + ' ' + @Movimiento + ' ' + @PMEAfectado);
-
-    INSERT INTO Bitacora_movimientos(usuario_b, fecha_movimiento, tipo_movimiento, detalle)
-    VALUES (@Usuario, @FechaActual, @Movimiento, @Detalle)
-END
-
----------------------------------------------------
----------------------------------------------------
----------------------------------------------------
----------------------------------------------------
----------------------------------------------------
-
-
---SELECT * FROM BITACORA_MOVIMIENTOS;
-
-
---SELECT * FROM PME;
-
---INSERT INTO PME (cedula_pme,nombre_pme, apellidos_pme, fecha_nacimiento_pme,edad_pme, provincia_pme, genero_pme, nacionalidad_pme, fecha_ingreso_pme)
---values('231253442','Simon', 'Mejia', '2010-03-25 15:28:28.790', 5, 'Heredia', 'M','Paisa', '2021-03-25 15:28:28.790');
-
---UPDATE PME 
---SET provincia_pme = 'Limon'
---WHERE cedula_pme = '231253442';
-
---DELETE FROM PME WHERE cedula_pme = '231253442';
-
----------------------------------------------------
----------------------------------------------------
----------------------------------------------------
-
----------------------------------------------------
-------------------------------------------------
-drop trigger TR_Insertar_Bitacora_Ingreso
-
 CREATE TRIGGER TR_Insertar_Bitacora_Ingreso
 ON Usuarios
 AFTER INSERT, DELETE
@@ -308,12 +240,14 @@ END;
 
 
 ---- Nuevo usuario
-INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
-values('Vilma','vilma@gmail.com', 'v1234', 1,1,1);
+
 
 SELECT * FROM Usuarios;
 select * from Bitacora_ingreso_salida;
 ---------------------------------------
+
+INSERT INTO Usuarios (nombre_u,correo_u, clave, estado_u, acceso_u, id_rol)
+values('Brad','bradsistema.cin', 'Admin123#!', 0,1,1);
 
 UPDATE Usuarios 
 SET estado_u = 0

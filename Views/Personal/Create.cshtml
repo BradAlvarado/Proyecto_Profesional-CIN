@@ -1,7 +1,7 @@
 ﻿@model Sistema_CIN.Models.Personal
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Personal";
 }
 
 <div class="row my-2">
@@ -11,7 +11,6 @@
         <h3 class="fw-bold fs-4 mb-3">Mantenimiento > Registrar Personal</h3>
         <a class="btn btn-secondary btn-sm" asp-action="Index">Volver</a>
     </div>
-
 
     <div asp-validation-summary="ModelOnly" class="alert alert-danger col" role="alert"></div>
 
@@ -84,11 +83,7 @@
                     <span asp-validation-for="IdRol" class="text-danger"></span>
                 </div>
             </div>
-
-
-
         </div>
-
 
         <!--------Columna derecha ---------->
         <div class="col-lg-6 col-md-12 col-sm-12">
@@ -110,7 +105,7 @@
                     <span asp-validation-for="EdadP" class="text-danger"></span>
                 </div>
             </div>
-
+            <!-------- Sexo Personal ---------->
             <div class="mb-4 row">
                 <label asp-for="GeneroP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Genero <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
@@ -123,7 +118,7 @@
                 </div>
             </div>
 
-
+            <!-------- Provincia Personal ---------->
             <div class="mb-4 row">
                 <label asp-for="ProvinciaP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Provincia <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
@@ -141,7 +136,7 @@
                 </div>
             </div>
 
-
+            <!-------- Canton Personal ---------->
             <div class="mb-4 row">
                 <label asp-for="CantonP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Cantón <span class="text-danger">*</span></label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
@@ -149,7 +144,7 @@
                     <span asp-validation-for="CantonP" class="text-danger"></span>
                 </div>
             </div>
-
+            <!-------- Distrito Personal ---------->
             <div class="mb-4 row">
                 <label asp-for="DistritoP" class="col-lg-4 col-md-3 col-sm-12 col-form-label">Distrito</label>
                 <div class="col-lg-8 col-md-9 col-sm-12">
@@ -162,9 +157,6 @@
 
     </div>
 
-
-
-
     <div class="col-auto mt-4">
 
         <button type="submit" class="btn btn-primary btn-sm me-3 text-white">Registrar  <i class="fa-solid fa-cloud-arrow-up"></i></button>
@@ -173,9 +165,6 @@
     </div>
 
 </form>
-
-
-
 
 
 @section Scripts {

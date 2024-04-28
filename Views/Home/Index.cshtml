@@ -141,10 +141,8 @@
                 </div>
             </div>
         }
-        
+
     </div><!----------END CONTADORES--------->
-
-
 </div>
 
 
@@ -152,12 +150,12 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-   
+
 
     @* ALERTA DE PERSONAL REGISTRADO / EDITADO EXITOSAMENTE*@
     @if (TempData["SuccessMessage"] != null)
     {
         <script>registroExito("@TempData["SuccessMessage"]");</script>
     }
-   
+
 }

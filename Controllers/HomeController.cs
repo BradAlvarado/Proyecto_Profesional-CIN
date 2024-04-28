@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sistema_CIN.Data;
 using Sistema_CIN.Models;
 using Sistema_CIN.Services;
@@ -14,11 +15,13 @@ namespace Sistema_CIN.Controllers
     {
         private readonly SistemaCIN_dbContext _context;
         private readonly FiltrosPermisos _filters;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public HomeController(SistemaCIN_dbContext context, FiltrosPermisos filtro)
+        public HomeController(SistemaCIN_dbContext context, FiltrosPermisos filtro, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _filters = filtro;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         private async Task<bool> VerificarPermiso(int idOp)
@@ -58,6 +61,30 @@ namespace Sistema_CIN.Controllers
         public IActionResult AcercaDe()
         {
             return View();
+        }
+       
+        public async Task<IActionResult> Ayuda()
+        {
+            if (!await VerificarPermiso(18))
+            {
+                return RedirectToAction("AccessDenied", "Cuenta");
+            }
+            var pdfFilePath = Path.Combine(_hostingEnvironment.ContentRootPath, "./Manual/Manual de Usuario CIN.pdf");
+
+            // Verificar si el archivo existe
+            if (!System.IO.File.Exists(pdfFilePath))
+            {
+                return NotFound();
+            }
+
+            // Leer el contenido del archivo PDF
+            var pdfFileStream = System.IO.File.OpenRead(pdfFilePath);
+
+            // Determinar el tipo de contenido
+            var contentType = "application/pdf";
+
+            // Retornar el archivo PDF como resultado de la acción
+            return File(pdfFileStream, contentType);
         }
 
         public IActionResult NotFound()

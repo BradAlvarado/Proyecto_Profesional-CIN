@@ -101,7 +101,7 @@
                     </a>
                     <ul id="bitacoras" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a asp-controller="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos y Salidas</a>
+                            <a asp-controller="BitacoraIngresoSalidas" asp-action="Index" class="sidebar-link">Ingresos Usuarios</a>
                         </li>
                         <li class="sidebar-item">
                             <a asp-controller="BitacorasMovimientosPme" asp-action="Index" class="sidebar-link">Movimientos PMEs</a>
@@ -119,7 +119,7 @@
                     </a>
                     <ul id="help" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Abrir Manual PDF</a>
+                            <a asp-controller="Home" asp-action="Ayuda" target="_blank" class="sidebar-link">Abrir Manual PDF</a>
                         </li>
                     </ul>
                 </li>
@@ -199,8 +199,8 @@
                                 <strong>SISTEMA CIN</strong>
                             </a>
                         </div>
-                        <div class="col-6 text-end text-primary">
-                            &copy; 2024 - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <div class="col-6 text-end ">
+                            &copy; @DateTime.Now.ToString("yyyy") - Sistema_CIN - <a asp-area="" asp-controller="Home" asp-action="AcercaDe">Acerca de</a>
                         </div>
                     </div>
                 </div>
@@ -215,30 +215,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        $(document).ready(function () {
-            // Hacer una solicitud AJAX para obtener los datos del usuario
-            $.ajax({
-                url: '@Url.Action("EditProfile", "Cuenta")',
-                type: 'GET',
-                success: function (data) {
-                    // Actualizar la información del usuario en el dropdown
-                    $('#dropdownMenu').html(`<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/imageUser/${data.fotoU}" alt="" width="32" height="32" class="rounded-circle me-2">
-                                    <span>${data.correoU}</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-                                    <li><a class="dropdown-item" href="#">Perfil</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Salir</a></li>
-                                </ul>`);
-                },
-                error: function () {
-                    console.error('Error al obtener los datos del usuario');
-                }
-            });
-        });
-    </script>
+   
 </body>
 </html>
 
