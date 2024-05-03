@@ -139,17 +139,23 @@ namespace Sistema_CIN.Controllers
         {
             var usuarioRegistrado = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoU == correo);
 
-
-            if (correo == null || clave == null)
+            if (correo == null)
             {
 
-                ModelState.AddModelError("", "Correo o contraseña sin ingresar");
-                return View(correo, clave);
+                ModelState.AddModelError("CorreoU", "Correo sin ingresar");
+                return View();
+            }
+
+            if (clave == null)
+            {
+
+                ModelState.AddModelError("Clave", "Contraseña sin ingresar");
+                return View();
             }
 
             if (usuarioRegistrado == null)
             {
-                ModelState.AddModelError("", "Correo o contraseña inválidos");
+                ModelState.AddModelError("", "Este usuario no existe");
                 return View();
             }
 
