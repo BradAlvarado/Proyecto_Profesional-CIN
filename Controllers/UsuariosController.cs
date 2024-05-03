@@ -22,10 +22,20 @@ namespace Sistema_CIN.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index() //no tiene Search User
+        public async Task<IActionResult> Index(string buscarUsuario) //no tiene Search User
         {
-            var cINContext = _context.Usuarios.Include(u => u.IdRolNavigation);
-            return View(await cINContext.ToListAsync());
+            var usuarios = from usuario in _context.Usuarios select usuario;
+
+            if (!String.IsNullOrEmpty(buscarUsuario))
+            {
+                usuarios = usuarios.Where(s => s.NombreU!.Contains(buscarUsuario));
+            }
+            else
+            {
+                ModelState.AddModelError("", "No existen Usuarios registrados");
+                return View(await usuarios.ToListAsync());
+            }
+            return View(await usuarios.ToListAsync());
         }
 
         // GET: Usuarios/Details/5

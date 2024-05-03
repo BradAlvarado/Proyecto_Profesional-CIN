@@ -115,6 +115,7 @@ function confirmDelete(id, nombre, controller) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
         confirmButtonText: 'Si, eliminarlo!'
     }).then((result) => {
         if (result.isConfirmed) {

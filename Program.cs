@@ -74,7 +74,6 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-app.UseStaticFiles(); // Esto ya está agregado, para servir archivos estáticos
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(

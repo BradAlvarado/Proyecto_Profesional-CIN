@@ -11,7 +11,7 @@ namespace Sistema_CIN.Models
         public string NombreU { get; set; } = null!;
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
-        [EmailAddress(ErrorMessage = "Este campo debe ser de tipo Correo")]
+        [DataType(DataType.EmailAddress, ErrorMessage ="Este campo debe ser de tipo Correo @")]
         public string? CorreoU { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
