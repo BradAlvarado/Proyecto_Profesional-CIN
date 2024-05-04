@@ -34,7 +34,7 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-envelope"></i>  Correo</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    <input id="correo" name="correo" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com" type="email"/>
+                    <input id="correo" name="correo" class="form-control text-center border-0 bg-light" placeholder="correo@ejemplo.com" type="email" maxlength="50" />
                     <span asp-validation-for="CorreoU" class="text-danger"></span>
                 </div>
             </div>
@@ -44,8 +44,8 @@
                 <label class="col-lg-4 col-md-3 col-sm-12 col-form-label"><i class="fa-solid fa-lock"></i>  Contraseña</label>
 
                 <div class="col-lg-8 col-md-9 col-sm-12">
-                    
-                    <input asp-for="Clave" type="password" id="clave" name="clave" min-lenght="6" class="form-control text-center border-0 bg-light" placeholder="**********" />
+
+                    <input asp-for="Clave" type="password" id="clave" name="clave" min-lenght="6" class="form-control text-center border-0 bg-light" placeholder="**********" maxlength="50" />
                     <span asp-validation-for="Clave" class="text-danger"></span>
                 </div>
             </div>
